@@ -29,6 +29,7 @@
     "standalone": "cozy-konnector-standalone",
     "pretest": "npm run clean",
     "test": "konitor testit .",
+    "jest": "jest",
     "clean": "rm -rf ./data",
     "build": "webpack",
     "lint": "eslint --fix .",
@@ -38,7 +39,8 @@
   },
   "dependencies": {
     "cozy-client": "6.21.0",
-    "cozy-konnector-libs": "4.15.3"
+    "cozy-konnector-libs": "4.15.3",
+    "jest": "24.7.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "5.0.2",
