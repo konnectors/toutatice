@@ -1,4 +1,4 @@
-[Cozy][cozy] <YOUR SUPER NEW KONNECTOR NAME>
+[Cozy][cozy] Toutatice
 =======================================
 
 What's Cozy?
@@ -11,15 +11,7 @@ What's Cozy?
 What is this konnector about ?
 ------------------------------
 
-This konnector retrieves your <SOME DATA> and <SOME OTHER DATA> from <SERVICE>
-<YOUR DESCRIPTION HERE>
-
-### Open a Pull-Request
-
-If you want to work on this konnector and submit code modifications, feel free to open pull-requests!
-</br>See :
-* the [contributing guide][contribute] for more information about how to properly open pull-requests.
-* the [konnectors development guide](https://docs.cozy.io/en/tutorials/konnector/)
+This konnector interacts with the [Toutatice] platform.
 
 ### Run and test
 
@@ -39,30 +31,11 @@ yarn standalone
 ```
 For running the konnector connected to a Cozy server and more details see [konnectors tutorial](https://docs.cozy.io/en/tutorials/konnector/)
 
-### Cozy-konnector-libs
-
-This connector uses [cozy-konnector-libs](https://github.com/cozy/cozy-konnector-libs). It brings a bunch of helpers to interact with the Cozy server and to fetch data from an online service.
-
-### Maintainer
-
-The lead maintainers for this konnector is <YOUR NAME>
-
-
-### Get in touch
-
-You can reach the Cozy Community by:
-
-- [Konnectors tutorial](https://docs.cozy.io/en/tutorials/konnector/)
-- Chatting with us on IRC [#cozycloud on Freenode][freenode]
-- Posting on our [Forum]
-- Posting issues on the [Github repos][github]
-- Say Hi! on [Twitter]
-
 
 License
 -------
 
-<YOUR KONNECTOR NAME> is developed by <your name> and distributed under the [AGPL v3 license][agpl-3.0].
+Cozy Toutatice is developed by Cozy Cloud and distributed under the [AGPL v3 license][agpl-3.0].
 
 [cozy]: https://cozy.io "Cozy Cloud"
 [agpl-3.0]: https://www.gnu.org/licenses/agpl-3.0.html
@@ -76,3 +49,4 @@ License
 [yarn]: https://yarnpkg.com
 [travis]: https://travis-ci.org
 [contribute]: CONTRIBUTING.md
+[Toutatice]: https://www.toutatice.fr/portail
