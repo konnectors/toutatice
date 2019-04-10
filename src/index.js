@@ -4,6 +4,7 @@ const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
 const transpileToCozy = require('./transpileToCozy')
+const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronize = require('./synchronize')
 
 module.exports = new BaseKonnector(start)
@@ -29,9 +30,10 @@ async function start() {
     )
     const remoteData = await response.json()
 
+    // fetch the remote file ✅
     // create all groups on cozy
     //
-    // foreach remote contact
+    // foreach remote contact ⏳
     // - transpiler to cozy ✅
     // - attach groups
     // - fetch cozy contact ✅
@@ -39,7 +41,8 @@ async function start() {
     // - - else update by overriding with remote first ✅
 
     const remoteContacts = get(remoteData, 'contacts', [])
-    const transpiledContacts = remoteContacts.map(contact =>
+    const filteredContacts = filterRemoteContacts(remoteContacts)
+    const transpiledContacts = filteredContacts.map(contact =>
       transpileToCozy(contact, contactAccount._id)
     )
 
