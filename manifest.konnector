@@ -24,13 +24,16 @@
       "verbs": ["GET"]
     },
     "contacts": {
-      "type": "io.cozy.contacts"
+      "type": "io.cozy.contacts",
+      "verbs": ["ALL"]
     },
     "contactsGroups": {
-      "type": "io.cozy.contacts.groups"
+      "type": "io.cozy.contacts.groups",
+      "verbs": ["ALL"]
     },
     "contactsAccounts": {
-      "type": "io.cozy.contacts.accounts"
+      "type": "io.cozy.contacts.accounts",
+      "verbs": ["ALL"]
     }
   },
   "developer": {
