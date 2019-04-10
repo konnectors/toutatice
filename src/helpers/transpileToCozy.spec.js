@@ -100,4 +100,28 @@ describe('Transpile to cozy', () => {
     const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result.jobTitle).toEqual('random')
   })
+
+  it('should handle empty job titles', () => {
+    const source = {
+      uuid: '8726-1029-1189-8627',
+      firstname: 'Rufus',
+      lastname: 'Roderson',
+      title: null,
+      cloud_url: 'rroderson120.mytoutatice.cloud'
+    }
+    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    expect(result.jobTitle).toEqual('')
+  })
+
+  it('should handle empty cozy urls', () => {
+    const source = {
+      uuid: '8726-1029-1189-8627',
+      firstname: 'Rufus',
+      lastname: 'Roderson',
+      title: 'ele',
+      cloud_url: ''
+    }
+    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    expect(result.cozy).toEqual([])
+  })
 })

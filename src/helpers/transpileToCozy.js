@@ -16,11 +16,21 @@ const transpileToCozy = (contact, contactsAccountsId) => {
   const familyName = get(contact, 'firstname')
   const givenName = get(contact, 'lastname')
   const cozyUrl = get(contact, 'cloud_url')
-  const title = get(contact, 'title')
+  const title = get(contact, 'title', '') || ''
   const remoteId = get(contact, 'uuid')
 
   const jobTitle = getJobTitle(title)
   const now = new Date().toISOString()
+
+  const cozy = cozyUrl
+    ? [
+        {
+          url: `https://${cozyUrl}`,
+          label: null,
+          primary: true
+        }
+      ]
+    : []
 
   return {
     _type: DOCTYPE_CONTACTS,
@@ -28,13 +38,7 @@ const transpileToCozy = (contact, contactsAccountsId) => {
       familyName,
       givenName
     },
-    cozy: [
-      {
-        url: `https://${cozyUrl}`,
-        label: null,
-        primary: true
-      }
-    ],
+    cozy,
     jobTitle,
     cozyMetadata: {
       sync: {
