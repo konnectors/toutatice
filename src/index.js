@@ -36,14 +36,21 @@ async function start() {
     // - attach groups
     // - fetch cozy contact ✅
     // - - if inexistent, create it ✅
-    // - - else update by overriding with remote first
+    // - - else update by overriding with remote first ✅
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const transpiledContacts = remoteContacts.map(contact =>
       transpileToCozy(contact, contactAccount._id)
     )
 
-    await synchronize(cozyUtils, contactAccount._id, transpiledContacts)
+    const result = await synchronize(
+      cozyUtils,
+      contactAccount._id,
+      transpiledContacts
+    )
+
+    log('info', `${result.contacts.created} contacts created`)
+    log('info', `${result.contacts.updated} contacts updated`)
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
