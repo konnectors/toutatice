@@ -29,7 +29,6 @@
     "standalone": "cozy-konnector-standalone",
     "pretest": "npm run clean",
     "test": "konitor testit .",
-    "check": "konitor check .",
     "clean": "rm -rf ./data",
     "build": "webpack",
     "lint": "eslint --fix .",
