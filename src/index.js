@@ -7,4 +7,17 @@ module.exports = new BaseKonnector(start)
 // the account information come from ./konnector-dev-config.json file
 async function start() {
   log('info', 'Nothing to run yet ...')
+
+  // get or create contacts.account
+  //
+  // fetch contacts and groups
+  //
+  // create all groups on cozy
+  //
+  // foreach remote contact
+  // - transpiler to cozy
+  // - attach groups
+  // - fetch cozy contact
+  // - - if inexistent, create it
+  // - - else update by overriding with remote first
 }
