@@ -1,4 +1,6 @@
 const { BaseKonnector, log, errors } = require('cozy-konnector-libs')
+const fetch = require('node-fetch')
+const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
 
@@ -20,8 +22,11 @@ async function start() {
       'toutatice'
     )
     log('info', contactAccount)
-    //
-    // fetch contacts and groups
+
+    const response = await fetch(
+      'https://gist.githubusercontent.com/y-lohse/32686b06ab953bef7ffd6904b76651cf/raw/04f2ef9bf19897698146e6d2ef22d382f4454abf/enseignant.json'
+    )
+    const remoteData = await response.json()
     //
     // create all groups on cozy
     //
@@ -31,6 +36,8 @@ async function start() {
     // - fetch cozy contact
     // - - if inexistent, create it
     // - - else update by overriding with remote first
+    const remoteContacts = get(remoteData, 'contacts', [])
+    log('info', remoteContacts)
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
