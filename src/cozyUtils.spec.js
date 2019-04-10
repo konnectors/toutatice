@@ -4,7 +4,8 @@ const CozyUtils = require('./CozyUtils')
 const {
   APP_NAME,
   APP_VERSION,
-  DOCTYPE_CONTACTS_ACCOUNT
+  DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_CONTACTS
 } = require('./constants')
 
 jest.mock('cozy-client')
@@ -43,6 +44,52 @@ describe('CozyUtils', () => {
     })
 
     expect(cozyUtils.client).toBeDefined()
+  })
+
+  describe('prepareIndex method', () => {
+    it('should prepare an index on remote id for contacts', () => {
+      const createIndexSpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        createIndex: createIndexSpy
+      }))
+      cozyUtils.prepareIndex('fakeAccountId')
+      expect(cozyUtils.client.collection).toHaveBeenCalledWith(DOCTYPE_CONTACTS)
+      expect(createIndexSpy).toHaveBeenCalledWith([
+        'cozyMetadata.sync.fakeAccountId.id'
+      ])
+    })
+  })
+
+  describe('findContact', () => {
+    it('should find the contact that has the given remote id', async () => {
+      const findSpy = jest.fn().mockResolvedValue({
+        data: [
+          {
+            id: 'my-awesome-contact'
+          }
+        ]
+      })
+      cozyUtils.client.collection = jest.fn(() => ({
+        find: findSpy
+      }))
+      const result = await cozyUtils.findContact(
+        'fakeAccountId',
+        '1234-5678-7269-0018'
+      )
+      expect(findSpy).toHaveBeenCalledWith(
+        {
+          cozyMetadata: {
+            sync: {
+              fakeAccountId: {
+                id: '1234-5678-7269-0018'
+              }
+            }
+          }
+        },
+        { indexedFields: ['cozyMetadata.sync.fakeAccountId.id'] }
+      )
+      expect(result).toEqual({ id: 'my-awesome-contact' })
+    })
   })
 
   describe('findOrCreateContactAccount', () => {
