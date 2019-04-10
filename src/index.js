@@ -1,4 +1,5 @@
 const { BaseKonnector, log, errors } = require('cozy-konnector-libs')
+const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
 
 module.exports = new BaseKonnector(start)
@@ -9,20 +10,27 @@ module.exports = new BaseKonnector(start)
 async function start() {
   log('info', 'Starting the Toutatice connector')
 
-  // get or create contacts.account
-  //
-  // fetch contacts and groups
-  //
-  // create all groups on cozy
-  //
-  // foreach remote contact
-  // - transpiler to cozy
-  // - attach groups
-  // - fetch cozy contact
-  // - - if inexistent, create it
-  // - - else update by overriding with remote first
   try {
     const accountId = getAccountId()
+    const cozyUtils = new CozyUtils(accountId)
+
+    log('info', 'Getting cozy contact account')
+    const contactAccount = await cozyUtils.findOrCreateContactAccount(
+      accountId,
+      'toutatice'
+    )
+    log('info', contactAccount)
+    //
+    // fetch contacts and groups
+    //
+    // create all groups on cozy
+    //
+    // foreach remote contact
+    // - transpiler to cozy
+    // - attach groups
+    // - fetch cozy contact
+    // - - if inexistent, create it
+    // - - else update by overriding with remote first
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
