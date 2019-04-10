@@ -33,7 +33,7 @@
     "build": "webpack",
     "lint": "eslint --fix .",
     "deploy": "git-directory-deploy --directory build/ --branch ${DEPLOY_BRANCH:-build} --repo=${DEPLOY_REPOSITORY:-git@github.com:konnectors/toutatice.git}",
-    "cozyPublish": "cozy-app-publish --token $REGISTRY_TOKEN --build-commit $(git rev-parse ${DEPLOY_BRANCH:-build}) --registry-url https://apps-registry.cozycloud.cc/academie_rennes",
+    "cozyPublish": "cozy-app-publish --token $REGISTRY_TOKEN --build-commit $(git rev-parse ${DEPLOY_BRANCH:-build}) --space academie_rennes",
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
