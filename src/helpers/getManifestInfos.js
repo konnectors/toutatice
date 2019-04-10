@@ -1,10 +1,9 @@
 const fs = require('fs')
-const manifestPath = './manifest.konnector'
 
 module.exports = () => {
   if (process.env.NODE_ENV === 'development') {
-    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+    return JSON.parse(fs.readFileSync('./manifest.konnector', 'utf8'))
   } else {
-    return require(manifestPath)
+    return require('../../manifest.konnector')
   }
 }
