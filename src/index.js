@@ -24,7 +24,7 @@ async function start() {
     )
 
     const response = await fetch(
-      'https://gist.githubusercontent.com/y-lohse/32686b06ab953bef7ffd6904b76651cf/raw/04f2ef9bf19897698146e6d2ef22d382f4454abf/enseignant.json'
+      'https://jsonblob.com/api/jsonBlob/a47fe912-5d25-11e9-bde5-291328616b73'
     )
     const remoteData = await response.json()
 
