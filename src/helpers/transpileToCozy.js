@@ -1,5 +1,5 @@
 const get = require('lodash/get')
-const { DOCTYPE_CONTACTS, APP_NAME } = require('./constants')
+const { DOCTYPE_CONTACTS, APP_NAME } = require('../constants')
 
 const getJobTitle = title => {
   switch (title.toLowerCase()) {

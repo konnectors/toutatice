@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
-const transpileToCozy = require('./transpileToCozy')
+const transpileToCozy = require('./helpers/transpileToCozy')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronize = require('./synchronize')
 
