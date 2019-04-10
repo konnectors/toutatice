@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
+const transpileToCozy = require('./transpileToCozy')
 
 module.exports = new BaseKonnector(start)
 
@@ -21,23 +22,26 @@ async function start() {
       accountId,
       'toutatice'
     )
-    log('info', contactAccount)
 
     const response = await fetch(
       'https://gist.githubusercontent.com/y-lohse/32686b06ab953bef7ffd6904b76651cf/raw/04f2ef9bf19897698146e6d2ef22d382f4454abf/enseignant.json'
     )
     const remoteData = await response.json()
-    //
+
     // create all groups on cozy
     //
     // foreach remote contact
-    // - transpiler to cozy
+    // - transpiler to cozy ✅
     // - attach groups
     // - fetch cozy contact
     // - - if inexistent, create it
     // - - else update by overriding with remote first
+
     const remoteContacts = get(remoteData, 'contacts', [])
-    log('info', remoteContacts)
+    const transpiledContacts = remoteContacts.map(contact =>
+      transpileToCozy(contact, contactAccount._id)
+    )
+    log('info', transpiledContacts.length)
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
