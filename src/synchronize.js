@@ -1,8 +1,14 @@
 const get = require('lodash/get')
 const merge = require('lodash/merge')
 const pLimit = require('p-limit')
+const transpileToCozy = require('./helpers/transpileToCozy')
 
-const synchronize = async (cozyUtils, contactAccountId, remoteContacts) => {
+const synchronize = async (
+  cozyUtils,
+  contactAccountId,
+  remoteContacts,
+  cozyContacts
+) => {
   const result = {
     contacts: {
       created: 0,
@@ -12,17 +18,21 @@ const synchronize = async (cozyUtils, contactAccountId, remoteContacts) => {
   await cozyUtils.prepareIndex()
 
   const promises = remoteContacts.map(remoteContact => async () => {
-    const remoteId = get(
-      remoteContact,
-      `cozyMetadata.sync.${contactAccountId}.id`
-    )
-    const cozyContact = await cozyUtils.findContact(contactAccountId, remoteId)
+    const cozyContact = cozyContacts.find(cozyContact => {
+      const cozyRemoteId = get(
+        cozyContact,
+        `cozyMetadata.sync.${contactAccountId}.id`
+      )
+      return cozyRemoteId === remoteContact.uuid
+    })
+
+    const transpiledContact = transpileToCozy(remoteContact, contactAccountId)
 
     if (!cozyContact) {
-      cozyUtils.save(remoteContact)
+      cozyUtils.save(transpiledContact)
       result.contacts.created++
     } else {
-      const merged = merge(cozyContact, remoteContact)
+      const merged = merge(cozyContact, transpiledContact)
       cozyUtils.save(merged)
       result.contacts.updated++
     }

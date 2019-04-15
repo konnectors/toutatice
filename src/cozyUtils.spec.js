@@ -56,35 +56,43 @@ describe('CozyUtils', () => {
     })
   })
 
-  describe('findContact', () => {
-    it('should find the contact that has the given remote id', async () => {
+  describe('findContacts', () => {
+    it('should find the contacts that have the given remote ids', async () => {
       const findSpy = jest.fn().mockResolvedValue({
         data: [
           {
             id: 'my-awesome-contact'
+          },
+          {
+            id: 'my-less-awesome-contact'
           }
         ]
       })
       cozyUtils.client.collection = jest.fn(() => ({
         find: findSpy
       }))
-      const result = await cozyUtils.findContact(
-        'fakeAccountId',
-        '1234-5678-7269-0018'
-      )
+      const result = await cozyUtils.findContacts('fakeAccountId', [
+        '1234-5678-7269-0018',
+        '2716-9818-1176-2836'
+      ])
       expect(findSpy).toHaveBeenCalledWith(
         {
           cozyMetadata: {
             sync: {
               fakeAccountId: {
-                id: '1234-5678-7269-0018'
+                id: {
+                  $in: ['1234-5678-7269-0018', '2716-9818-1176-2836']
+                }
               }
             }
           }
         },
         { indexedFields: ['cozyMetadata.sync.fakeAccountId.id'] }
       )
-      expect(result).toEqual({ id: 'my-awesome-contact' })
+      expect(result).toEqual([
+        { id: 'my-awesome-contact' },
+        { id: 'my-less-awesome-contact' }
+      ])
     })
   })
 

@@ -3,7 +3,6 @@ const fetch = require('node-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
-const transpileToCozy = require('./helpers/transpileToCozy')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronize = require('./synchronize')
 
@@ -42,14 +41,18 @@ async function start() {
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)
-    const transpiledContacts = filteredContacts.map(contact =>
-      transpileToCozy(contact, contactAccount._id)
+
+    const remoteContactsId = filteredContacts.map(({ uuid }) => uuid)
+    const cozyContacts = await cozyUtils.findContacts(
+      contactAccount._id,
+      remoteContactsId
     )
 
     const result = await synchronize(
       cozyUtils,
       contactAccount._id,
-      transpiledContacts
+      filteredContacts,
+      cozyContacts
     )
 
     log('info', `${result.contacts.created} contacts created`)

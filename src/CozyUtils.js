@@ -19,14 +19,16 @@ class CozyUtils {
       .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
   }
 
-  async findContact(accountId, remoteId) {
+  async findContacts(accountId, remoteIds) {
     const contactsCollection = this.client.collection(DOCTYPE_CONTACTS)
     const resp = await contactsCollection.find(
       {
         cozyMetadata: {
           sync: {
             [accountId]: {
-              id: remoteId
+              id: {
+                $in: remoteIds
+              }
             }
           }
         }
@@ -34,7 +36,7 @@ class CozyUtils {
       { indexedFields: [`cozyMetadata.sync.${accountId}.id`] }
     )
 
-    return get(resp, 'data.0')
+    return get(resp, 'data')
   }
 
   async findOrCreateContactAccount(accountId, accountName) {
