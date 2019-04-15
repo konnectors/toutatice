@@ -1,76 +1,12 @@
 const { log } = require('cozy-konnector-libs')
 const get = require('lodash/get')
-const CozyClient = require('cozy-client').default
+const initCozyClient = require('./helpers/initCozyClient')
 
 const {
   APP_NAME,
-  APP_VERSION,
   DOCTYPE_CONTACTS,
-  DOCTYPE_CONTACTS_ACCOUNT,
-  DOCTYPE_CONTACTS_VERSION,
-  DOCTYPE_CONTACTS_ACCOUNT_VERSION
+  DOCTYPE_CONTACTS_ACCOUNT
 } = require('./constants')
-
-function getAccessToken(environment) {
-  try {
-    if (environment === 'development') {
-      const cozyCredentials = JSON.parse(process.env.COZY_CREDENTIALS)
-      return cozyCredentials.token.accessToken
-    } else {
-      return process.env.COZY_CREDENTIALS.trim()
-    }
-  } catch (err) {
-    log(
-      'error',
-      `Please provide proper COZY_CREDENTIALS environment variable. ${
-        process.env.COZY_CREDENTIALS
-      } is not OK`
-    )
-
-    throw err
-  }
-}
-
-function getCozyUrl() {
-  if (process.env.COZY_URL === undefined) {
-    log('error', 'Please provide COZY_URL environment variable.')
-    throw new Error('COZY_URL environment variable is absent/not valid')
-  } else {
-    return process.env.COZY_URL
-  }
-}
-
-function getSchema() {
-  return {
-    contacts: {
-      doctype: DOCTYPE_CONTACTS,
-      doctypeVersion: DOCTYPE_CONTACTS_VERSION
-    },
-    contactsAccounts: {
-      doctype: DOCTYPE_CONTACTS_ACCOUNT,
-      doctypeVersion: DOCTYPE_CONTACTS_ACCOUNT_VERSION
-    }
-  }
-}
-
-function initCozyClient(accountId) {
-  const environment =
-    process.env.NODE_ENV === 'none' ? 'production' : process.env.NODE_ENV
-  try {
-    const uri = getCozyUrl(environment)
-    const token = getAccessToken(environment)
-    const appMetadata = {
-      slug: APP_NAME,
-      sourceAccount: accountId,
-      version: APP_VERSION
-    }
-    const schema = getSchema()
-    return new CozyClient({ uri, token, appMetadata, schema })
-  } catch (err) {
-    log('error', 'Unable to initialize cozy client')
-    throw err
-  }
-}
 
 class CozyUtils {
   constructor(accountId) {
