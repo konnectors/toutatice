@@ -234,4 +234,72 @@ describe('synchronizing contacts', () => {
       updated: 1
     })
   })
+
+  it('should not update unmodified contacts', async () => {
+    const cozyContacts = [
+      {
+        _id: 'a145b5551e46fe3870763109c90063f0',
+        _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+        cozy: [
+          {
+            primary: true,
+            url: 'https://vhugo14.mytoutatice.cloud'
+          }
+        ],
+        cozyMetadata: {
+          createdAt: '2019-04-12T14:34:29.088Z',
+          createdByApp: 'konnector-toutatice',
+          createdByAppVersion: '1.0.0',
+          doctypeVersion: 2,
+          metadataVersion: 1,
+          sourceAccount: 'fakeAccountId',
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '7162-1889-0916-6273',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          updatedAt: '2019-04-12T15:40:08.126Z',
+          updatedByApps: [
+            {
+              date: '2019-04-12T14:34:29.088Z',
+              slug: 'konnector-toutatice',
+              version: '1.0.0'
+            }
+          ]
+        },
+        fullname: 'Victor Hugo',
+        id: 'a145b5551e46fe3870763109c90063f0',
+        jobTitle: 'Élève',
+        name: {
+          familyName: 'Hugo',
+          givenName: 'Victor'
+        }
+      }
+    ]
+    const remoteContacts = [
+      {
+        uuid: '7162-1889-0916-6273',
+        firstname: 'Victor',
+        lastname: 'Hugo',
+        title: 'ele',
+        cloud_url: 'vhugo14.mytoutatice.cloud'
+      }
+    ]
+
+    const result = await synchronize(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      cozyContacts
+    )
+    expect(mockCozyUtils.save).not.toHaveBeenCalled()
+    expect(result.contacts).toEqual({
+      created: 0,
+      updated: 0
+    })
+  })
 })
