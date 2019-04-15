@@ -27,8 +27,8 @@ describe('Transpile to cozy', () => {
     expect(result).toEqual({
       _type: DOCTYPE,
       name: {
-        familyName: 'Nicolas',
-        givenName: 'Blin'
+        familyName: 'Blin',
+        givenName: 'Nicolas'
       },
       cozy: [
         {
@@ -64,8 +64,8 @@ describe('Transpile to cozy', () => {
     expect(result).toEqual({
       _type: DOCTYPE,
       name: {
-        familyName: 'Sophie',
-        givenName: 'Schaal'
+        familyName: 'Schaal',
+        givenName: 'Sophie'
       },
       cozy: [
         {

@@ -13,8 +13,8 @@ const getJobTitle = title => {
 }
 
 const transpileToCozy = (contact, contactsAccountsId) => {
-  const familyName = get(contact, 'firstname')
-  const givenName = get(contact, 'lastname')
+  const givenName = get(contact, 'firstname')
+  const familyName = get(contact, 'lastname')
   const cozyUrl = get(contact, 'cloud_url')
   const title = get(contact, 'title', '') || ''
   const remoteId = get(contact, 'uuid')
