@@ -54,6 +54,11 @@ async function start() {
 
     log('info', `${result.contacts.created} contacts created`)
     log('info', `${result.contacts.updated} contacts updated`)
+
+    await cozyUtils.save({
+      ...contactAccount,
+      lastLocalSync: new Date().toISOString()
+    })
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
