@@ -75,8 +75,6 @@ describe('synchronizing contacts', () => {
       {
         _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
         _rev: '2-c39d514f9b25a694a1331f893ba4bf2f',
-        address: [],
-        company: '',
         cozy: [
           {
             primary: true,
@@ -113,7 +111,6 @@ describe('synchronizing contacts', () => {
             }
           ]
         },
-        email: [],
         fullname: 'Rodriguez Pablo',
         id: 'da30c4ca96ec5068874ae5fe9a005eb1',
         jobTitle: 'Élève',
@@ -125,7 +122,6 @@ describe('synchronizing contacts', () => {
           familyName: 'Pablito', // Changed
           givenName: 'Rodriguez'
         },
-        note: '',
         phone: [
           {
             number: '001122334455',
@@ -162,8 +158,6 @@ describe('synchronizing contacts', () => {
       _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
       _type: 'io.cozy.contacts',
       _rev: '2-c39d514f9b25a694a1331f893ba4bf2f',
-      address: [],
-      company: '',
       cozy: [
         {
           primary: true,
@@ -201,7 +195,6 @@ describe('synchronizing contacts', () => {
           }
         ]
       },
-      email: [],
       fullname: 'Rodriguez Pablo',
       id: 'da30c4ca96ec5068874ae5fe9a005eb1',
       jobTitle: 'Élève',
@@ -213,7 +206,6 @@ describe('synchronizing contacts', () => {
         familyName: 'Rodriguez',
         givenName: 'Pablo'
       },
-      note: '',
       phone: [
         {
           number: '001122334455',
