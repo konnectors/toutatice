@@ -110,7 +110,7 @@ describe('Transpile to cozy', () => {
       cloud_url: 'rroderson120.mytoutatice.cloud'
     }
     const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
-    expect(result.jobTitle).toEqual('')
+    expect(result.jobTitle).toEqual(undefined)
   })
 
   it('should handle empty cozy urls', () => {
@@ -123,5 +123,33 @@ describe('Transpile to cozy', () => {
     }
     const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result.cozy).toEqual([])
+  })
+
+  it('should handle missing fields', () => {
+    const source = {
+      uuid: '1728-0091-6274-1839'
+      // no other fields
+    }
+    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    expect(result).toEqual({
+      _type: DOCTYPE,
+      jobTitle: undefined,
+      name: {
+        familyName: undefined,
+        givenName: undefined
+      },
+      cozy: [],
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '1728-0091-6274-1839',
+            konnector: KONNECTOR_NAME,
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        }
+      }
+    })
   })
 })

@@ -294,4 +294,109 @@ describe('synchronizing contacts', () => {
       updated: 0
     })
   })
+
+  it('should keep cozy fields when remote fields are missing', async () => {
+    const cozyContacts = [
+      {
+        _id: 'a145b5551e46fe3870763109c9008c1c',
+        _rev: '2-a7cd90ba870a3505b9676fb6d66f5493',
+        cozy: [
+          {
+            primary: true,
+            url: 'https://jausten20.mytoutatice.cloud'
+          }
+        ],
+        cozyMetadata: {
+          createdAt: '2019-04-12T14:34:29.088Z',
+          createdByApp: 'konnector-toutatice',
+          createdByAppVersion: '1.0.0',
+          doctypeVersion: 2,
+          metadataVersion: 1,
+          sourceAccount: 'fakeAccountId',
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '2766-0917-1711-5382',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          updatedAt: '2019-04-12T15:40:08.126Z',
+          updatedByApps: [
+            {
+              date: '2019-04-12T14:34:29.088Z',
+              slug: 'konnector-toutatice',
+              version: '1.0.0'
+            }
+          ]
+        },
+        id: 'a145b5551e46fe3870763109c90063f0',
+        jobTitle: 'Élève',
+        name: {
+          familyName: 'Austen',
+          givenName: 'Jane'
+        }
+      }
+    ]
+    const remoteContacts = [
+      {
+        uuid: '2766-0917-1711-5382',
+        firstname: 'Elisabeth'
+      }
+    ]
+
+    const result = await synchronize(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      cozyContacts
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+      _id: 'a145b5551e46fe3870763109c9008c1c',
+      _type: 'io.cozy.contacts',
+      _rev: '2-a7cd90ba870a3505b9676fb6d66f5493',
+      cozy: [
+        {
+          primary: true,
+          url: 'https://jausten20.mytoutatice.cloud'
+        }
+      ],
+      cozyMetadata: {
+        createdAt: '2019-04-12T14:34:29.088Z',
+        createdByApp: 'konnector-toutatice',
+        createdByAppVersion: '1.0.0',
+        doctypeVersion: 2,
+        metadataVersion: 1,
+        sourceAccount: 'fakeAccountId',
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '2766-0917-1711-5382',
+            konnector: 'konnector-toutatice',
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        },
+        updatedAt: '2019-04-12T15:40:08.126Z',
+        updatedByApps: [
+          {
+            date: '2019-04-12T14:34:29.088Z',
+            slug: 'konnector-toutatice',
+            version: '1.0.0'
+          }
+        ]
+      },
+      id: 'a145b5551e46fe3870763109c90063f0',
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Austen',
+        givenName: 'Elisabeth'
+      }
+    })
+    expect(result.contacts).toEqual({
+      created: 0,
+      updated: 1
+    })
+  })
 })

@@ -16,10 +16,10 @@ const transpileToCozy = (contact, contactsAccountsId) => {
   const givenName = get(contact, 'firstname')
   const familyName = get(contact, 'lastname')
   const cozyUrl = get(contact, 'cloud_url')
-  const title = get(contact, 'title', '') || ''
+  const title = get(contact, 'title')
   const remoteId = get(contact, 'uuid')
 
-  const jobTitle = getJobTitle(title)
+  const jobTitle = title ? getJobTitle(title) : undefined
   const now = new Date().toISOString()
 
   const cozy = cozyUrl
