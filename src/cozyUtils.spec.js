@@ -26,10 +26,6 @@ describe('CozyUtils', () => {
         version: APP_VERSION
       },
       schema: {
-        accounts: {
-          doctype: 'io.cozy.accounts',
-          doctypeVersion: 1
-        },
         contacts: {
           doctype: 'io.cozy.contacts',
           doctypeVersion: 2

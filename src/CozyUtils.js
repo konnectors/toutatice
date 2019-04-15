@@ -5,8 +5,6 @@ const CozyClient = require('cozy-client').default
 const {
   APP_NAME,
   APP_VERSION,
-  DOCTYPE_ACCOUNTS,
-  DOCTYPE_ACCOUNTS_VERSION,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_ACCOUNT,
   DOCTYPE_CONTACTS_VERSION,
@@ -44,10 +42,6 @@ function getCozyUrl() {
 
 function getSchema() {
   return {
-    accounts: {
-      doctype: DOCTYPE_ACCOUNTS,
-      doctypeVersion: DOCTYPE_ACCOUNTS_VERSION
-    },
     contacts: {
       doctype: DOCTYPE_CONTACTS,
       doctypeVersion: DOCTYPE_CONTACTS_VERSION
