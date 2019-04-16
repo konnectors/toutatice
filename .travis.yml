@@ -18,6 +18,7 @@ branches:
   - build-debug
 script:
 - yarn lint
+- yarn jest
 - yarn build
 deploy:
 - provider: script
