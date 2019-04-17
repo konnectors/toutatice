@@ -43,6 +43,26 @@ class CozyUtils {
     return get(resp, 'data')
   }
 
+  async findGroups(accountId, remoteIds) {
+    const groupsCollection = this.client.collection(DOCTYPE_CONTACTS_GROUPS)
+    const resp = await groupsCollection.find(
+      {
+        cozyMetadata: {
+          sync: {
+            [accountId]: {
+              id: {
+                $in: remoteIds
+              }
+            }
+          }
+        }
+      },
+      { indexedFields: [`cozyMetadata.sync.${accountId}.id`] }
+    )
+
+    return get(resp, 'data')
+  }
+
   async findOrCreateContactAccount(accountId, accountName) {
     const accountsCollection = this.client.collection(DOCTYPE_CONTACTS_ACCOUNT)
     const accountsWithSourceAccount = await accountsCollection.find({

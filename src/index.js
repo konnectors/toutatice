@@ -36,7 +36,13 @@ async function start() {
     const remoteStructures = get(remoteData, 'structures', [])
     const remoteGroups = convertStructuresToGroups(remoteStructures)
     const filteredGroups = filterRemoteGroups(remoteGroups)
-    log('info', filteredGroups)
+
+    const remoteGroupsId = filteredGroups.map(({ gid }) => gid)
+    const cozyGroups = await cozyUtils.findGroups(
+      contactAccount._id,
+      remoteGroupsId
+    )
+    log('info', cozyGroups)
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)

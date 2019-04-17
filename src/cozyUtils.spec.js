@@ -80,6 +80,7 @@ describe('CozyUtils', () => {
         '1234-5678-7269-0018',
         '2716-9818-1176-2836'
       ])
+      expect(cozyUtils.client.collection).toHaveBeenCalledWith(DOCTYPE_CONTACTS)
       expect(findSpy).toHaveBeenCalledWith(
         {
           cozyMetadata: {
@@ -98,6 +99,46 @@ describe('CozyUtils', () => {
         { id: 'my-awesome-contact' },
         { id: 'my-less-awesome-contact' }
       ])
+    })
+  })
+
+  describe('findGroups', () => {
+    it('should find the groups that have the given remote ids', async () => {
+      const findSpy = jest.fn().mockResolvedValue({
+        data: [
+          {
+            id: 'hufflepuff'
+          },
+          {
+            id: 'gryffindor'
+          }
+        ]
+      })
+      cozyUtils.client.collection = jest.fn(() => ({
+        find: findSpy
+      }))
+      const result = await cozyUtils.findGroups('fakeAccountId', [
+        '6167-7728-0938-1661',
+        '7273-7639-1773-8379'
+      ])
+      expect(cozyUtils.client.collection).toHaveBeenCalledWith(
+        DOCTYPE_CONTACTS_GROUPS
+      )
+      expect(findSpy).toHaveBeenCalledWith(
+        {
+          cozyMetadata: {
+            sync: {
+              fakeAccountId: {
+                id: {
+                  $in: ['6167-7728-0938-1661', '7273-7639-1773-8379']
+                }
+              }
+            }
+          }
+        },
+        { indexedFields: ['cozyMetadata.sync.fakeAccountId.id'] }
+      )
+      expect(result).toEqual([{ id: 'hufflepuff' }, { id: 'gryffindor' }])
     })
   })
 
