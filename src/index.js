@@ -29,16 +29,6 @@ async function start() {
     )
     const remoteData = await response.json()
 
-    // fetch the remote file ✅
-    // create all groups on cozy
-    //
-    // foreach remote contact ⏳
-    // - transpiler to cozy ✅
-    // - attach groups
-    // - fetch cozy contact ✅
-    // - - if inexistent, create it ✅
-    // - - else update by overriding with remote first ✅
-
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)
 
