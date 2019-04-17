@@ -26,6 +26,8 @@ async function start() {
       'toutatice'
     )
 
+    await cozyUtils.prepareIndexes()
+
     const response = await fetch(
       'https://jsonblob.com/api/jsonBlob/a47fe912-5d25-11e9-bde5-291328616b73'
     )

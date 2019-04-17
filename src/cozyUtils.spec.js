@@ -5,6 +5,7 @@ const {
   APP_NAME,
   APP_VERSION,
   DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS
 } = require('./constants')
 
@@ -42,14 +43,18 @@ describe('CozyUtils', () => {
     expect(cozyUtils.client).toBeDefined()
   })
 
-  describe('prepareIndex method', () => {
-    it('should prepare an index on remote id for contacts', () => {
+  describe('prepareIndexes method', () => {
+    it('should prepare an index on remote id for contacts', async () => {
       const createIndexSpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
         createIndex: createIndexSpy
       }))
-      cozyUtils.prepareIndex('fakeAccountId')
+      await cozyUtils.prepareIndexes('fakeAccountId')
+      expect(cozyUtils.client.collection).toHaveBeenCalledTimes(2)
       expect(cozyUtils.client.collection).toHaveBeenCalledWith(DOCTYPE_CONTACTS)
+      expect(cozyUtils.client.collection).toHaveBeenCalledWith(
+        DOCTYPE_CONTACTS_GROUPS
+      )
       expect(createIndexSpy).toHaveBeenCalledWith([
         'cozyMetadata.sync.fakeAccountId.id'
       ])

@@ -5,6 +5,7 @@ const initCozyClient = require('./helpers/initCozyClient')
 const {
   APP_NAME,
   DOCTYPE_CONTACTS,
+  DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS_ACCOUNT
 } = require('./constants')
 
@@ -13,9 +14,12 @@ class CozyUtils {
     this.client = initCozyClient(accountId)
   }
 
-  prepareIndex(contactAccountId) {
-    return this.client
+  async prepareIndexes(contactAccountId) {
+    await this.client
       .collection(DOCTYPE_CONTACTS)
+      .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
+    await this.client
+      .collection(DOCTYPE_CONTACTS_GROUPS)
       .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
   }
 
