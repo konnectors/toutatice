@@ -1,4 +1,4 @@
-const synchronize = require('./synchronize')
+const synchronizeContacts = require('./synchronizeContacts')
 const MockDate = require('mockdate')
 
 describe('synchronizing contacts', () => {
@@ -32,7 +32,7 @@ describe('synchronizing contacts', () => {
       }
     ]
     const cozyContacts = []
-    const result = await synchronize(
+    const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
@@ -148,7 +148,7 @@ describe('synchronizing contacts', () => {
       }
     ]
 
-    const result = await synchronize(
+    const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
@@ -282,7 +282,7 @@ describe('synchronizing contacts', () => {
       }
     ]
 
-    const result = await synchronize(
+    const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
@@ -346,7 +346,7 @@ describe('synchronizing contacts', () => {
       }
     ]
 
-    const result = await synchronize(
+    const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,

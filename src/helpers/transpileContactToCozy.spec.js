@@ -1,5 +1,5 @@
 const MockDate = require('mockdate')
-const transpileToCozy = require('./transpileToCozy')
+const transpileContactToCozy = require('./transpileContactToCozy')
 
 const MOCKED_DATE = '2019-03-05T09:09:00.115Z'
 const MOCK_CONTACT_ACCOUNT_ID = '123-abc'
@@ -23,7 +23,7 @@ describe('Transpile to cozy', () => {
       title: 'ele',
       cloud_url: 'hpotter3.mytoutatice.cloud'
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result).toEqual({
       _type: DOCTYPE,
       name: {
@@ -60,7 +60,7 @@ describe('Transpile to cozy', () => {
       title: 'ens',
       cloud_url: 'hgranger14.mytoutatice.cloud'
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result).toEqual({
       _type: DOCTYPE,
       name: {
@@ -97,7 +97,7 @@ describe('Transpile to cozy', () => {
       title: 'random',
       cloud_url: 'rweasley120.mytoutatice.cloud'
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result.jobTitle).toEqual('random')
   })
 
@@ -109,7 +109,7 @@ describe('Transpile to cozy', () => {
       title: null,
       cloud_url: 'rweasley120.mytoutatice.cloud'
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result.jobTitle).toEqual(undefined)
   })
 
@@ -121,7 +121,7 @@ describe('Transpile to cozy', () => {
       title: 'ele',
       cloud_url: ''
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result.cozy).toEqual([])
   })
 
@@ -130,7 +130,7 @@ describe('Transpile to cozy', () => {
       uuid: '1728-0091-6274-1839'
       // no other fields
     }
-    const result = transpileToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+    const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result).toEqual({
       _type: DOCTYPE,
       jobTitle: undefined,

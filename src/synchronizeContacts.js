@@ -1,7 +1,7 @@
 const get = require('lodash/get')
 const merge = require('lodash/merge')
 const pLimit = require('p-limit')
-const transpileToCozy = require('./helpers/transpileToCozy')
+const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
 const haveRemoteFieldsChanged = (
   currentContact,
@@ -20,7 +20,7 @@ const haveRemoteFieldsChanged = (
   )
 }
 
-const synchronize = async (
+const synchronizeContacts = async (
   cozyUtils,
   contactAccountId,
   remoteContacts,
@@ -41,7 +41,10 @@ const synchronize = async (
       return cozyRemoteId === remoteContact.uuid
     })
 
-    const transpiledContact = transpileToCozy(remoteContact, contactAccountId)
+    const transpiledContact = transpileContactToCozy(
+      remoteContact,
+      contactAccountId
+    )
     const needsUpdate = haveRemoteFieldsChanged(
       cozyContact,
       transpiledContact,
@@ -65,4 +68,4 @@ const synchronize = async (
   return result
 }
 
-module.exports = synchronize
+module.exports = synchronizeContacts

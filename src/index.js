@@ -6,7 +6,7 @@ const getAccountId = require('./helpers/getAccountId')
 const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
 const filterRemoteGroups = require('./helpers/filterRemoteGroups')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
-const synchronize = require('./synchronize')
+const synchronizeContacts = require('./synchronizeContacts')
 
 module.exports = new BaseKonnector(start)
 
@@ -53,7 +53,7 @@ async function start() {
       remoteContactsId
     )
 
-    const result = await synchronize(
+    const result = await synchronizeContacts(
       cozyUtils,
       contactAccount._id,
       filteredContacts,

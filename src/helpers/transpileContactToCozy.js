@@ -12,7 +12,7 @@ const getJobTitle = title => {
   }
 }
 
-const transpileToCozy = (contact, contactsAccountsId) => {
+const transpileContactToCozy = (contact, contactsAccountsId) => {
   const givenName = get(contact, 'firstname')
   const familyName = get(contact, 'lastname')
   const cozyUrl = get(contact, 'cloud_url')
@@ -54,4 +54,4 @@ const transpileToCozy = (contact, contactsAccountsId) => {
   }
 }
 
-module.exports = transpileToCozy
+module.exports = transpileContactToCozy
