@@ -3,6 +3,7 @@ const fetch = require('isomorphic-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
+const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronize = require('./synchronize')
 
@@ -28,6 +29,10 @@ async function start() {
       'https://jsonblob.com/api/jsonBlob/a47fe912-5d25-11e9-bde5-291328616b73'
     )
     const remoteData = await response.json()
+
+    const remoteStructures = get(remoteData, 'structures', [])
+    const remoteGroups = convertStructuresToGroups(remoteStructures)
+    log('info', remoteGroups)
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)
