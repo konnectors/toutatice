@@ -82,12 +82,6 @@ describe('synchronizing contacts', () => {
           }
         ],
         cozyMetadata: {
-          createdAt: '2019-04-12T14:34:29.088Z',
-          createdByApp: 'konnector-toutatice',
-          createdByAppVersion: '1.0.0',
-          doctypeVersion: 2,
-          metadataVersion: 1,
-          sourceAccount: 'fakeAccountId',
           sync: {
             [MOCK_CONTACT_ACCOUNT_ID]: {
               contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
@@ -97,7 +91,6 @@ describe('synchronizing contacts', () => {
               remoteRev: null
             }
           },
-          updatedAt: '2019-04-12T15:40:08.126Z',
           updatedByApps: [
             {
               date: '2019-04-12T15:40:08.126Z',
@@ -112,12 +105,7 @@ describe('synchronizing contacts', () => {
           ]
         },
         fullname: 'Weasley Ronald',
-        id: 'da30c4ca96ec5068874ae5fe9a005eb1',
         jobTitle: 'Élève',
-        metadata: {
-          cozy: true,
-          version: 1
-        },
         name: {
           familyName: 'Ron', // Changed
           givenName: 'Weasley'
@@ -127,15 +115,7 @@ describe('synchronizing contacts', () => {
             number: '001122334455',
             primary: true
           }
-        ],
-        relationships: {
-          accounts: {
-            data: []
-          },
-          groups: {
-            data: []
-          }
-        }
+        ]
       }
     ]
     const remoteContacts = [
@@ -156,8 +136,8 @@ describe('synchronizing contacts', () => {
     )
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
       _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
-      _type: 'io.cozy.contacts',
       _rev: '2-c39d514f9b25a694a1331f893ba4bf2f',
+      _type: 'io.cozy.contacts',
       cozy: [
         {
           primary: true,
@@ -166,12 +146,6 @@ describe('synchronizing contacts', () => {
         }
       ],
       cozyMetadata: {
-        createdAt: '2019-04-12T14:34:29.088Z',
-        createdByApp: 'konnector-toutatice',
-        createdByAppVersion: '1.0.0',
-        doctypeVersion: 2,
-        metadataVersion: 1,
-        sourceAccount: 'fakeAccountId',
         sync: {
           [MOCK_CONTACT_ACCOUNT_ID]: {
             contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
@@ -181,7 +155,6 @@ describe('synchronizing contacts', () => {
             remoteRev: null
           }
         },
-        updatedAt: '2019-04-12T15:40:08.126Z',
         updatedByApps: [
           {
             date: '2019-04-12T15:40:08.126Z',
@@ -196,12 +169,7 @@ describe('synchronizing contacts', () => {
         ]
       },
       fullname: 'Weasley Ronald',
-      id: 'da30c4ca96ec5068874ae5fe9a005eb1',
       jobTitle: 'Élève',
-      metadata: {
-        cozy: true,
-        version: 1
-      },
       name: {
         familyName: 'Weasley',
         givenName: 'Ronald'
@@ -211,15 +179,7 @@ describe('synchronizing contacts', () => {
           number: '001122334455',
           primary: true
         }
-      ],
-      relationships: {
-        accounts: {
-          data: []
-        },
-        groups: {
-          data: []
-        }
-      }
+      ]
     })
     expect(result.contacts).toEqual({
       created: 0,
@@ -239,12 +199,6 @@ describe('synchronizing contacts', () => {
           }
         ],
         cozyMetadata: {
-          createdAt: '2019-04-12T14:34:29.088Z',
-          createdByApp: 'konnector-toutatice',
-          createdByAppVersion: '1.0.0',
-          doctypeVersion: 2,
-          metadataVersion: 1,
-          sourceAccount: 'fakeAccountId',
           sync: {
             [MOCK_CONTACT_ACCOUNT_ID]: {
               contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
@@ -254,7 +208,6 @@ describe('synchronizing contacts', () => {
               remoteRev: null
             }
           },
-          updatedAt: '2019-04-12T15:40:08.126Z',
           updatedByApps: [
             {
               date: '2019-04-12T14:34:29.088Z',
@@ -264,7 +217,6 @@ describe('synchronizing contacts', () => {
           ]
         },
         fullname: 'Hermione Granger',
-        id: 'a145b5551e46fe3870763109c90063f0',
         jobTitle: 'Élève',
         name: {
           familyName: 'Granger',
@@ -307,12 +259,6 @@ describe('synchronizing contacts', () => {
           }
         ],
         cozyMetadata: {
-          createdAt: '2019-04-12T14:34:29.088Z',
-          createdByApp: 'konnector-toutatice',
-          createdByAppVersion: '1.0.0',
-          doctypeVersion: 2,
-          metadataVersion: 1,
-          sourceAccount: 'fakeAccountId',
           sync: {
             [MOCK_CONTACT_ACCOUNT_ID]: {
               contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
@@ -322,7 +268,6 @@ describe('synchronizing contacts', () => {
               remoteRev: null
             }
           },
-          updatedAt: '2019-04-12T15:40:08.126Z',
           updatedByApps: [
             {
               date: '2019-04-12T14:34:29.088Z',
@@ -354,8 +299,8 @@ describe('synchronizing contacts', () => {
     )
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
       _id: 'a145b5551e46fe3870763109c9008c1c',
-      _type: 'io.cozy.contacts',
       _rev: '2-a7cd90ba870a3505b9676fb6d66f5493',
+      _type: 'io.cozy.contacts',
       cozy: [
         {
           primary: true,
@@ -363,12 +308,6 @@ describe('synchronizing contacts', () => {
         }
       ],
       cozyMetadata: {
-        createdAt: '2019-04-12T14:34:29.088Z',
-        createdByApp: 'konnector-toutatice',
-        createdByAppVersion: '1.0.0',
-        doctypeVersion: 2,
-        metadataVersion: 1,
-        sourceAccount: 'fakeAccountId',
         sync: {
           [MOCK_CONTACT_ACCOUNT_ID]: {
             contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
@@ -378,7 +317,6 @@ describe('synchronizing contacts', () => {
             remoteRev: null
           }
         },
-        updatedAt: '2019-04-12T15:40:08.126Z',
         updatedByApps: [
           {
             date: '2019-04-12T14:34:29.088Z',
