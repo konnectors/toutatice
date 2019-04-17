@@ -4,6 +4,7 @@ const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
 const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
+const filterRemoteGroups = require('./helpers/filterRemoteGroups')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronize = require('./synchronize')
 
@@ -32,7 +33,8 @@ async function start() {
 
     const remoteStructures = get(remoteData, 'structures', [])
     const remoteGroups = convertStructuresToGroups(remoteStructures)
-    log('info', remoteGroups)
+    const filteredGroups = filterRemoteGroups(remoteGroups)
+    log('info', filteredGroups)
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)
