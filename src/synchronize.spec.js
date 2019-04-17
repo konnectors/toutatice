@@ -25,10 +25,10 @@ describe('synchronizing contacts', () => {
     const remoteContacts = [
       {
         uuid: '1458-1523-1236-123',
-        firstname: 'Nicolas',
-        lastname: 'Blin',
+        firstname: 'Harry',
+        lastname: 'Potter',
         title: 'ele',
-        cloud_url: 'nblin3.mytoutatice.cloud'
+        cloud_url: 'hpotter3.mytoutatice.cloud'
       }
     ]
     const cozyContacts = []
@@ -41,15 +41,15 @@ describe('synchronizing contacts', () => {
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
       _type: 'io.cozy.contacts',
       name: {
-        familyName: 'Blin',
-        givenName: 'Nicolas'
+        familyName: 'Potter',
+        givenName: 'Harry'
       },
       jobTitle: 'Élève',
       cozy: [
         {
           primary: true,
           label: null,
-          url: 'https://nblin3.mytoutatice.cloud'
+          url: 'https://hpotter3.mytoutatice.cloud'
         }
       ],
       cozyMetadata: {
@@ -78,7 +78,7 @@ describe('synchronizing contacts', () => {
         cozy: [
           {
             primary: true,
-            url: 'https://prodrigue12.mytoutatice.cloud'
+            url: 'https://rweasley12.mytoutatice.cloud'
           }
         ],
         cozyMetadata: {
@@ -111,7 +111,7 @@ describe('synchronizing contacts', () => {
             }
           ]
         },
-        fullname: 'Rodriguez Pablo',
+        fullname: 'Weasley Ronald',
         id: 'da30c4ca96ec5068874ae5fe9a005eb1',
         jobTitle: 'Élève',
         metadata: {
@@ -119,8 +119,8 @@ describe('synchronizing contacts', () => {
           version: 1
         },
         name: {
-          familyName: 'Pablito', // Changed
-          givenName: 'Rodriguez'
+          familyName: 'Ron', // Changed
+          givenName: 'Weasley'
         },
         phone: [
           {
@@ -141,10 +141,10 @@ describe('synchronizing contacts', () => {
     const remoteContacts = [
       {
         uuid: '1452-1598-3578-789',
-        firstname: 'Pablo',
-        lastname: 'Rodriguez',
+        firstname: 'Ronald',
+        lastname: 'Weasley',
         title: 'ele',
-        cloud_url: 'prodrigue12.mytoutatice.cloud'
+        cloud_url: 'rweasley12.mytoutatice.cloud'
       }
     ]
 
@@ -162,7 +162,7 @@ describe('synchronizing contacts', () => {
         {
           primary: true,
           label: null,
-          url: 'https://prodrigue12.mytoutatice.cloud'
+          url: 'https://rweasley12.mytoutatice.cloud'
         }
       ],
       cozyMetadata: {
@@ -195,7 +195,7 @@ describe('synchronizing contacts', () => {
           }
         ]
       },
-      fullname: 'Rodriguez Pablo',
+      fullname: 'Weasley Ronald',
       id: 'da30c4ca96ec5068874ae5fe9a005eb1',
       jobTitle: 'Élève',
       metadata: {
@@ -203,8 +203,8 @@ describe('synchronizing contacts', () => {
         version: 1
       },
       name: {
-        familyName: 'Rodriguez',
-        givenName: 'Pablo'
+        familyName: 'Weasley',
+        givenName: 'Ronald'
       },
       phone: [
         {
@@ -235,7 +235,7 @@ describe('synchronizing contacts', () => {
         cozy: [
           {
             primary: true,
-            url: 'https://vhugo14.mytoutatice.cloud'
+            url: 'https://hgranger14.mytoutatice.cloud'
           }
         ],
         cozyMetadata: {
@@ -263,22 +263,22 @@ describe('synchronizing contacts', () => {
             }
           ]
         },
-        fullname: 'Victor Hugo',
+        fullname: 'Hermione Granger',
         id: 'a145b5551e46fe3870763109c90063f0',
         jobTitle: 'Élève',
         name: {
-          familyName: 'Hugo',
-          givenName: 'Victor'
+          familyName: 'Granger',
+          givenName: 'Hermione'
         }
       }
     ]
     const remoteContacts = [
       {
         uuid: '7162-1889-0916-6273',
-        firstname: 'Victor',
-        lastname: 'Hugo',
+        firstname: 'Hermione',
+        lastname: 'Granger',
         title: 'ele',
-        cloud_url: 'vhugo14.mytoutatice.cloud'
+        cloud_url: 'hgranger14.mytoutatice.cloud'
       }
     ]
 
@@ -303,7 +303,7 @@ describe('synchronizing contacts', () => {
         cozy: [
           {
             primary: true,
-            url: 'https://jausten20.mytoutatice.cloud'
+            url: 'https://sblack20.mytoutatice.cloud'
           }
         ],
         cozyMetadata: {
@@ -334,15 +334,15 @@ describe('synchronizing contacts', () => {
         id: 'a145b5551e46fe3870763109c90063f0',
         jobTitle: 'Élève',
         name: {
-          familyName: 'Austen',
-          givenName: 'Jane'
+          familyName: 'Black',
+          givenName: 'Padfoot'
         }
       }
     ]
     const remoteContacts = [
       {
         uuid: '2766-0917-1711-5382',
-        firstname: 'Elisabeth'
+        firstname: 'Sirius'
       }
     ]
 
@@ -359,7 +359,7 @@ describe('synchronizing contacts', () => {
       cozy: [
         {
           primary: true,
-          url: 'https://jausten20.mytoutatice.cloud'
+          url: 'https://sblack20.mytoutatice.cloud'
         }
       ],
       cozyMetadata: {
@@ -390,8 +390,8 @@ describe('synchronizing contacts', () => {
       id: 'a145b5551e46fe3870763109c90063f0',
       jobTitle: 'Élève',
       name: {
-        familyName: 'Austen',
-        givenName: 'Elisabeth'
+        familyName: 'Black',
+        givenName: 'Sirius'
       }
     })
     expect(result.contacts).toEqual({

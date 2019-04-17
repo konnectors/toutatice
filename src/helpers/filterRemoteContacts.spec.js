@@ -5,16 +5,16 @@ describe('filtering remote contacts', () => {
     const source = [
       {
         uuid: '1458-1523-1236-123',
-        firstname: 'Nicolas',
+        firstname: 'Harry',
         lastname: 'Ok'
       },
       {
-        firstname: 'Jean',
+        firstname: 'Hermione',
         lastname: 'NoUUID'
       },
       {
         uuid: null,
-        firstname: 'Paul',
+        firstname: 'Ron',
         lastname: 'NullUUID'
       }
     ]
@@ -22,7 +22,7 @@ describe('filtering remote contacts', () => {
     expect(result.length).toEqual(1)
     expect(result[0]).toEqual({
       uuid: '1458-1523-1236-123',
-      firstname: 'Nicolas',
+      firstname: 'Harry',
       lastname: 'Ok'
     })
   })
@@ -31,51 +31,51 @@ describe('filtering remote contacts', () => {
     const source = [
       {
         uuid: '1458-1523-1236-123',
-        firstname: 'Nicolas',
-        lastname: 'Unique'
+        firstname: 'Harry',
+        lastname: 'Potter'
       },
       {
         uuid: '1',
-        firstname: 'Remus',
-        lastname: '🐕'
+        firstname: 'Parvati',
+        lastname: 'Patil'
       },
       {
         uuid: '1',
-        firstname: 'Remus',
-        lastname: '🐕'
+        firstname: 'Padma',
+        lastname: 'Patil'
       },
       {
         uuid: '2',
-        firstname: 'Riri',
-        lastname: '🦆'
+        firstname: 'Ron',
+        lastname: 'Weasley'
       },
       {
         uuid: '2',
-        firstname: 'Fifi',
-        lastname: '🦆'
+        firstname: 'Fred',
+        lastname: 'Weasley'
       },
       {
         uuid: '2',
-        firstname: 'Loulou',
-        lastname: '🦆'
+        firstname: 'George',
+        lastname: 'Weasley'
       }
     ]
     const result = filterRemoteContacts(source)
     expect(result.length).toEqual(3)
     expect(result[0]).toEqual({
       uuid: '1458-1523-1236-123',
-      firstname: 'Nicolas',
-      lastname: 'Unique'
+      firstname: 'Harry',
+      lastname: 'Potter'
     })
     expect(result[1]).toEqual({
       uuid: '1',
-      firstname: 'Remus',
-      lastname: '🐕'
+      firstname: 'Parvati',
+      lastname: 'Patil'
     })
     expect(result[2]).toEqual({
       uuid: '2',
-      firstname: 'Riri',
-      lastname: '🦆'
+      firstname: 'Ron',
+      lastname: 'Weasley'
     })
   })
 })
