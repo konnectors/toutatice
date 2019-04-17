@@ -32,8 +32,6 @@ const synchronize = async (
       updated: 0
     }
   }
-  await cozyUtils.prepareIndex()
-
   const promises = remoteContacts.map(remoteContact => async () => {
     const cozyContact = cozyContacts.find(cozyContact => {
       const cozyRemoteId = get(
