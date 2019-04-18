@@ -7,6 +7,7 @@ const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
 const filterRemoteGroups = require('./helpers/filterRemoteGroups')
 const filterRemoteContacts = require('./helpers/filterRemoteContacts')
 const synchronizeContacts = require('./synchronizeContacts')
+const synchronizeGroups = require('./synchronizeGroups')
 
 module.exports = new BaseKonnector(start)
 
@@ -42,7 +43,14 @@ async function start() {
       contactAccount._id,
       remoteGroupsId
     )
-    log('info', cozyGroups)
+    const groupsSyncResult = await synchronizeGroups(
+      cozyUtils,
+      contactAccount._id,
+      filteredGroups,
+      cozyGroups
+    )
+    log('info', `${groupsSyncResult.created} groups created`)
+    log('info', `${groupsSyncResult.updated} groups updated`)
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterRemoteContacts(remoteContacts)
@@ -53,15 +61,15 @@ async function start() {
       remoteContactsId
     )
 
-    const result = await synchronizeContacts(
+    const contactsSyncResult = await synchronizeContacts(
       cozyUtils,
       contactAccount._id,
       filteredContacts,
       cozyContacts
     )
 
-    log('info', `${result.contacts.created} contacts created`)
-    log('info', `${result.contacts.updated} contacts updated`)
+    log('info', `${contactsSyncResult.contacts.created} contacts created`)
+    log('info', `${contactsSyncResult.contacts.updated} contacts updated`)
 
     await cozyUtils.save({
       ...contactAccount,
