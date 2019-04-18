@@ -96,4 +96,48 @@ describe('filtering remote groups', () => {
       }
     ])
   })
+
+  it('should remove groups without structure id', () => {
+    const groups = [
+      {
+        structure: '11111111',
+        structureName: 'HOGWARTS',
+        gid: '1A',
+        name: '2018-2019 1A',
+        group_contacts: [
+          { uuid: '1458-1523-1236-123' },
+          { uuid: '1452-1789-1236-456' },
+          { uuid: '1452-1598-3578-789' }
+        ]
+      },
+      {
+        structureName: 'HOGWARTS',
+        gid: '2A',
+        name: '2018-2019 2A',
+        group_contacts: []
+      },
+      {
+        structure: null,
+        structureName: 'HOGWARTS',
+        gid: '2B',
+        name: '2018-2019 2A',
+        group_contacts: []
+      }
+    ]
+
+    const result = filterRemoteGroups(groups)
+    expect(result).toEqual([
+      {
+        structure: '11111111',
+        structureName: 'HOGWARTS',
+        gid: '1A',
+        name: '2018-2019 1A',
+        group_contacts: [
+          { uuid: '1458-1523-1236-123' },
+          { uuid: '1452-1789-1236-456' },
+          { uuid: '1452-1598-3578-789' }
+        ]
+      }
+    ])
+  })
 })
