@@ -55,6 +55,7 @@ describe('Converting structures array to groups', () => {
     const result = convertStructuresToGroups(structures)
     expect(result).toEqual([
       {
+        uuid: '11111111-1A',
         structure: '11111111',
         structureName: 'HOGWARTS',
         gid: '1A',
@@ -66,6 +67,7 @@ describe('Converting structures array to groups', () => {
         ]
       },
       {
+        uuid: '11111111-1B',
         structure: '11111111',
         structureName: 'HOGWARTS',
         gid: '1B',
@@ -77,6 +79,7 @@ describe('Converting structures array to groups', () => {
         ]
       },
       {
+        uuid: '22222222-2A',
         structure: '22222222',
         structureName: 'BEAUXBATONS',
         gid: '2A',
@@ -88,6 +91,7 @@ describe('Converting structures array to groups', () => {
         ]
       },
       {
+        uuid: '22222222-2B',
         structure: '22222222',
         structureName: 'BEAUXBATONS',
         gid: '2B',

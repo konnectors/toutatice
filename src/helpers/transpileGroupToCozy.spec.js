@@ -15,6 +15,7 @@ describe('Transpile groups to cozy format', () => {
 
   it('should transpile a group', () => {
     const group = {
+      uuid: '11111111-1A',
       structure: '11111111',
       structureName: 'HOGWARTS',
       gid: '1A',
