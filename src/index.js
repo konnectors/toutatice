@@ -38,7 +38,7 @@ async function start() {
     const remoteGroups = convertStructuresToGroups(remoteStructures)
     const filteredGroups = filterRemoteGroups(remoteGroups)
 
-    const remoteGroupsId = filteredGroups.map(({ gid }) => gid)
+    const remoteGroupsId = filteredGroups.map(({ uuid }) => uuid)
     const cozyGroups = await cozyUtils.findGroups(
       contactAccount._id,
       remoteGroupsId

@@ -24,6 +24,7 @@ describe('synchronizing groups', () => {
   it('should create missing groups', async () => {
     const remoteGroups = [
       {
+        uuid: '11111111-1A',
         structure: '11111111',
         structureName: 'HOGWARTS',
         gid: '1A',
@@ -96,6 +97,7 @@ describe('synchronizing groups', () => {
     ]
     const remoteGroups = [
       {
+        uuid: '11111111-1A',
         structure: '11111111',
         structureName: 'HOGWARTS',
         gid: '1A',
@@ -177,6 +179,7 @@ describe('synchronizing groups', () => {
     ]
     const remoteGroups = [
       {
+        uuid: '11111111-1A',
         structure: '11111111',
         structureName: 'HOGWARTS',
         gid: '1A',

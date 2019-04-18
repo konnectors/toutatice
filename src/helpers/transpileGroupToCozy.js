@@ -3,9 +3,7 @@ const { DOCTYPE_CONTACTS_GROUPS, APP_NAME } = require('../constants')
 
 const transpileGroupToCozy = (group, contactsAccountsId) => {
   const name = get(group, 'name')
-  const structureId = get(group, 'structure', '')
-  const groupId = get(group, 'gid', '')
-  const remoteId = `${structureId}-${groupId}`
+  const remoteId = get(group, 'uuid')
   const now = new Date().toISOString()
 
   return {
