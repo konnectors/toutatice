@@ -34,6 +34,10 @@ describe('CozyUtils', () => {
         contactsAccounts: {
           doctype: 'io.cozy.contacts.accounts',
           doctypeVersion: 1
+        },
+        contactsGroups: {
+          doctype: 'io.cozy.contacts.groups',
+          doctypeVersion: 2
         }
       },
       token: '{"token":{"accessToken":"0230b4b0-f833-4e4a-b70a-ffb1e48e2c01"}}',
