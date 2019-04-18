@@ -8,8 +8,10 @@ const {
   APP_VERSION,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS_VERSION,
-  DOCTYPE_CONTACTS_ACCOUNT_VERSION
+  DOCTYPE_CONTACTS_ACCOUNT_VERSION,
+  DOCTYPE_CONTACTS_GROUPS_VERSION
 } = require('../constants')
 
 function getSchema() {
@@ -21,6 +23,10 @@ function getSchema() {
     contactsAccounts: {
       doctype: DOCTYPE_CONTACTS_ACCOUNT,
       doctypeVersion: DOCTYPE_CONTACTS_ACCOUNT_VERSION
+    },
+    contactsGroups: {
+      doctype: DOCTYPE_CONTACTS_GROUPS,
+      doctypeVersion: DOCTYPE_CONTACTS_GROUPS_VERSION
     }
   }
 }
