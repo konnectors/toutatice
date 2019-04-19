@@ -1,5 +1,5 @@
 const { BaseKonnector, log, errors } = require('cozy-konnector-libs')
-const fetch = require('node-fetch')
+const fetch = require('isomorphic-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const getAccountId = require('./helpers/getAccountId')
