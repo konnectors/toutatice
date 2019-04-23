@@ -1,6 +1,6 @@
 const uniqBy = require('lodash/uniqBy')
 
-const filterRemoteGroups = groups => {
+const filterValidGroups = groups => {
   return uniqBy(groups, 'gid').filter(({ structure, gid }) => gid && structure)
 }
-module.exports = filterRemoteGroups
+module.exports = filterValidGroups
