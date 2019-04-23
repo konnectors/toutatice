@@ -1,4 +1,4 @@
-const filterRemoteGroups = require('./filterRemoteGroups')
+const filterValidGroups = require('./filterValidGroups')
 
 describe('filtering remote groups', () => {
   it('should remove groups with no id', () => {
@@ -29,7 +29,7 @@ describe('filtering remote groups', () => {
       }
     ]
 
-    const result = filterRemoteGroups(groups)
+    const result = filterValidGroups(groups)
     expect(result).toEqual([
       {
         structure: '11111111',
@@ -74,7 +74,7 @@ describe('filtering remote groups', () => {
       }
     ]
 
-    const result = filterRemoteGroups(groups)
+    const result = filterValidGroups(groups)
     expect(result).toEqual([
       {
         structure: '11111111',
@@ -125,7 +125,7 @@ describe('filtering remote groups', () => {
       }
     ]
 
-    const result = filterRemoteGroups(groups)
+    const result = filterValidGroups(groups)
     expect(result).toEqual([
       {
         structure: '11111111',

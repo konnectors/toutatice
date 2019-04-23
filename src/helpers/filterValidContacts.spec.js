@@ -1,4 +1,4 @@
-const filterRemoteContacts = require('./filterRemoteContacts')
+const filterValidContacts = require('./filterValidContacts')
 
 describe('filtering remote contacts', () => {
   it('should discard contacts without uuid', () => {
@@ -18,7 +18,7 @@ describe('filtering remote contacts', () => {
         lastname: 'NullUUID'
       }
     ]
-    const result = filterRemoteContacts(source)
+    const result = filterValidContacts(source)
     expect(result.length).toEqual(1)
     expect(result[0]).toEqual({
       uuid: '1458-1523-1236-123',
@@ -60,7 +60,7 @@ describe('filtering remote contacts', () => {
         lastname: 'Weasley'
       }
     ]
-    const result = filterRemoteContacts(source)
+    const result = filterValidContacts(source)
     expect(result.length).toEqual(3)
     expect(result[0]).toEqual({
       uuid: '1458-1523-1236-123',

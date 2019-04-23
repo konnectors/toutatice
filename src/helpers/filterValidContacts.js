@@ -1,7 +1,7 @@
 const uniqBy = require('lodash/uniqBy')
 
-const filterRemoteContacts = contacts => {
+const filterValidContacts = contacts => {
   return uniqBy(contacts, 'uuid').filter(({ uuid }) => !!uuid)
 }
 
-module.exports = filterRemoteContacts
+module.exports = filterValidContacts
