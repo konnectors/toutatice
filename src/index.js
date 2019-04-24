@@ -27,13 +27,16 @@ async function start() {
       'toutatice'
     )
 
+    log('info', 'Preparing CouchDB indexes')
     await cozyUtils.prepareIndexes()
 
+    log('info', 'Fetching remote infos')
     const response = await fetch(
       'https://jsonblob.com/api/jsonBlob/a47fe912-5d25-11e9-bde5-291328616b73'
     )
     const remoteData = await response.json()
 
+    log('info', 'Syncing groups')
     const remoteStructures = get(remoteData, 'structures', [])
     const remoteGroups = convertStructuresToGroups(remoteStructures)
     const filteredGroups = filterValidGroups(remoteGroups)
@@ -53,6 +56,7 @@ async function start() {
     log('info', `${groupsSyncResult.updated} groups updated`)
     log('info', `${groupsSyncResult.skipped} groups skipped`)
 
+    log('info', 'Syncing contacts')
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterValidContacts(remoteContacts)
 
@@ -73,10 +77,13 @@ async function start() {
     log('info', `${contactsSyncResult.contacts.updated} contacts updated`)
     log('info', `${contactsSyncResult.contacts.skipped} contacts skipped`)
 
+    log('info', 'Updating lastLocalSync')
     await cozyUtils.save({
       ...contactAccount,
       lastLocalSync: new Date().toISOString()
     })
+
+    log('info', 'Finished!')
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
