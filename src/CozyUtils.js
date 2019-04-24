@@ -23,6 +23,13 @@ class CozyUtils {
       .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
   }
 
+  /**
+   * async findContacts - Finds contacts based on a list of remote ids
+   *
+   * @param  {string} accountId The io.cozy.contacts.account contacts should be linked to
+   * @param  {array} remoteIds
+   * @returns {array}
+   */
   async findContacts(accountId, remoteIds) {
     const contactsCollection = this.client.collection(DOCTYPE_CONTACTS)
     const resp = await contactsCollection.find(
@@ -43,6 +50,13 @@ class CozyUtils {
     return get(resp, 'data')
   }
 
+  /**
+   * async findGroups - Finds groups based on a list of remote ids
+   *
+   * @param  {string} accountId The io.cozy.contacts.account groups should be linked to
+   * @param  {array} remoteIds
+   * @returns {array}
+   */
   async findGroups(accountId, remoteIds) {
     const groupsCollection = this.client.collection(DOCTYPE_CONTACTS_GROUPS)
     const resp = await groupsCollection.find(
@@ -63,6 +77,13 @@ class CozyUtils {
     return get(resp, 'data')
   }
 
+  /**
+   * async findOrCreateContactAccount - Finds (or creates) a io;cozy;contacts.account with the given name
+   *
+   * @param  {string} accountId   io.cozy.account ID
+   * @param  {string} accountName
+   * @returns {object}
+   */
   async findOrCreateContactAccount(accountId, accountName) {
     const accountsCollection = this.client.collection(DOCTYPE_CONTACTS_ACCOUNT)
     const accountsWithSourceAccount = await accountsCollection.find({
