@@ -66,7 +66,8 @@ describe('synchronizing contacts', () => {
     })
     expect(result.contacts).toEqual({
       created: 1,
-      updated: 0
+      updated: 0,
+      skipped: 0
     })
   })
 
@@ -183,7 +184,8 @@ describe('synchronizing contacts', () => {
     })
     expect(result.contacts).toEqual({
       created: 0,
-      updated: 1
+      updated: 1,
+      skipped: 0
     })
   })
 
@@ -243,7 +245,8 @@ describe('synchronizing contacts', () => {
     expect(mockCozyUtils.save).not.toHaveBeenCalled()
     expect(result.contacts).toEqual({
       created: 0,
-      updated: 0
+      updated: 0,
+      skipped: 1
     })
   })
 
@@ -334,7 +337,8 @@ describe('synchronizing contacts', () => {
     })
     expect(result.contacts).toEqual({
       created: 0,
-      updated: 1
+      updated: 1,
+      skipped: 0
     })
   })
 })

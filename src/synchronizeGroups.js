@@ -11,7 +11,8 @@ const synchronizeGroups = async (
 ) => {
   const result = {
     created: 0,
-    updated: 0
+    updated: 0,
+    skipped: 0
   }
   const promises = remoteGroups.map(remoteGroup => async () => {
     const transpiledGroup = transpileGroupToCozy(remoteGroup, contactAccountId)
@@ -34,6 +35,7 @@ const synchronizeGroups = async (
       result.updated++
     } else {
       // the group already exists and there is nothing to update
+      result.skipped++
     }
   })
 
