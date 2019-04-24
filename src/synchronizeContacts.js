@@ -29,7 +29,8 @@ const synchronizeContacts = async (
   const result = {
     contacts: {
       created: 0,
-      updated: 0
+      updated: 0,
+      skipped: 0
     }
   }
   const promises = remoteContacts.map(remoteContact => async () => {
@@ -60,6 +61,7 @@ const synchronizeContacts = async (
       result.contacts.updated++
     } else {
       // the contact already exists and there is nothing to update
+      result.contacts.skipped++
     }
   })
 

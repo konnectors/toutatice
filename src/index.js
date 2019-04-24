@@ -51,6 +51,7 @@ async function start() {
     )
     log('info', `${groupsSyncResult.created} groups created`)
     log('info', `${groupsSyncResult.updated} groups updated`)
+    log('info', `${groupsSyncResult.skipped} groups skipped`)
 
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterValidContacts(remoteContacts)
@@ -70,6 +71,7 @@ async function start() {
 
     log('info', `${contactsSyncResult.contacts.created} contacts created`)
     log('info', `${contactsSyncResult.contacts.updated} contacts updated`)
+    log('info', `${contactsSyncResult.contacts.skipped} contacts skipped`)
 
     await cozyUtils.save({
       ...contactAccount,

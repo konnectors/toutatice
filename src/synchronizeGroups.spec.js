@@ -60,7 +60,8 @@ describe('synchronizing groups', () => {
     })
     expect(result).toEqual({
       created: 1,
-      updated: 0
+      updated: 0,
+      skipped: 0
     })
   })
 
@@ -147,7 +148,8 @@ describe('synchronizing groups', () => {
     })
     expect(result).toEqual({
       created: 0,
-      updated: 1
+      updated: 1,
+      skipped: 0
     })
   })
 
@@ -201,7 +203,8 @@ describe('synchronizing groups', () => {
     expect(mockCozyUtils.save).not.toHaveBeenCalled()
     expect(result).toEqual({
       created: 0,
-      updated: 0
+      updated: 0,
+      skipped: 1
     })
   })
 })
