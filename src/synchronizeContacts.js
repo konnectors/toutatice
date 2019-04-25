@@ -1,6 +1,7 @@
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const pLimit = require('p-limit')
+const mergeWith = require('lodash/mergeWith')
+const isArray = require('lodash/isArray')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
 const haveRemoteFieldsChanged = (
@@ -11,13 +12,21 @@ const haveRemoteFieldsChanged = (
   const diffKeys = [
     'name.familyName',
     'name.givenName',
-    'cozy.url',
+    'cozy.0.url',
     'jobTitle',
     `cozyMetadata.sync.${contactAccountId}.id`
   ]
   return diffKeys.some(
     key => get(currentContact, key) !== get(nextContact, key)
   )
+}
+
+// When merging contacts, we use the normal lodash merge function, except for the array of cozy URLs where we want a regular override
+const mergeWithCozyOverride = (objValue, srcValue, key) => {
+  const hasNewCozyValue =
+    key === 'cozy' && isArray(srcValue) && srcValue.length > 0
+  if (hasNewCozyValue) return srcValue
+  else return undefined
 }
 
 const synchronizeContacts = async (
@@ -56,7 +65,12 @@ const synchronizeContacts = async (
       cozyUtils.save(transpiledContact)
       result.contacts.created++
     } else if (needsUpdate) {
-      const merged = merge({}, cozyContact, transpiledContact)
+      const merged = mergeWith(
+        {},
+        cozyContact,
+        transpiledContact,
+        mergeWithCozyOverride
+      )
       cozyUtils.save(merged)
       result.contacts.updated++
     } else {

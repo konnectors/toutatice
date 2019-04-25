@@ -108,8 +108,8 @@ describe('synchronizing contacts', () => {
         fullname: 'Weasley Ronald',
         jobTitle: 'Élève',
         name: {
-          familyName: 'Ron', // Changed
-          givenName: 'Weasley'
+          familyName: 'Weasley',
+          givenName: 'Ron'
         },
         phone: [
           {
@@ -117,15 +117,106 @@ describe('synchronizing contacts', () => {
             primary: true
           }
         ]
+      },
+      {
+        _id: '307b3cdc9a855c549eb9d50a8bc93e6110594b25',
+        _rev: '2-20abd709a4cee2fc7855da2ad26c84ad0b2fac1d',
+        cozy: [],
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '7281-7189-0928-663',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          updatedByApps: [
+            {
+              date: '2019-04-12T15:40:08.126Z',
+              slug: 'Contacts',
+              version: '0.8.2'
+            },
+            {
+              date: '2019-04-12T14:34:29.088Z',
+              slug: 'konnector-toutatice',
+              version: '1.0.0'
+            }
+          ]
+        },
+        fullname: 'Hermione Granger',
+        jobTitle: 'Élève',
+        name: {
+          familyName: 'Granger',
+          givenName: 'Hermione'
+        }
+      },
+      {
+        _id: '10e5866050d20afe8ccae04456491db7908a96ec',
+        _rev: '2-cb79bd0ce2a8c435a9bbeddc9ef6c8bc7c3c4b43',
+        cozy: [
+          {
+            primary: false,
+            url: 'https://harry.theburrow.cloud'
+          },
+          {
+            primary: true,
+            url: 'https://potterstinks.mytoutatice.cloud'
+          }
+        ],
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '7617-0092-1667-282',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          updatedByApps: [
+            {
+              date: '2019-04-12T15:40:08.126Z',
+              slug: 'Contacts',
+              version: '0.8.2'
+            },
+            {
+              date: '2019-04-12T14:34:29.088Z',
+              slug: 'konnector-toutatice',
+              version: '1.0.0'
+            }
+          ]
+        },
+        fullname: 'Harry Potter',
+        jobTitle: 'Élève',
+        name: {
+          familyName: 'Potter',
+          givenName: 'Harry'
+        }
       }
     ]
     const remoteContacts = [
       {
         uuid: '1452-1598-3578-789',
-        firstname: 'Ronald',
+        firstname: 'Ronald', // changed
         lastname: 'Weasley',
         title: 'ele',
         cloud_url: 'rweasley12.mytoutatice.cloud'
+      },
+      {
+        uuid: '7281-7189-0928-663',
+        firstname: 'Hermione',
+        lastname: 'Granger',
+        title: 'ele',
+        cloud_url: 'hgranger14.mytoutatice.cloud' // added
+      },
+      {
+        uuid: '7617-0092-1667-282',
+        firstname: 'Harry',
+        lastname: 'Potter',
+        title: 'ele',
+        cloud_url: 'hpotter3.mytoutatice.cloud' // changed
       }
     ]
 
@@ -135,7 +226,8 @@ describe('synchronizing contacts', () => {
       remoteContacts,
       cozyContacts
     )
-    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+    expect(mockCozyUtils.save).toHaveBeenCalledTimes(3)
+    expect(mockCozyUtils.save).toHaveBeenNthCalledWith(1, {
       _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
       _rev: '2-c39d514f9b25a694a1331f893ba4bf2f',
       _type: 'io.cozy.contacts',
@@ -182,9 +274,92 @@ describe('synchronizing contacts', () => {
         }
       ]
     })
+    expect(mockCozyUtils.save).toHaveBeenNthCalledWith(2, {
+      _id: '307b3cdc9a855c549eb9d50a8bc93e6110594b25',
+      _rev: '2-20abd709a4cee2fc7855da2ad26c84ad0b2fac1d',
+      _type: 'io.cozy.contacts',
+      cozy: [
+        {
+          primary: true,
+          label: null,
+          url: 'https://hgranger14.mytoutatice.cloud'
+        }
+      ],
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '7281-7189-0928-663',
+            konnector: 'konnector-toutatice',
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        },
+        updatedByApps: [
+          {
+            date: '2019-04-12T15:40:08.126Z',
+            slug: 'Contacts',
+            version: '0.8.2'
+          },
+          {
+            date: '2019-04-12T14:34:29.088Z',
+            slug: 'konnector-toutatice',
+            version: '1.0.0'
+          }
+        ]
+      },
+      fullname: 'Hermione Granger',
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Granger',
+        givenName: 'Hermione'
+      }
+    })
+    expect(mockCozyUtils.save).toHaveBeenNthCalledWith(3, {
+      _id: '10e5866050d20afe8ccae04456491db7908a96ec',
+      _rev: '2-cb79bd0ce2a8c435a9bbeddc9ef6c8bc7c3c4b43',
+      _type: 'io.cozy.contacts',
+      cozy: [
+        {
+          label: null,
+          primary: true,
+          url: 'https://hpotter3.mytoutatice.cloud'
+        }
+      ],
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '7617-0092-1667-282',
+            konnector: 'konnector-toutatice',
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        },
+        updatedByApps: [
+          {
+            date: '2019-04-12T15:40:08.126Z',
+            slug: 'Contacts',
+            version: '0.8.2'
+          },
+          {
+            date: '2019-04-12T14:34:29.088Z',
+            slug: 'konnector-toutatice',
+            version: '1.0.0'
+          }
+        ]
+      },
+      fullname: 'Harry Potter',
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Potter',
+        givenName: 'Harry'
+      }
+    })
+
     expect(result.contacts).toEqual({
       created: 0,
-      updated: 1,
+      updated: 3,
       skipped: 0
     })
   })
