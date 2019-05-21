@@ -62,6 +62,11 @@ describe('synchronizing contacts', () => {
             remoteRev: null
           }
         }
+      },
+      relationships: {
+        groups: {
+          data: []
+        }
       }
     })
     expect(result.contacts).toEqual({
@@ -272,7 +277,12 @@ describe('synchronizing contacts', () => {
           number: '001122334455',
           primary: true
         }
-      ]
+      ],
+      relationships: {
+        groups: {
+          data: []
+        }
+      }
     })
     expect(mockCozyUtils.save).toHaveBeenNthCalledWith(2, {
       _id: '307b3cdc9a855c549eb9d50a8bc93e6110594b25',
@@ -313,6 +323,11 @@ describe('synchronizing contacts', () => {
       name: {
         familyName: 'Granger',
         givenName: 'Hermione'
+      },
+      relationships: {
+        groups: {
+          data: []
+        }
       }
     })
     expect(mockCozyUtils.save).toHaveBeenNthCalledWith(3, {
@@ -354,6 +369,11 @@ describe('synchronizing contacts', () => {
       name: {
         familyName: 'Potter',
         givenName: 'Harry'
+      },
+      relationships: {
+        groups: {
+          data: []
+        }
       }
     })
 
@@ -525,6 +545,11 @@ describe('synchronizing contacts', () => {
       name: {
         familyName: 'Granger',
         givenName: 'Hermione'
+      },
+      relationships: {
+        groups: {
+          data: []
+        }
       }
     })
     expect(result.contacts).toEqual({
@@ -617,6 +642,11 @@ describe('synchronizing contacts', () => {
       name: {
         familyName: 'Black',
         givenName: 'Sirius'
+      },
+      relationships: {
+        groups: {
+          data: []
+        }
       }
     })
     expect(result.contacts).toEqual({
