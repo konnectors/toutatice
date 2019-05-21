@@ -5,6 +5,25 @@ const isArray = require('lodash/isArray')
 const unset = require('lodash/unset')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
+// When merging contacts, we use the normal lodash merge function, except for the array of cozy URLs where we want a regular override
+const mergeWithCozyOverride = (objValue, srcValue, key) => {
+  const hasNewCozyValue =
+    key === 'cozy' && isArray(srcValue) && srcValue.length > 0
+  if (hasNewCozyValue) return srcValue
+  else return undefined
+}
+
+const getFinalContactData = (cozyContact, remoteContact) => {
+  const merged = mergeWith(
+    {},
+    cozyContact,
+    remoteContact,
+    mergeWithCozyOverride
+  )
+  unset(merged, 'trashed')
+  return merged
+}
+
 const haveRemoteFieldsChanged = (
   currentContact,
   nextContact,
@@ -21,14 +40,6 @@ const haveRemoteFieldsChanged = (
   return diffKeys.some(
     key => get(currentContact, key) !== get(nextContact, key)
   )
-}
-
-// When merging contacts, we use the normal lodash merge function, except for the array of cozy URLs where we want a regular override
-const mergeWithCozyOverride = (objValue, srcValue, key) => {
-  const hasNewCozyValue =
-    key === 'cozy' && isArray(srcValue) && srcValue.length > 0
-  if (hasNewCozyValue) return srcValue
-  else return undefined
 }
 
 const synchronizeContacts = async (
@@ -57,24 +68,19 @@ const synchronizeContacts = async (
       remoteContact,
       contactAccountId
     )
+    const finalContact = getFinalContactData(cozyContact, transpiledContact)
+
     const needsUpdate = haveRemoteFieldsChanged(
       cozyContact,
-      transpiledContact,
+      finalContact,
       contactAccountId
     )
 
     if (!cozyContact) {
-      cozyUtils.save(transpiledContact)
+      cozyUtils.save(finalContact)
       result.contacts.created++
     } else if (needsUpdate) {
-      const merged = mergeWith(
-        {},
-        cozyContact,
-        transpiledContact,
-        mergeWithCozyOverride
-      )
-      unset(merged, 'trashed')
-      cozyUtils.save(merged)
+      cozyUtils.save(finalContact)
       result.contacts.updated++
     } else {
       // the contact already exists and there is nothing to update
