@@ -2,6 +2,7 @@ const get = require('lodash/get')
 const pLimit = require('p-limit')
 const mergeWith = require('lodash/mergeWith')
 const isArray = require('lodash/isArray')
+const isEqual = require('lodash/isEqual')
 const unset = require('lodash/unset')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
@@ -35,10 +36,11 @@ const haveRemoteFieldsChanged = (
     'cozy.0.url',
     'jobTitle',
     'trashed', // always false for the remote/next contact
-    `cozyMetadata.sync.${contactAccountId}.id`
+    `cozyMetadata.sync.${contactAccountId}.id`,
+    'relationships.groups.data'
   ]
   return diffKeys.some(
-    key => get(currentContact, key) !== get(nextContact, key)
+    key => !isEqual(get(currentContact, key), get(nextContact, key))
   )
 }
 
