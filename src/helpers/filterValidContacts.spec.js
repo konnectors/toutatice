@@ -27,7 +27,7 @@ describe('filtering remote contacts', () => {
     })
   })
 
-  it('should discard conatcts with the same UUID', () => {
+  it('should discard contacts with the same UUID', () => {
     const source = [
       {
         uuid: '1458-1523-1236-123',
