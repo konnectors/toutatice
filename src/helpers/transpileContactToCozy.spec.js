@@ -21,7 +21,19 @@ describe('Transpile to cozy', () => {
       firstname: 'Harry',
       lastname: 'Potter',
       title: 'ele',
-      cloud_url: 'hpotter3.mytoutatice.cloud'
+      cloud_url: 'hpotter3.mytoutatice.cloud',
+      groups: [
+        {
+          _type: 'io.cozy.contacts.groups',
+          _id: 'd41d8cd98f00b204e9800998ecf8427e',
+          name: 'Gryffindor'
+        },
+        {
+          _type: 'io.cozy.contacts.groups',
+          _id: 'e284ce3c522873e4177454aad57dfcde',
+          name: 'Potion class'
+        }
+      ]
     }
     const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result).toEqual({
@@ -48,6 +60,20 @@ describe('Transpile to cozy', () => {
             remoteRev: null
           }
         }
+      },
+      relationships: {
+        groups: {
+          data: [
+            {
+              _id: 'd41d8cd98f00b204e9800998ecf8427e',
+              _type: 'io.cozy.contacts.groups'
+            },
+            {
+              _id: 'e284ce3c522873e4177454aad57dfcde',
+              _type: 'io.cozy.contacts.groups'
+            }
+          ]
+        }
       }
     })
   })
@@ -58,7 +84,14 @@ describe('Transpile to cozy', () => {
       firstname: 'Hermione',
       lastname: 'Granger',
       title: 'ens',
-      cloud_url: 'hgranger14.mytoutatice.cloud'
+      cloud_url: 'hgranger14.mytoutatice.cloud',
+      groups: [
+        {
+          _type: 'io.cozy.contacts.groups',
+          _id: 'd41d8cd98f00b204e9800998ecf8427e',
+          name: 'Gryffindor'
+        }
+      ]
     }
     const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
     expect(result).toEqual({
@@ -84,6 +117,16 @@ describe('Transpile to cozy', () => {
             lastSync: MOCKED_DATE,
             remoteRev: null
           }
+        }
+      },
+      relationships: {
+        groups: {
+          data: [
+            {
+              _id: 'd41d8cd98f00b204e9800998ecf8427e',
+              _type: 'io.cozy.contacts.groups'
+            }
+          ]
         }
       }
     })
@@ -148,6 +191,11 @@ describe('Transpile to cozy', () => {
             lastSync: MOCKED_DATE,
             remoteRev: null
           }
+        }
+      },
+      relationships: {
+        groups: {
+          data: []
         }
       }
     })

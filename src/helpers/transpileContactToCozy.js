@@ -32,6 +32,11 @@ const transpileContactToCozy = (contact, contactsAccountsId) => {
       ]
     : []
 
+  const groups = get(contact, 'groups', []).map(({ _id }) => ({
+    _id,
+    _type: 'io.cozy.contacts.groups'
+  }))
+
   return {
     _type: DOCTYPE_CONTACTS,
     name: {
@@ -40,6 +45,11 @@ const transpileContactToCozy = (contact, contactsAccountsId) => {
     },
     cozy,
     jobTitle,
+    relationships: {
+      groups: {
+        data: groups
+      }
+    },
     cozyMetadata: {
       sync: {
         [contactsAccountsId]: {
