@@ -4,22 +4,52 @@ const mergeWith = require('lodash/mergeWith')
 const isArray = require('lodash/isArray')
 const isEqual = require('lodash/isEqual')
 const unset = require('lodash/unset')
+const omit = require('lodash/omit')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
-const customMerge = (objValue, srcValue, key) => {
-  if (key === 'cozy') return cozyMergeStrategy(objValue, srcValue)
-  else return undefined // for othr fields, use the normal lodash merge strategy
+const customMerge = connectorGroupIds => (existingValue, newValue, key) => {
+  if (key === 'cozy') return cozyMergeStrategy(existingValue, newValue)
+  if (key === 'relationships')
+    return relationshipsMergeStrategy(connectorGroupIds)(
+      existingValue,
+      newValue
+    )
+  else return undefined // for other fields, use the normal lodash merge strategy
 }
 
 // for the cozy field, we want to always the new value
-const cozyMergeStrategy = (objCozy, srcCozy) => {
-  const hasNewCozyValue = isArray(srcCozy) && srcCozy.length > 0
-  if (hasNewCozyValue) return srcCozy
+const cozyMergeStrategy = (existingCozy, newCozy) => {
+  const hasNewCozyValue = isArray(newCozy) && newCozy.length > 0
+  if (hasNewCozyValue) return newCozy
   else return undefined
 }
 
-const getFinalContactData = (cozyContact, remoteContact) => {
-  const merged = mergeWith({}, cozyContact, remoteContact, customMerge)
+const relationshipsMergeStrategy = connectorGroupIds => (
+  existingRelationships,
+  newRelationships
+) => {
+  const otherRelationships = omit(existingRelationships, 'groups')
+  const existingGroups = get(existingRelationships, 'groups.data', [])
+  const existingManualGroups = existingGroups.filter(
+    ({ _id }) => !connectorGroupIds.includes(_id)
+  )
+  const newGroups = get(newRelationships, 'groups.data', [])
+
+  return {
+    ...otherRelationships,
+    groups: {
+      data: [...newGroups, ...existingManualGroups]
+    }
+  }
+}
+
+const getFinalContactData = (cozyContact, remoteContact, connectorGroupIds) => {
+  const merged = mergeWith(
+    {},
+    cozyContact,
+    remoteContact,
+    customMerge(connectorGroupIds)
+  )
   unset(merged, 'trashed')
   return merged
 }
@@ -47,7 +77,8 @@ const synchronizeContacts = async (
   cozyUtils,
   contactAccountId,
   remoteContacts,
-  cozyContacts
+  cozyContacts,
+  connectorGroupIds
 ) => {
   const result = {
     contacts: {
@@ -69,7 +100,11 @@ const synchronizeContacts = async (
       remoteContact,
       contactAccountId
     )
-    const finalContact = getFinalContactData(cozyContact, transpiledContact)
+    const finalContact = getFinalContactData(
+      cozyContact,
+      transpiledContact,
+      connectorGroupIds
+    )
 
     const needsUpdate = haveRemoteFieldsChanged(
       cozyContact,
