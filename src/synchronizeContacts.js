@@ -6,21 +6,20 @@ const isEqual = require('lodash/isEqual')
 const unset = require('lodash/unset')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
-// When merging contacts, we use the normal lodash merge function, except for the array of cozy URLs where we want a regular override
-const mergeWithCozyOverride = (objValue, srcValue, key) => {
-  const hasNewCozyValue =
-    key === 'cozy' && isArray(srcValue) && srcValue.length > 0
-  if (hasNewCozyValue) return srcValue
+const customMerge = (objValue, srcValue, key) => {
+  if (key === 'cozy') return cozyMergeStrategy(objValue, srcValue)
+  else return undefined // for othr fields, use the normal lodash merge strategy
+}
+
+// for the cozy field, we want to always the new value
+const cozyMergeStrategy = (objCozy, srcCozy) => {
+  const hasNewCozyValue = isArray(srcCozy) && srcCozy.length > 0
+  if (hasNewCozyValue) return srcCozy
   else return undefined
 }
 
 const getFinalContactData = (cozyContact, remoteContact) => {
-  const merged = mergeWith(
-    {},
-    cozyContact,
-    remoteContact,
-    mergeWithCozyOverride
-  )
+  const merged = mergeWith({}, cozyContact, remoteContact, customMerge)
   unset(merged, 'trashed')
   return merged
 }
