@@ -28,15 +28,22 @@ describe('synchronizing contacts', () => {
         firstname: 'Harry',
         lastname: 'Potter',
         title: 'ele',
-        cloud_url: 'hpotter3.mytoutatice.cloud'
+        cloud_url: 'hpotter3.mytoutatice.cloud',
+        groups: [
+          {
+            _id: 'id-group-gryffindor'
+          }
+        ]
       }
     ]
     const cozyContacts = []
+    const remoteGroups = ['id-group-gryffindor']
     const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      remoteGroups
     )
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
       _type: 'io.cozy.contacts',
@@ -65,7 +72,9 @@ describe('synchronizing contacts', () => {
       },
       relationships: {
         groups: {
-          data: []
+          data: [
+            { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' }
+          ]
         }
       }
     })
@@ -121,7 +130,16 @@ describe('synchronizing contacts', () => {
             number: '001122334455',
             primary: true
           }
-        ]
+        ],
+        relationships: {
+          groups: {
+            data: [
+              { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' },
+              { _id: 'id-group-removed', _type: 'io.cozy.contacts.groups' },
+              { _id: 'id-group-manual', _type: 'io.cozy.contacts.groups' }
+            ]
+          }
+        }
       },
       {
         _id: '307b3cdc9a855c549eb9d50a8bc93e6110594b25',
@@ -155,6 +173,13 @@ describe('synchronizing contacts', () => {
         name: {
           familyName: 'Granger',
           givenName: 'Hermione'
+        },
+        relationships: {
+          groups: {
+            data: [
+              { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' }
+            ]
+          }
         }
       },
       {
@@ -198,6 +223,14 @@ describe('synchronizing contacts', () => {
         name: {
           familyName: 'Potter',
           givenName: 'Harry'
+        },
+        relationships: {
+          groups: {
+            data: [
+              { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' },
+              { _id: 'id-group-magic-chess', _type: 'io.cozy.contacts.groups' }
+            ]
+          }
         }
       }
     ]
@@ -207,29 +240,58 @@ describe('synchronizing contacts', () => {
         firstname: 'Ronald', // changed
         lastname: 'Weasley',
         title: 'ele',
-        cloud_url: 'rweasley12.mytoutatice.cloud'
+        cloud_url: 'rweasley12.mytoutatice.cloud',
+        groups: [
+          {
+            _id: 'id-group-gryffindor'
+          }
+        ]
       },
       {
         uuid: '7281-7189-0928-663',
         firstname: 'Hermione',
         lastname: 'Granger',
         title: 'ele',
-        cloud_url: 'hgranger14.mytoutatice.cloud' // added
+        cloud_url: 'hgranger14.mytoutatice.cloud', // added
+        groups: [
+          {
+            _id: 'id-group-gryffindor'
+          },
+          {
+            _id: 'id-group-numerology' //added
+          }
+        ]
       },
       {
         uuid: '7617-0092-1667-282',
         firstname: 'Harry',
         lastname: 'Potter',
         title: 'ele',
-        cloud_url: 'hpotter3.mytoutatice.cloud' // changed
+        cloud_url: 'hpotter3.mytoutatice.cloud', // changed
+        groups: [
+          {
+            _id: 'id-group-gryffindor'
+          },
+          {
+            _id: 'id-group-quidditch' // changed
+          }
+        ]
       }
+    ]
+    const remoteGroups = [
+      'id-group-gryffindor',
+      'id-group-magic-chess',
+      'id-group-numerology',
+      'id-group-quidditch',
+      'id-group-removed'
     ]
 
     const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      remoteGroups
     )
     expect(mockCozyUtils.save).toHaveBeenCalledTimes(3)
     expect(mockCozyUtils.save).toHaveBeenNthCalledWith(1, {
@@ -280,7 +342,10 @@ describe('synchronizing contacts', () => {
       ],
       relationships: {
         groups: {
-          data: []
+          data: [
+            { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' },
+            { _id: 'id-group-manual', _type: 'io.cozy.contacts.groups' }
+          ]
         }
       }
     })
@@ -326,7 +391,10 @@ describe('synchronizing contacts', () => {
       },
       relationships: {
         groups: {
-          data: []
+          data: [
+            { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' },
+            { _id: 'id-group-numerology', _type: 'io.cozy.contacts.groups' }
+          ]
         }
       }
     })
@@ -372,7 +440,10 @@ describe('synchronizing contacts', () => {
       },
       relationships: {
         groups: {
-          data: []
+          data: [
+            { _id: 'id-group-gryffindor', _type: 'io.cozy.contacts.groups' },
+            { _id: 'id-group-quidditch', _type: 'io.cozy.contacts.groups' }
+          ]
         }
       }
     })
@@ -445,12 +516,14 @@ describe('synchronizing contacts', () => {
         ]
       }
     ]
+    const remoteGroups = ['new-group-id', 'previous-group-id']
 
     const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      remoteGroups
     )
     expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
@@ -559,12 +632,14 @@ describe('synchronizing contacts', () => {
         ]
       }
     ]
+    const remoteGroups = ['id-group']
 
     const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      remoteGroups
     )
     expect(mockCozyUtils.save).not.toHaveBeenCalled()
     expect(result.contacts).toEqual({
@@ -632,7 +707,8 @@ describe('synchronizing contacts', () => {
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      []
     )
     expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
@@ -736,7 +812,8 @@ describe('synchronizing contacts', () => {
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
       remoteContacts,
-      cozyContacts
+      cozyContacts,
+      []
     )
     expect(mockCozyUtils.save).toHaveBeenCalledWith({
       _id: 'a145b5551e46fe3870763109c9008c1c',
