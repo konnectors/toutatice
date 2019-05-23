@@ -37,7 +37,7 @@ describe('synchronizing contacts', () => {
       }
     ]
     const cozyContacts = []
-    const remoteGroups = ['id-group-gryffindor']
+    const remoteGroups = [{ _id: 'id-group-gryffindor' }]
     const result = await synchronizeContacts(
       mockCozyUtils,
       MOCK_CONTACT_ACCOUNT_ID,
@@ -279,11 +279,11 @@ describe('synchronizing contacts', () => {
       }
     ]
     const remoteGroups = [
-      'id-group-gryffindor',
-      'id-group-magic-chess',
-      'id-group-numerology',
-      'id-group-quidditch',
-      'id-group-removed'
+      { _id: 'id-group-gryffindor' },
+      { _id: 'id-group-magic-chess' },
+      { _id: 'id-group-numerology' },
+      { _id: 'id-group-quidditch' },
+      { _id: 'id-group-removed' }
     ]
 
     const result = await synchronizeContacts(
@@ -516,7 +516,7 @@ describe('synchronizing contacts', () => {
         ]
       }
     ]
-    const remoteGroups = ['new-group-id', 'previous-group-id']
+    const remoteGroups = [{ _id: 'new-group-id' }, { _id: 'previous-group-id' }]
 
     const result = await synchronizeContacts(
       mockCozyUtils,
@@ -632,7 +632,7 @@ describe('synchronizing contacts', () => {
         ]
       }
     ]
-    const remoteGroups = ['id-group']
+    const remoteGroups = [{ _id: 'id-group' }]
 
     const result = await synchronizeContacts(
       mockCozyUtils,
