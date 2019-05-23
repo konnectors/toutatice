@@ -31,7 +31,10 @@ const relationshipsMergeStrategy = connectorGroupIds => (
   const otherRelationships = omit(existingRelationships, 'groups')
   const existingGroups = get(existingRelationships, 'groups.data', [])
   const existingManualGroups = existingGroups.filter(
-    ({ _id }) => !connectorGroupIds.includes(_id)
+    ({ _id: existingGroupId }) =>
+      !connectorGroupIds.some(
+        ({ _id: connectorGroupId }) => connectorGroupId === existingGroupId
+      )
   )
   const newGroups = get(newRelationships, 'groups.data', [])
 
