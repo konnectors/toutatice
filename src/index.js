@@ -6,6 +6,7 @@ const getAccountId = require('./helpers/getAccountId')
 const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
 const filterValidGroups = require('./helpers/filterValidGroups')
 const filterValidContacts = require('./helpers/filterValidContacts')
+const attachGroupsToContacts = require('./helpers/attachGroupsToContacts')
 const synchronizeContacts = require('./synchronizeContacts')
 const synchronizeGroups = require('./synchronizeGroups')
 
@@ -46,7 +47,10 @@ async function start() {
       contactAccount._id,
       remoteGroupsId
     )
-    const groupsSyncResult = await synchronizeGroups(
+    const {
+      groups: allConnectorGroups,
+      ...groupsSyncResult
+    } = await synchronizeGroups(
       cozyUtils,
       contactAccount._id,
       filteredGroups,
@@ -60,6 +64,13 @@ async function start() {
     const remoteContacts = get(remoteData, 'contacts', [])
     const filteredContacts = filterValidContacts(remoteContacts)
 
+    const remoteContactsWithGroups = attachGroupsToContacts(
+      filteredContacts,
+      filteredGroups,
+      allConnectorGroups,
+      contactAccount._id
+    )
+
     const remoteContactsId = filteredContacts.map(({ uuid }) => uuid)
     const cozyContacts = await cozyUtils.findContacts(
       contactAccount._id,
@@ -69,8 +80,9 @@ async function start() {
     const contactsSyncResult = await synchronizeContacts(
       cozyUtils,
       contactAccount._id,
-      filteredContacts,
-      cozyContacts
+      remoteContactsWithGroups,
+      cozyContacts,
+      allConnectorGroups
     )
 
     log('info', `${contactsSyncResult.contacts.created} contacts created`)
