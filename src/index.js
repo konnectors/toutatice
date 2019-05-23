@@ -42,7 +42,7 @@ async function start() {
     const filteredGroups = filterValidGroups(remoteGroups)
 
     const remoteGroupsId = filteredGroups.map(({ uuid }) => uuid)
-    const cozyGroups = await cozyUtils.findGroups(
+    const existingCozyGroups = await cozyUtils.findGroups(
       contactAccount._id,
       remoteGroupsId
     )
@@ -50,7 +50,7 @@ async function start() {
       cozyUtils,
       contactAccount._id,
       filteredGroups,
-      cozyGroups
+      existingCozyGroups
     )
     log('info', `${groupsSyncResult.created} groups created`)
     log('info', `${groupsSyncResult.updated} groups updated`)
