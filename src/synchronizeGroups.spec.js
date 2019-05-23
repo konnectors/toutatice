@@ -4,7 +4,7 @@ const MockDate = require('mockdate')
 describe('synchronizing groups', () => {
   const mockCozyUtils = {
     prepareIndex: jest.fn(),
-    save: jest.fn()
+    save: jest.fn(group => ({ data: { name: group.name } }))
   }
   const MOCK_CONTACT_ACCOUNT_ID = '123-456'
   const MOCKED_DATE = '2019-05-15T09:09:00.115Z'
@@ -58,11 +58,10 @@ describe('synchronizing groups', () => {
         }
       }
     })
-    expect(result).toEqual({
-      created: 1,
-      updated: 0,
-      skipped: 0
-    })
+    expect(result.created).toEqual(1)
+    expect(result.updated).toEqual(0)
+    expect(result.skipped).toEqual(0)
+    expect(result.groups.length).toEqual(1)
   })
 
   it('should update existing groups', async () => {
@@ -146,11 +145,10 @@ describe('synchronizing groups', () => {
         ]
       }
     })
-    expect(result).toEqual({
-      created: 0,
-      updated: 1,
-      skipped: 0
-    })
+    expect(result.created).toEqual(0)
+    expect(result.updated).toEqual(1)
+    expect(result.skipped).toEqual(0)
+    expect(result.groups.length).toEqual(1)
   })
 
   it('should not update unmodified groups', async () => {
@@ -201,10 +199,78 @@ describe('synchronizing groups', () => {
       cozyGroups
     )
     expect(mockCozyUtils.save).not.toHaveBeenCalled()
-    expect(result).toEqual({
-      created: 0,
-      updated: 0,
-      skipped: 1
-    })
+    expect(result.created).toEqual(0)
+    expect(result.updated).toEqual(0)
+    expect(result.skipped).toEqual(1)
+    expect(result.groups.length).toEqual(1)
+  })
+
+  it('should return all groups (created, updated and skipped)', async () => {
+    const cozyGroups = [
+      {
+        _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
+        name: 'My Mates', // changed
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '11111111-1A',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          }
+        }
+      },
+      {
+        _id: '2ef734c2d5b57669a83bcc763d1f5e47',
+        name: '2018-2019 2A',
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '222222-2A',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          }
+        }
+      }
+    ]
+    const remoteGroups = [
+      {
+        uuid: '11111111-1A',
+        structure: '11111111',
+        structureName: 'HOGWARTS',
+        gid: '1A',
+        name: '2018-2019 1A'
+      },
+      {
+        uuid: '222222-2A',
+        structure: '222222',
+        structureName: 'HOGWARTS',
+        gid: '2A',
+        name: '2018-2019 2A'
+      },
+      {
+        uuid: '333333-3A',
+        structure: '333333',
+        structureName: 'HOGWARTS',
+        gid: '3A',
+        name: '2018-2019 3A'
+      }
+    ]
+
+    const result = await synchronizeGroups(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteGroups,
+      cozyGroups
+    )
+    expect(result.created).toEqual(1)
+    expect(result.updated).toEqual(1)
+    expect(result.skipped).toEqual(1)
+    expect(result.groups.length).toEqual(3)
   })
 })
