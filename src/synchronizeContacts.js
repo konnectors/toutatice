@@ -17,7 +17,7 @@ const customMerge = connectorGroupIds => (existingValue, newValue, key) => {
   else return undefined // for other fields, use the normal lodash merge strategy
 }
 
-// for the cozy field, we want to always the new value
+// for the cozy field, we always want to use the new value
 const cozyMergeStrategy = (existingCozy, newCozy) => {
   const hasNewCozyValue = isArray(newCozy) && newCozy.length > 0
   if (hasNewCozyValue) return newCozy
@@ -48,7 +48,7 @@ const relationshipsMergeStrategy = connectorGroupIds => (
 
 const getFinalContactData = (cozyContact, remoteContact, connectorGroupIds) => {
   const merged = mergeWith(
-    {},
+    {}, // we don't want to mutate cozyContact or remoteContact
     cozyContact,
     remoteContact,
     customMerge(connectorGroupIds)
