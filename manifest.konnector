@@ -14,6 +14,7 @@
       "type": "hidden"
     }
   },
+  "frequency": "monthly",
   "data_types": [
     "contacts"
   ],
