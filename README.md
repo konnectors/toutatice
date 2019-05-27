@@ -31,6 +31,58 @@ yarn standalone
 ```
 For running the konnector connected to a Cozy server and more details see [konnectors tutorial](https://docs.cozy.io/en/tutorials/konnector/)
 
+### Real OAuth authentication
+
+You will need a cozy-stack running on your local machine.
+
+:warning: If you do not have [nsjail](https://github.com/google/nsjail) installed on your system, you'll have to configure the cozy-stack's server to run connectors directly with nodejs: if you don't already have a config file, copy example config from cozy-stack repository to create one in `~/.cozy/cozy.yaml`.
+
+```
+cp cozy-stack/cozy.example.yaml $HOME/.cozy/cozy.yaml
+```
+
+In this file, change the konnectors command to run connectors with node (you may need to use the absolute path):
+
+```
+konnectors:
+  cmd: <path_to_your_cozy-stack>/cozy-stack/scripts/konnector-node-run.sh
+```
+
+Then, remove/comment lines about vault and mail service (SMTP).
+
+Restart the `cozy-stack`.
+
+Next, build and install the konnector:
+
+```
+yarn build
+cozy-stack konnectors install toutatice file://$PWD/build
+```
+
+Then you'll have to register the konnector's oauth system into the cozy-stack's server with the following (see it on [cozy/cozy-stack](https://github.com/cozy/cozy-stack/blob/master/docs/konnectors-workflow.md#example-google)):
+
+```
+curl -X PUT 'localhost:5984/secrets%2Fio-cozy-account_types'
+curl -X PUT localhost:5984/secrets%2Fio-cozy-account_types/toutatice -d '{ "grant_mode": "authorization_code", "client_id": "<CLIENT_ID>", "client_secret": "<CLIENT_SECRET>", "auth_endpoint": "<AUTH_ENDPOINT>", "token_endpoint": "<TOKEN_ENDPOINT>" }'
+```
+
+Make sure that `http://cozy.tools:8080/accounts/toutatice/redirect` is whitelisted as a redirect URL on the Toutatice endpoint.
+
+Then, you can install the app you want to use with the connector, it should use your local build of the connector.
+For example, you can install `cozy-home` (`cozy-stack apps install home`) and run the synchronization from the Home app.
+
+Note that each time you change something in the connector's code, you will need to rebuild it and update it on the stack side:
+
+```
+yarn build
+cozy-stack konnectors update toutatice file://$PWD/build
+```
+
+To have a better understanding of what happens, you may also need to activate debug mode on the stack (be aware that if you restart the stack you will need to re-enable debug mode):
+
+```
+cozy-stack instances debug cozy.tools:8080 true
+```
 
 License
 -------
