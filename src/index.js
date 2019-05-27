@@ -28,17 +28,20 @@ async function start(fields) {
       token: fields.access_token
     })
 
+    log('info', 'Fetching user infos')
+    const userInfo = await toutaticeClient.getUserInfo()
+
     log('info', 'Getting cozy contact account')
+    const accountName = get(userInfo, 'unik', 'toutatice')
     const contactAccount = await cozyUtils.findOrCreateContactAccount(
       accountId,
-      'toutatice'
+      accountName
     )
 
     log('info', 'Preparing CouchDB indexes')
     await cozyUtils.prepareIndexes()
 
-    log('info', 'Fetching remote infos')
-    const userInfo = await toutaticeClient.getUserInfo()
+    log('info', 'Fetching remote data')
     if (!userInfo.ENTPersonUid)
       throw new Error('No ENTPersonUid field for current user')
     const remoteData = await toutaticeClient.getContacts(userInfo.ENTPersonUid)
