@@ -1,7 +1,7 @@
 const { BaseKonnector, log, errors } = require('cozy-konnector-libs')
-const fetch = require('isomorphic-fetch')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
+const ToutaticeClient = require('./toutaticeClient')
 const getAccountId = require('./helpers/getAccountId')
 const convertStructuresToGroups = require('./helpers/convertStructuresToGroups')
 const filterValidGroups = require('./helpers/filterValidGroups')
@@ -10,17 +10,23 @@ const attachGroupsToContacts = require('./helpers/attachGroupsToContacts')
 const synchronizeContacts = require('./synchronizeContacts')
 const synchronizeGroups = require('./synchronizeGroups')
 
+const TOUTATICE_API_URL = 'https://partenaires.ipanema.education.fr'
+
 module.exports = new BaseKonnector(start)
 
 // The start function is run by the BaseKonnector instance only when it got all the account
 // information (fields). When you run this connector yourself in "standalone" mode or "dev" mode,
 // the account information come from ./konnector-dev-config.json file
-async function start() {
+async function start(fields) {
   log('info', 'Starting the Toutatice connector')
 
   try {
     const accountId = getAccountId()
     const cozyUtils = new CozyUtils(accountId)
+    const toutaticeClient = new ToutaticeClient({
+      url: TOUTATICE_API_URL,
+      token: fields.access_token
+    })
 
     log('info', 'Getting cozy contact account')
     const contactAccount = await cozyUtils.findOrCreateContactAccount(
@@ -32,10 +38,10 @@ async function start() {
     await cozyUtils.prepareIndexes()
 
     log('info', 'Fetching remote infos')
-    const response = await fetch(
-      'https://jsonblob.com/api/jsonBlob/a47fe912-5d25-11e9-bde5-291328616b73'
-    )
-    const remoteData = await response.json()
+    const userInfo = await toutaticeClient.getUserInfo()
+    if (!userInfo.ENTPersonUid)
+      throw new Error('No ENTPersonUid field for current user')
+    const remoteData = await toutaticeClient.getContacts(userInfo.ENTPersonUid)
 
     log('info', 'Syncing groups')
     const remoteStructures = get(remoteData, 'structures', [])
