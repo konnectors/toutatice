@@ -63,7 +63,7 @@ Then you'll have to register the konnector's oauth system into the cozy-stack's 
 
 ```
 curl -X PUT 'localhost:5984/secrets%2Fio-cozy-account_types'
-curl -X PUT localhost:5984/secrets%2Fio-cozy-account_types/toutatice -d '{ "grant_mode": "authorization_code", "client_id": "<CLIENT_ID>", "client_secret": "<CLIENT_SECRET>", "auth_endpoint": "<AUTH_ENDPOINT>", "token_endpoint": "<TOKEN_ENDPOINT>" }'
+curl -X PUT localhost:5984/secrets%2Fio-cozy-account_types/toutatice -d '{ "grant_mode": "authorization_code", "client_id": "<CLIENT_ID>", "client_secret": "<CLIENT_SECRET>", "auth_endpoint": "https://partenaires.ipanema.education.fr/idp/profile/oidc/authorize", "token_endpoint": "https://partenaires.ipanema.education.fr/idp/profile/oidc/token" }'
 ```
 
 Make sure that `http://cozy.tools:8080/accounts/toutatice/redirect` is whitelisted as a redirect URL on the Toutatice endpoint.
