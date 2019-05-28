@@ -9,8 +9,7 @@ const filterValidContacts = require('./helpers/filterValidContacts')
 const attachGroupsToContacts = require('./helpers/attachGroupsToContacts')
 const synchronizeContacts = require('./synchronizeContacts')
 const synchronizeGroups = require('./synchronizeGroups')
-
-const TOUTATICE_API_URL = 'https://partenaires.ipanema.education.fr'
+const { TOUTATICE_API_URL } = require('./constants')
 
 module.exports = new BaseKonnector(start)
 
