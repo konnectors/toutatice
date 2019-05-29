@@ -6,7 +6,8 @@ const {
   APP_NAME,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
-  DOCTYPE_CONTACTS_ACCOUNT
+  DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_ACCOUNT
 } = require('./constants')
 
 class CozyUtils {
@@ -128,6 +129,20 @@ class CozyUtils {
 
   save(params) {
     return this.client.save(params)
+  }
+
+  async deleteAccount(accountId) {
+    const accountsCollection = this.client.collection(DOCTYPE_ACCOUNT)
+    const response = await accountsCollection.get(accountId)
+    const doc = get(response, 'data')
+    if (!doc && process.env.NODE_ENV === 'development') {
+      log(
+        'info',
+        "Coudln't find io.cozy.accounts in development mode, skipping deleting the account."
+      )
+    } else {
+      return accountsCollection.destroy(doc)
+    }
   }
 }
 

@@ -7,6 +7,7 @@ module.exports = {
   DOCTYPE_CONTACTS: 'io.cozy.contacts',
   DOCTYPE_CONTACTS_GROUPS: 'io.cozy.contacts.groups',
   DOCTYPE_CONTACTS_ACCOUNT: 'io.cozy.contacts.accounts',
+  DOCTYPE_ACCOUNT: 'io.cozy.accounts',
   DOCTYPE_CONTACTS_VERSION: 2,
   DOCTYPE_CONTACTS_GROUPS_VERSION: 2,
   DOCTYPE_CONTACTS_ACCOUNT_VERSION: 1,
