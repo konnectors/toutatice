@@ -101,6 +101,7 @@ async function start(fields) {
     log('info', 'Updating lastLocalSync')
     await cozyUtils.save({
       ...contactAccount,
+      sourceAccount: null, // to indicate that the account is now disconnected
       lastLocalSync: new Date().toISOString()
     })
 
