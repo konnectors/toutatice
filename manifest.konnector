@@ -8,12 +8,13 @@
   "source": "git@github.com:konnectors/toutatice.git",
   "editor": "Cozy",
   "vendor_link": "https://www.toutatice.fr",
-  "categories": ["online_services"],
+  "categories": ["online_services", "contacts"],
   "fields": {
     "access_token": {
       "type": "hidden"
     }
   },
+  "frequency": "monthly",
   "data_types": [
     "contacts"
   ],
