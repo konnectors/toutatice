@@ -259,4 +259,27 @@ describe('CozyUtils', () => {
       })
     })
   })
+
+  describe('deleteAccount', () => {
+    it('should work', async () => {
+      const MOCK_ACCOUNT_ID = '123'
+      const MOCK_ACCOUNT_DOC = {
+        _id: MOCK_ACCOUNT_ID,
+        _rev: 'abc'
+      }
+      const getSpy = jest.fn().mockResolvedValue({
+        data: MOCK_ACCOUNT_DOC
+      })
+      const destroySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        get: getSpy,
+        destroy: destroySpy
+      }))
+
+      await cozyUtils.deleteAccount(MOCK_ACCOUNT_ID)
+
+      expect(getSpy).toHaveBeenCalledWith(MOCK_ACCOUNT_ID)
+      expect(destroySpy).toHaveBeenCalledWith(MOCK_ACCOUNT_DOC)
+    })
+  })
 })

@@ -27,7 +27,7 @@
   "permissions": {
     "accounts": {
       "type": "io.cozy.accounts",
-      "verbs": ["GET"]
+      "verbs": ["ALL"]
     },
     "contacts": {
       "type": "io.cozy.contacts",

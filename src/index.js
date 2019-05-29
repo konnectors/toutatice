@@ -22,6 +22,7 @@ async function start(fields) {
   try {
     const accountId = getAccountId()
     const cozyUtils = new CozyUtils(accountId)
+
     const toutaticeClient = new ToutaticeClient({
       url: TOUTATICE_API_URL,
       token: fields.access_token
@@ -102,6 +103,9 @@ async function start(fields) {
       ...contactAccount,
       lastLocalSync: new Date().toISOString()
     })
+
+    log('info', 'Deleting account')
+    await cozyUtils.deleteAccount(accountId)
 
     log('info', 'Finished!')
   } catch (err) {
