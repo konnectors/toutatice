@@ -78,7 +78,7 @@ const run = async () => {
     const previousConfigFileContent = require(`../${KONNECTOR_DEV_CONFIG_FILE}`)
 
     fs.writeFileSync(
-      `../${KONNECTOR_DEV_CONFIG_FILE}`,
+      `./${KONNECTOR_DEV_CONFIG_FILE}`,
       JSON.stringify(
         {
           ...previousConfigFileContent,
