@@ -282,4 +282,56 @@ describe('CozyUtils', () => {
       expect(destroySpy).toHaveBeenCalledWith(MOCK_ACCOUNT_DOC)
     })
   })
+
+  describe('deleteTrigger', () => {
+    it('should work', async () => {
+      const MOCK_ACCOUNT_ID = '123'
+      const findSpy = jest.fn().mockResolvedValue({
+        data: [
+          {
+            _id: 'trigger',
+            worker: 'konnector',
+            message: {
+              konnector: 'toutatice',
+              account: MOCK_ACCOUNT_ID
+            }
+          },
+          {
+            _id: 'other-trigger',
+            worker: 'konnector',
+            message: {
+              konnector: 'belenos',
+              account: 'something else'
+            }
+          },
+          {
+            _id: 'other-id',
+            worker: 'konnector',
+            message: {
+              konnector: 'toutatice',
+              account: 'something else'
+            }
+          }
+        ]
+      })
+      const destroySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        find: findSpy,
+        destroy: destroySpy
+      }))
+
+      await cozyUtils.deleteTrigger(MOCK_ACCOUNT_ID)
+
+      expect(findSpy).toHaveBeenCalled()
+      expect(destroySpy).toHaveBeenCalledWith({
+        _id: 'trigger',
+        worker: 'konnector',
+        message: {
+          konnector: 'toutatice',
+          account: MOCK_ACCOUNT_ID
+        }
+      })
+      expect(destroySpy).toHaveBeenCalledTimes(1)
+    })
+  })
 })

@@ -106,7 +106,10 @@ async function start(fields) {
     })
 
     log('info', 'Deleting account')
-    await cozyUtils.deleteAccount(accountId)
+    await Promise.all([
+      cozyUtils.deleteAccount(accountId),
+      cozyUtils.deleteTrigger(accountId)
+    ])
 
     log('info', 'Finished!')
   } catch (err) {
