@@ -138,7 +138,7 @@ class CozyUtils {
     if (!doc && process.env.NODE_ENV === 'development') {
       log(
         'info',
-        "Coudln't find io.cozy.accounts in development mode, skipping deleting the account."
+        `Couldn't find io.cozy.accounts in development mode, skipping deleting account with id ${accountId}.`
       )
     } else {
       return accountsCollection.destroy(doc)
