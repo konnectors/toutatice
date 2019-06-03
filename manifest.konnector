@@ -29,6 +29,10 @@
       "type": "io.cozy.accounts",
       "verbs": ["GET", "DELETE"]
     },
+    "triggers": {
+      "type": "io.cozy.triggers",
+      "verbs": ["GET", "DELETE"]
+    },
     "contacts": {
       "type": "io.cozy.contacts",
       "verbs": ["ALL"]
