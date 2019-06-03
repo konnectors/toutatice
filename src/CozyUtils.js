@@ -160,7 +160,7 @@ class CozyUtils {
     })
 
     await Promise.all(
-      // Int theory there is only one matching trigger, so there shoudn't be many promises here
+      // In theory there is only one matching trigger, so there shouldn't be many promises here
       accountTriggers.map(async trigger => {
         return triggersCollection.destroy(trigger)
       })
