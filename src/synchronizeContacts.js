@@ -127,6 +127,31 @@ const synchronizeContacts = async (
     }
   })
 
+  const contactsDeletedOnRemote = cozyContacts.filter(cozyContact => {
+    const cozyRemoteId = get(
+      cozyContact,
+      `cozyMetadata.sync.${contactAccountId}.id`
+    )
+
+    return !remoteContacts.some(
+      remoteContact => cozyRemoteId === remoteContact.uuid
+    )
+  })
+
+  contactsDeletedOnRemote.map(contactDeletedOnRemote => {
+    const onlyManualRelationships = relationshipsMergeStrategy(
+      connectorGroupIds
+    )(contactDeletedOnRemote.relationships, {})
+
+    const contactWithoutConnectorGroups = {
+      ...contactDeletedOnRemote,
+      relationships: onlyManualRelationships
+    }
+
+    cozyUtils.save(contactWithoutConnectorGroups)
+    result.contacts.updated++
+  })
+
   const limit = pLimit(50)
   await Promise.all(promises.map(limit))
   return result
