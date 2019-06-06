@@ -764,6 +764,86 @@ describe('synchronizing contacts', () => {
     })
   })
 
+  it('should remove groups from a deleted contact', async () => {
+    const cozyContacts = [
+      {
+        _id: 'a145b5551e46fe3870763109c90063f0',
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '7162-1889-0916-6273',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-04-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          }
+        },
+        jobTitle: 'Élève',
+        name: {
+          familyName: 'Granger',
+          givenName: 'Hermione'
+        },
+        relationships: {
+          other: {
+            data: [{ _id: 'id-other', _type: 'io.cozy.other' }]
+          },
+          groups: {
+            data: [
+              { _id: 'id-group', _type: 'io.cozy.contacts.groups' },
+              { _id: 'manual-group', _type: 'io.cozy.contacts.groups' }
+            ]
+          }
+        }
+      }
+    ]
+    const remoteContacts = [
+      // contact has been removed on the remote side
+    ]
+    const remoteGroups = [{ _id: 'id-group' }]
+
+    const result = await synchronizeContacts(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      cozyContacts,
+      remoteGroups
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
+    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+      _id: 'a145b5551e46fe3870763109c90063f0',
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '7162-1889-0916-6273',
+            konnector: 'konnector-toutatice',
+            lastSync: '2019-04-12T14:34:28.737Z',
+            remoteRev: null
+          }
+        }
+      },
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Granger',
+        givenName: 'Hermione'
+      },
+      relationships: {
+        other: {
+          data: [{ _id: 'id-other', _type: 'io.cozy.other' }]
+        },
+        groups: {
+          data: [{ _id: 'manual-group', _type: 'io.cozy.contacts.groups' }]
+        }
+      }
+    })
+    expect(result.contacts).toEqual({
+      created: 0,
+      updated: 1,
+      skipped: 0
+    })
+  })
+
   it('should keep cozy fields when remote fields are missing', async () => {
     const cozyContacts = [
       {
