@@ -80,11 +80,7 @@ async function start(fields) {
       contactAccount._id
     )
 
-    const remoteContactsId = filteredContacts.map(({ uuid }) => uuid)
-    const cozyContacts = await cozyUtils.findContacts(
-      contactAccount._id,
-      remoteContactsId
-    )
+    const cozyContacts = await cozyUtils.findContacts(contactAccount._id)
 
     const contactsSyncResult = await synchronizeContacts(
       cozyUtils,

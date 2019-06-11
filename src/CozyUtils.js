@@ -19,7 +19,7 @@ class CozyUtils {
   async prepareIndexes(contactAccountId) {
     await this.client
       .collection(DOCTYPE_CONTACTS)
-      .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
+      .createIndex([`cozyMetadata.sync.${contactAccountId}.contactsAccountsId`])
     await this.client
       .collection(DOCTYPE_CONTACTS_GROUPS)
       .createIndex([`cozyMetadata.sync.${contactAccountId}.id`])
@@ -29,24 +29,21 @@ class CozyUtils {
    * async findContacts - Finds contacts based on a list of remote ids
    *
    * @param  {string} accountId The io.cozy.contacts.account contacts should be linked to
-   * @param  {array} remoteIds
    * @returns {array}
    */
-  async findContacts(accountId, remoteIds) {
+  async findContacts(accountId) {
     const contactsCollection = this.client.collection(DOCTYPE_CONTACTS)
     const resp = await contactsCollection.find(
       {
         cozyMetadata: {
           sync: {
             [accountId]: {
-              id: {
-                $in: remoteIds
-              }
+              contactsAccountsId: accountId
             }
           }
         }
       },
-      { indexedFields: [`cozyMetadata.sync.${accountId}.id`] }
+      { indexedFields: [`cozyMetadata.sync.${accountId}.contactsAccountsId`] }
     )
 
     return get(resp, 'data')
