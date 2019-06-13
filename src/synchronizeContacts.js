@@ -116,10 +116,10 @@ const synchronizeContacts = async (
     )
 
     if (!cozyContact) {
-      cozyUtils.save(finalContact)
+      await cozyUtils.save(finalContact)
       result.contacts.created++
     } else if (needsUpdate) {
-      cozyUtils.save(finalContact)
+      await cozyUtils.save(finalContact)
       result.contacts.updated++
     } else {
       // the contact already exists and there is nothing to update
@@ -138,7 +138,7 @@ const synchronizeContacts = async (
     )
   })
 
-  contactsDeletedOnRemote.map(contactDeletedOnRemote => {
+  contactsDeletedOnRemote.map(async contactDeletedOnRemote => {
     const onlyManualRelationships = relationshipsMergeStrategy(
       connectorGroupIds
     )(contactDeletedOnRemote.relationships, {})
@@ -148,7 +148,7 @@ const synchronizeContacts = async (
       relationships: onlyManualRelationships
     }
 
-    cozyUtils.save(contactWithoutConnectorGroups)
+    await cozyUtils.save(contactWithoutConnectorGroups)
     result.contacts.updated++
   })
 

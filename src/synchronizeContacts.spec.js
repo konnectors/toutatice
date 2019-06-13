@@ -941,4 +941,49 @@ describe('synchronizing contacts', () => {
       skipped: 0
     })
   })
+
+  it('should throttle network requests', async () => {
+    const sleep = delay => new Promise(resolve => setTimeout(resolve, delay))
+    const SLEEP_DELAY = 100
+
+    const afterSaveRequest = jest.fn()
+    mockCozyUtils.save.mockImplementation(async () => {
+      await sleep(SLEEP_DELAY)
+      afterSaveRequest()
+    })
+
+    const remoteContacts = []
+    for (let i = 0; i < 51; i++)
+      remoteContacts.push({
+        uuid: '2766-0917-1711-5382',
+        firstname: 'Sirius'
+      })
+
+    // we don't await synchronizeContacts so we can test the advancement of the callbacks manually
+    const promise = synchronizeContacts(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      [],
+      []
+    )
+
+    // at first, all the save requests should be pending
+    expect(afterSaveRequest).toHaveBeenCalledTimes(0)
+    // after the faked delay, the first batch of requests should be finished
+    await sleep(SLEEP_DELAY)
+    expect(afterSaveRequest).toHaveBeenCalledTimes(50)
+    // as long as the fakd delay is not over, the next batch should not be finished
+    await sleep(SLEEP_DELAY / 2)
+    expect(afterSaveRequest).toHaveBeenCalledTimes(50)
+    await sleep(SLEEP_DELAY / 2)
+    expect(afterSaveRequest).toHaveBeenCalledTimes(51)
+
+    const result = await promise
+    expect(result.contacts).toEqual({
+      created: 51,
+      updated: 0,
+      skipped: 0
+    })
+  })
 })
