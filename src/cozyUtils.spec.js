@@ -70,7 +70,9 @@ describe('CozyUtils', () => {
 
   describe('findContacts', () => {
     it('should find the contacts that have the given remote ids', async () => {
-      const findSpy = jest.fn()
+      const findSpy = jest.fn().mockResolvedValue({
+        data: []
+      })
       cozyUtils.client.collection = jest.fn(() => ({
         find: findSpy
       }))
@@ -87,9 +89,31 @@ describe('CozyUtils', () => {
           }
         },
         {
-          indexedFields: ['cozyMetadata.sync.fakeAccountId.contactsAccountsId']
+          indexedFields: ['cozyMetadata.sync.fakeAccountId.contactsAccountsId'],
+          limit: 100,
+          skip: 0
         }
       )
+    })
+
+    it('should load all pages', async () => {
+      let pagesLoaded = 0
+      const findSpy = jest.fn(() => {
+        const responses = [
+          { data: [1, 2, 3], next: true },
+          { data: [4, 5, 6], next: true },
+          { data: [7], next: false }
+        ]
+        const result = responses[pagesLoaded++]
+        return result
+      })
+      cozyUtils.client.collection = jest.fn(() => ({
+        find: findSpy
+      }))
+
+      const result = await cozyUtils.findContacts('fakeAccountId')
+      expect(findSpy).toHaveBeenCalledTimes(3)
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, 7])
     })
   })
 
