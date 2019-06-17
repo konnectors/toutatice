@@ -33,20 +33,34 @@ class CozyUtils {
    */
   async findContacts(accountId) {
     const contactsCollection = this.client.collection(DOCTYPE_CONTACTS)
-    const resp = await contactsCollection.find(
-      {
-        cozyMetadata: {
-          sync: {
-            [accountId]: {
-              contactsAccountsId: accountId
+    const LIMIT = 100
+    let allContacts = []
+    let skip = 0
+    let hasMore = true
+
+    while (hasMore) {
+      const resp = await contactsCollection.find(
+        {
+          cozyMetadata: {
+            sync: {
+              [accountId]: {
+                contactsAccountsId: accountId
+              }
             }
           }
+        },
+        {
+          indexedFields: [`cozyMetadata.sync.${accountId}.contactsAccountsId`],
+          skip,
+          limit: LIMIT
         }
-      },
-      { indexedFields: [`cozyMetadata.sync.${accountId}.contactsAccountsId`] }
-    )
+      )
+      allContacts = [...allContacts, ...get(resp, 'data')]
+      hasMore = resp.next
+      skip += LIMIT
+    }
 
-    return get(resp, 'data')
+    return allContacts
   }
 
   /**
