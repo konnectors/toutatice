@@ -16,6 +16,15 @@ class CozyUtils {
     this.client = initCozyClient(accountId)
   }
 
+  async refreshToken(accountId) {
+    const response = await this.client.fetch(
+      'POST',
+      `/accounts/toutatice/${accountId}/refresh`
+    )
+    const body = await response.json()
+    return get(body, 'data.attributes.oauth.access_token', null)
+  }
+
   async prepareIndexes(contactAccountId) {
     await this.client
       .collection(DOCTYPE_CONTACTS)
