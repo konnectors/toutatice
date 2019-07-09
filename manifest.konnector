@@ -27,11 +27,7 @@
   "permissions": {
     "accounts": {
       "type": "io.cozy.accounts",
-      "verbs": ["GET", "DELETE"]
-    },
-    "triggers": {
-      "type": "io.cozy.triggers",
-      "verbs": ["GET", "DELETE"]
+      "verbs": ["GET"]
     },
     "contacts": {
       "type": "io.cozy.contacts",
