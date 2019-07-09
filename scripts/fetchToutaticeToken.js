@@ -83,7 +83,8 @@ const run = async () => {
         {
           ...previousConfigFileContent,
           fields: {
-            access_token: tokenData.access_token
+            access_token: tokenData.access_token,
+            refresh_token: tokenData.refresh_token
           }
         },
         null,

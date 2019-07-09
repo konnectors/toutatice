@@ -23,9 +23,11 @@ async function start(fields) {
     const accountId = getAccountId()
     const cozyUtils = new CozyUtils(accountId)
 
+    const accessToken = await cozyUtils.refreshToken(accountId)
+
     const toutaticeClient = new ToutaticeClient({
       url: TOUTATICE_API_URL,
-      token: fields.access_token
+      token: accessToken || fields.access_token
     })
 
     log('info', 'Fetching user infos')

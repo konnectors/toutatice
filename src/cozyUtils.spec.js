@@ -47,6 +47,38 @@ describe('CozyUtils', () => {
     expect(cozyUtils.client).toBeDefined()
   })
 
+  describe('refreshing a token', () => {
+    it('should returned a refreshed token', async () => {
+      const MOCK_ACCOUNT_ID = '123'
+      const MOCK_REFRESHED_TOKEN = 'abc123'
+      const mockResponse = {
+        json: () => ({
+          data: {
+            attributes: {
+              oauth: {
+                access_token: MOCK_REFRESHED_TOKEN
+              }
+            }
+          }
+        })
+      }
+      cozyUtils.client.fetch = jest.fn(() => mockResponse)
+
+      const result = await cozyUtils.refreshToken(MOCK_ACCOUNT_ID)
+      expect(cozyUtils.client.fetch).toHaveBeenCalledWith(
+        'POST',
+        '/accounts/toutatice/123/refresh'
+      )
+      expect(result).toEqual(MOCK_REFRESHED_TOKEN)
+    })
+
+    it('should return null in case of a problem', async () => {
+      cozyUtils.client.fetch = jest.fn(() => ({ json: () => null }))
+      const result = await cozyUtils.refreshToken('123')
+      expect(result).toEqual(null)
+    })
+  })
+
   describe('prepareIndexes method', () => {
     it('should prepare an index on remote id for contacts', async () => {
       const createIndexSpy = jest.fn()
