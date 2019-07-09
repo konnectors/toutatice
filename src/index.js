@@ -103,12 +103,6 @@ async function start(fields) {
       lastLocalSync: new Date().toISOString()
     })
 
-    log('info', 'Deleting account')
-    await Promise.all([
-      cozyUtils.deleteAccount(accountId),
-      cozyUtils.deleteTrigger(accountId)
-    ])
-
     log('info', 'Finished!')
   } catch (err) {
     log('error', 'caught an unexpected error')

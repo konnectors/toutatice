@@ -6,9 +6,7 @@ const {
   APP_NAME,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
-  DOCTYPE_CONTACTS_ACCOUNT,
-  DOCTYPE_ACCOUNT,
-  DOCTYPE_TRIGGERS
+  DOCTYPE_CONTACTS_ACCOUNT
 } = require('./constants')
 
 class CozyUtils {
@@ -150,41 +148,6 @@ class CozyUtils {
 
   save(params) {
     return this.client.save(params)
-  }
-
-  async deleteAccount(accountId) {
-    const accountsCollection = this.client.collection(DOCTYPE_ACCOUNT)
-    const response = await accountsCollection.get(accountId)
-    const doc = get(response, 'data')
-    if (!doc && process.env.NODE_ENV === 'development') {
-      log(
-        'info',
-        `Couldn't find io.cozy.accounts in development mode, skipping deleting account with id ${accountId}.`
-      )
-    } else {
-      return accountsCollection.destroy(doc)
-    }
-  }
-
-  async deleteTrigger(accountId) {
-    const triggersCollection = this.client.collection(DOCTYPE_TRIGGERS)
-    const response = await triggersCollection.find({
-      worker: 'konnector' // this is the only field we can filter on in the trigger collection, other filters have to be applied manually
-    })
-    const triggers = response.data
-    const accountTriggers = triggers.filter(trigger => {
-      return (
-        get(trigger, 'message.konnector') === 'toutatice' &&
-        get(trigger, 'message.account') === accountId
-      )
-    })
-
-    await Promise.all(
-      // In theory there is only one matching trigger, so there shouldn't be many promises here
-      accountTriggers.map(async trigger => {
-        return triggersCollection.destroy(trigger)
-      })
-    )
   }
 }
 
