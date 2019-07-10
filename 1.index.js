@@ -1,7 +1,7 @@
 exports.ids = [1];
 exports.modules = {
 
-/***/ 1354:
+/***/ 1960:
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
