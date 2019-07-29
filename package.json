@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "cozy-client": "6.55.0",
-    "cozy-konnector-libs": "4.18.3",
+    "cozy-konnector-libs": "4.18.4",
     "isomorphic-fetch": "2.2.1",
     "jest": "24.8.0",
     "json-loader": "0.5.7",
