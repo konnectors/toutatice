@@ -1,5 +1,6 @@
 jest.mock('isomorphic-fetch', () => {
   return jest.fn(() => ({
+    status: 200,
     json: jest.fn().mockResolvedValue({
       response: 'ok'
     })
@@ -53,6 +54,18 @@ describe('toutatice client', () => {
     expect(url).toMatch(new RegExp(`/contacts/${MOCK_UUID}$`))
     expect(authHeader).toEqual(`Bearer ${MOCK_TOKEN}`)
     expect(result).toEqual({ response: 'ok' })
+  })
+
+  it('should handle empty responses when fetching remote contacts', async () => {
+    const MOCK_UUID = 'my-uuid'
+    const mockResponse = {
+      status: 204,
+      json: jest.fn().mockRejectedValue('Parse error')
+    }
+    fetch.mockResolvedValue(mockResponse)
+    const result = await client.getContacts(MOCK_UUID)
+    expect(result).toEqual(null)
+    expect(mockResponse.json).not.toHaveBeenCalled()
   })
 
   it('should URL encode UUIDs', async () => {

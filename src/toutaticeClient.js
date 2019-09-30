@@ -25,8 +25,8 @@ class ToutaticeClient {
         }
       }
     )
-    const infos = await response.json()
-    return infos
+    if (response.status === 200) return response.json()
+    else return null
   }
 }
 
