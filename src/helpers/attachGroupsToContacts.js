@@ -25,9 +25,7 @@ const attachGroupsToContacts = (
     else {
       log(
         'warn',
-        `Unable to find a matching remote group for cozy group with id ${
-          cozyGroup._id
-        }`
+        `Unable to find a matching remote group for cozy group with id ${cozyGroup._id}`
       )
       log('warn', remoteGroups)
     }
