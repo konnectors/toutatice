@@ -11,9 +11,7 @@ function getAccessToken(environment) {
   } catch (err) {
     log(
       'error',
-      `Please provide proper COZY_CREDENTIALS environment variable. ${
-        process.env.COZY_CREDENTIALS
-      } is not OK`
+      `Please provide proper COZY_CREDENTIALS environment variable. ${process.env.COZY_CREDENTIALS} is not OK`
     )
 
     throw err
