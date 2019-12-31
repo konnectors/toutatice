@@ -48,7 +48,7 @@
     "p-limit": "2.2.1"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "5.0.5",
+    "copy-webpack-plugin": "5.1.1",
     "cozy-app-publish": "0.20.0",
     "cozy-jobs-cli": "1.10.6",
     "eslint": "6.7.2",
