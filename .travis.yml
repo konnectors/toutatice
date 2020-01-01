@@ -1,10 +1,8 @@
 language: node_js
 node_js:
-- '8'
+- '12'
 env:
   global:
-  - GH_USER_EMAIL="travis@example.org"
-  - GH_USER_NAME="cozy-bot"
   - DEPLOY_REPOSITORY="git@github.com:konnectors/toutatice.git"
   # REGISTRY_TOKEN
   - secure: FYsosCC4BP/Q8wRTJ6K8dp48yHhhTTkAVgdtaVLVFIHnZkYO3RVhL+olmVd09pJBFVL0uMI9cfBhe6h96etBb7tR9munV4S3zVgLzdnR49cn143E8m+P05mh+AeQ1bsFTR35SVFYNlnndS5cP/BXD027at2FG+26XRMiWf1Fzo6+Qx0NrJDnRIW0hl1CoQvL0OrQAHj9udl/df/vhPCeK1pYTklS8AghRQPGQx1vuDsFyQpin+d1tQwBIYsQaPEtxmartxSDbK7L/Prpidijrr4PxSoOj2+RV0y/nnOU3R9bCSJ+tr5PACwTRveZkFJE3s3+0V/JFInIW7CPcPgkCCyqO6yxzmW4FIu5y2DNVed+1JUi0UrOJ2u3U6C+wHwY4BvgfoQiOIT8fsxuTWupY8119U1BcWuRgbM8tCDki18iiWt+wt7xxOhdqspSXd2zkYfPkB2GE9Eb8dx0QOY5F3lVyuvqQywo2psDtgliRF1qWzkPpUhHJNN8v3t89M+DqsJVNv+byzHVf5nnVamAsHbBMmMqZOUKQ7wC/sB/UaBhvOYeGp/QCuRXuLPEnjMtTdJE4AloDuHHYPDaKyAizrK+TfbPwNZPZPCKZpxwtbtEU6deg7BtgJwxNKdciaqjngt0l1gQSGQPh1Tzb+e7ltE2ENvb7mG9hB6VLAX2xIg=
