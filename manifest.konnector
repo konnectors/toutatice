@@ -1,0 +1,89 @@
+{
+  "version": "1.0.0",
+  "name": "Toutatice",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.svg",
+  "slug": "toutatice",
+  "source": "git@github.com:konnectors/toutatice.git",
+  "editor": "Cozy",
+  "vendor_link": "https://www.toutatice.fr",
+  "categories": ["online_services", "contacts"],
+  "fields": {
+    "access_token": {
+      "type": "hidden"
+    }
+  },
+  "frequency": "monthly",
+  "oauth": {
+    "scope": [
+      "openid+toutatice+offline_access"
+    ]
+  },
+  "data_types": [
+    "contacts"
+  ],
+  "screenshots": [],
+  "permissions": {
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": ["GET"]
+    },
+    "contacts": {
+      "type": "io.cozy.contacts",
+      "verbs": ["ALL"]
+    },
+    "contactsGroups": {
+      "type": "io.cozy.contacts.groups",
+      "verbs": ["ALL"]
+    },
+    "contactsAccounts": {
+      "type": "io.cozy.contacts.accounts",
+      "verbs": ["ALL"]
+    }
+  },
+  "developer": {
+    "name": "Cozy Cloud",
+    "url": "https://cozy.io"
+  },
+  "langs": ["fr", "en"],
+  "locales": {
+    "fr": {
+      "short_description": "Cette application Toutatice récupère automatiquement les contacts triés par votre établissement afin de vous faciliter le partage de documents avec ces contacts et groupes de contacts.",
+      "long_description": "Vous êtes un enseignant et souhaitez partagez des documents à votre classe ? à vos confrères et consœurs d'un établissement ?\nVous êtes un élève et souhaitez échangez avec vos camarades sur des documents de travail ?\n\n&nbsp\n\nCette application vous permet, aussi bien aux élèves qu'aux enseignants de l'académie de Rennes, de récupérer votre carnet d'adresses personnalisé et vous facilite ainsi le partage de documents.\nVos contacts se retrouvent dans l'application Cozy Contacts, déjà triés par groupes (classes, établissements, élèves ou enseignants...).\nMais surtout, depuis vos documents visibles depuis Cozy Drive, vos contacts et groupes de contacts apparaitront automatiquement si vous les partagez.\n\n&nbsp\n\nEn tant qu'élève, vous retrouverez dans l'application Cozy Contacts :\n- la liste de tous vos enseignants\n- la liste de vos camarades de classe\n- un groupe \"Enseignants\" et un groupe \"Camarades\" déjà créés\n\nLibre à vous de créer de nouveaux groupes ou d'agrémenter les fiches contacts existantes ou d'en créer des nouvelles !\n\n&nbsp\n\nEn tant qu'enseignant, vous retrouverez dans l'application Cozy Contacts :\n- la liste de tous les enseignants des établissements où vous travaillez\n- la liste de tous vos élèves, groupés par classes\n- un groupe \"Enseignants\" propre à chaque établissement\n- un groupe pour chacune de vos classes\n\nLibre à vous de créer de nouveaux groupes ou d'agrémenter les fiches contacts existantes ou d'en créer des nouvelles !\n\n&nbsp\n\nLes données provenant de cette application seront mises à jour par l'académie de Rennes. Certaines mises à jour pourront parfois altérer les éventuelles données que vous auriez éditer (les noms et prénoms de vos contacts par exemple, ou leur adresse Cozy).\nSi vous rajoutez vous même des contacts, si vous créez des groupes ou si vous ajoutez des données que cette application ne vous transmet pas (téléphone ou email), elles seront bien entendu conservées.",
+      "permissions": {
+        "accounts": {
+          "description": "Utilisé pour se connecter au compte Toutatice."
+        },
+        "contacts": {
+          "description": "Utilisé pour accéder aux contacts de votre Cozy."
+        },
+        "contactsGroups": {
+          "description": "Utilisé pour accéder aux groupes de contacts de votre Cozy."
+        },
+        "contactsAccounts": {
+          "description": "Utilisé pour faire les associations entre vos contacts et votre compte Toutatice."
+        }
+      }
+    },
+    "en": {
+      "short_description": "This application Toutatice automatically retrieves the contacts sorted by your school to facilitate the sharing of documents with these contacts and groups of contacts.",
+      "long_description": "You are a teacher and want to share documents with your class? to your colleagues in an establishment?\nYou are a student and want to exchange with your classmates on work papers?\n\n&nbsp\n\nThis application allows you, both students and teachers of the academy of Rennes, to recover your personalized address book and thus facilitates the sharing of documents.\nYour contacts are found in the Cozy Contacts application, already sorted by groups (classes, schools, students or teachers...).\nBut most importantly, from your documents visible from Cozy Drive, your contacts and groups of contacts will appear automatically by sharing them.\n\n&nbsp\n\nAs a student, you will find in the Cozy Contacts application:\n- the list of all your teachers\n- the list of your classmates\n- a group \"Teachers\" and a group \"Classmates\" already created\n\nYou are free to create new groups or to enhance existing contact sheets or to create new ones!\n\n&nbsp\n\nAs a teacher, you will find in the Cozy Contacts application:\n- a list of all teachers in the schools where you work\n- the list of all your students, grouped by class\n- a group \"Teachers\" specific to each school\n- a group for each of your classes\n\nYou are free to create new groups or to enhance existing contact sheets or to create new ones!\n\n&nbsp\n\nData from this application will be updated by the academy of Rennes. Some updates may sometimes alter any data you have edited (the names and first names of your contacts, for example, or their address Cozy).\nIf you add contacts yourself, if you create groups or if you add data that this application does not send you (phone or email), they will of course be kept.",
+      "permissions": {
+        "accounts": {
+          "description": "Required to sign in to your Toutatice account."
+        },
+        "contacts": {
+          "description": "Required to access your contacts in your Cozy."
+        },
+        "contactsGroups": {
+          "description": "Required to access your groups of contacts in your Cozy."
+        },
+        "contactsAccounts": {
+          "description": "Required to link your contacts with your Toutatice remote account."
+        }
+      }
+    }
+  },
+  "manifest_version": "2"
+}

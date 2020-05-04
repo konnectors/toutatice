@@ -1,0 +1,42 @@
+language: node_js
+node_js:
+- '12'
+env:
+  global:
+  - MATTERMOST_CHANNEL=publication
+  # REGISTRY_TOKEN(editor=cozy, app=toutatice)
+  - secure: FYsosCC4BP/Q8wRTJ6K8dp48yHhhTTkAVgdtaVLVFIHnZkYO3RVhL+olmVd09pJBFVL0uMI9cfBhe6h96etBb7tR9munV4S3zVgLzdnR49cn143E8m+P05mh+AeQ1bsFTR35SVFYNlnndS5cP/BXD027at2FG+26XRMiWf1Fzo6+Qx0NrJDnRIW0hl1CoQvL0OrQAHj9udl/df/vhPCeK1pYTklS8AghRQPGQx1vuDsFyQpin+d1tQwBIYsQaPEtxmartxSDbK7L/Prpidijrr4PxSoOj2+RV0y/nnOU3R9bCSJ+tr5PACwTRveZkFJE3s3+0V/JFInIW7CPcPgkCCyqO6yxzmW4FIu5y2DNVed+1JUi0UrOJ2u3U6C+wHwY4BvgfoQiOIT8fsxuTWupY8119U1BcWuRgbM8tCDki18iiWt+wt7xxOhdqspSXd2zkYfPkB2GE9Eb8dx0QOY5F3lVyuvqQywo2psDtgliRF1qWzkPpUhHJNN8v3t89M+DqsJVNv+byzHVf5nnVamAsHbBMmMqZOUKQ7wC/sB/UaBhvOYeGp/QCuRXuLPEnjMtTdJE4AloDuHHYPDaKyAizrK+TfbPwNZPZPCKZpxwtbtEU6deg7BtgJwxNKdciaqjngt0l1gQSGQPh1Tzb+e7ltE2ENvb7mG9hB6VLAX2xIg=
+  # MATTERMOST_HOOK_URL
+  - secure: H9SqlCuUq08IgOSIpoe8gaPCzY8JNt5OHHu3rmo19p/7vdQ9IzIQ8vq11V1lGnNOcNcuxcSCAl4xyza3g4NokLuRJuys+tmJrcHd8YYviPAhAT+9CLyd1mTMLDzYt/Q64kw1rbJMURvVxY6eIoIrAkyd0b95th36EPwxbn9pOF7+NtlSgUKUjGNXES3FPMUf74zb3s8KYA5ctmUVI7ZOBxbpsr4YhaFhESpxyPPrMVQiMYASJWtsRdTByQsrHtr6NAExS26bmTBndaa9xW6WHrpVXVY+HW4QZX2L1w1Ejgj+fI+LIQJ00m4JVjgFjuXPjLLY/fYRdiKJ+uR+iTahcFktH/OvaWKfRyi5l/prCsc/xXWGMEoLtObzJkqEpthQmjQiCyVSk1NOmtUhfaG4lpXK8+PE0YOiHYZ2UIZcq/LyRdw3+9P7BTGDhxVQpYLwqHtod5Oa4RcFEzRQk9dleibDVIwclBB+7wCy9Ypo+6thyzxNyiILkRoiLUl5ocfpXrzl1TUZd0Wx5QfDJxce+cOYlGIeflVHzpA7gescPgZUri2a9Tiddp3W3tfHPCrqj+bTEsAHPhAuJLGZX0/b5W5IG/YnzEKCLDqzzKzcpVsv3jgyzFBvT0NDWM8xvnI2UZ4vtY+ACGMdROoVAdV+IWPz2lqnkF7exZab45ViZ0o=
+cache:
+  yarn: true
+  directories:
+  - node_modules
+branches:
+  except:
+  - build
+  - build-debug
+script:
+- yarn lint
+- yarn jest
+- yarn build
+deploy:
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    branch: master
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish --postpublish mattermost
+  on:
+    tags: true
+before_install:
+- openssl aes-256-cbc -K $encrypted_5e5aaf50d9bf_key -iv $encrypted_5e5aaf50d9bf_iv
+  -in github_deploy_key.enc -out /tmp/github_deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/github_deploy_key
+- ssh-add /tmp/github_deploy_key
+after_deploy:
+- rm /tmp/github_deploy_key
+- ssh-add -D
