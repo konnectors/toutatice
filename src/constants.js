@@ -12,5 +12,5 @@ module.exports = {
   DOCTYPE_CONTACTS_VERSION: 2,
   DOCTYPE_CONTACTS_GROUPS_VERSION: 2,
   DOCTYPE_CONTACTS_ACCOUNT_VERSION: 1,
-  TOUTATICE_API_URL: 'https://partenaires.ipanema.education.fr'
+  TOUTATICE_API_URL: 'https://www.toutatice.fr'
 }
