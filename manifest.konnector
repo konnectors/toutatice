@@ -16,9 +16,13 @@
   },
   "frequency": "monthly",
   "oauth": {
-    "scope": ["openid+toutatice+offline_access"]
+    "scope": [
+      "openid+toutatice+offline_access"
+    ]
   },
-  "data_types": ["contacts"],
+  "data_types": [
+    "contacts"
+  ],
   "screenshots": [],
   "permissions": {
     "accounts": {
