@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "cozy-client": "13.6.0",
-    "cozy-konnector-libs": "4.34.2",
+    "cozy-konnector-libs": "4.34.3",
     "isomorphic-fetch": "2.2.1",
     "jest": "25.5.4",
     "json-loader": "0.5.7",
@@ -49,7 +49,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "6.0.1",
     "cozy-app-publish": "0.22.3",
-    "cozy-jobs-cli": "1.13.3",
+    "cozy-jobs-cli": "1.13.5",
     "eslint-config-cozy-app": "1.5.0",
     "git-directory-deploy": "1.5.1",
     "husky": "4.2.5",
