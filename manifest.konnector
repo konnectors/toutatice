@@ -40,10 +40,6 @@
     "contactsAccounts": {
       "type": "io.cozy.contacts.accounts",
       "verbs": ["ALL"]
-    },
-    "files": {
-      "type": "io.cozy.files",
-      "verbs": ["ALL"]
     }
   },
   "developer": {
