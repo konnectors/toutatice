@@ -32,6 +32,10 @@ async function start(fields) {
 
     log('info', 'Fetching user infos')
     const userInfo = await toutaticeClient.getUserInfo()
+    if (userInfo.error) {
+      log('error', userInfo.error)
+      throw new Error('Error while fetch user info')
+    }
 
     log('info', 'Getting cozy contact account')
     const accountName = get(userInfo, 'unik', 'toutatice')
