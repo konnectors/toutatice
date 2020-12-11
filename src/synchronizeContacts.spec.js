@@ -258,7 +258,7 @@ describe('synchronizing contacts', () => {
             _id: 'id-group-gryffindor'
           },
           {
-            _id: 'id-group-numerology' //added
+            _id: 'id-group-numerology' // added
           }
         ]
       },

@@ -1,4 +1,4 @@
-/*eslint no-console: 0 */
+/* eslint no-console: 0 */
 const http = require('http')
 const url = require('url')
 const open = require('open')
