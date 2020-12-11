@@ -181,7 +181,7 @@ describe('attaching groups to contacts', () => {
       cozyGroups,
       MOCK_CONTACT_ACCOUNT_ID
     )
-    //expect a log
+    // expect a log
     expect(result).toEqual([
       {
         uuid: '1',
