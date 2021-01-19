@@ -47,7 +47,7 @@
     "p-limit": "3.1.0"
   },
   "devDependencies": {
-    "cozy-jobs-cli": "1.15.5",
+    "cozy-jobs-cli": "1.15.7",
     "cozy-konnector-build": "1.1.5",
     "mockdate": "3.0.2",
     "open": "7.3.0",
