@@ -14,7 +14,6 @@
       "type": "hidden"
     }
   },
-  "frequency": "monthly",
   "oauth": {
     "scope": [
       "openid+toutatice+offline_access"
