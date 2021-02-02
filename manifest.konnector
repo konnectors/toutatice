@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "Toutatice",
   "type": "konnector",
   "language": "node",
@@ -17,7 +17,6 @@
       "type": "hidden"
     }
   },
-  "frequency": "monthly",
   "oauth": {
     "scope": [
       "openid+toutatice+offline_access"
