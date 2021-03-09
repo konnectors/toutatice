@@ -65,6 +65,7 @@ const haveRemoteFieldsChanged = (
   const diffKeys = [
     'name.familyName',
     'name.givenName',
+    'email',
     'cozy.0.url',
     'jobTitle',
     'trashed', // always false for the remote/next contact
