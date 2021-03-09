@@ -64,7 +64,7 @@ describe('synchronizing groups', () => {
     expect(result.groups.length).toEqual(1)
   })
 
-  it('should update existing groups', async () => {
+  it('should not update existing groups with modified name', async () => {
     const cozyGroups = [
       {
         _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
@@ -116,38 +116,10 @@ describe('synchronizing groups', () => {
       remoteGroups,
       cozyGroups
     )
-    expect(mockCozyUtils.save).toHaveBeenCalledWith({
-      _id: 'da30c4ca96ec5068874ae5fe9a005eb1',
-      _rev: '2-c39d514f9b25a694a1331f893ba4bf2f',
-      _type: 'io.cozy.contacts.groups',
-      name: '2018-2019 1A',
-      cozyMetadata: {
-        sync: {
-          [MOCK_CONTACT_ACCOUNT_ID]: {
-            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
-            id: '11111111-1A',
-            konnector: 'konnector-toutatice',
-            lastSync: MOCKED_DATE,
-            remoteRev: null
-          }
-        },
-        updatedByApps: [
-          {
-            date: '2019-04-12T15:40:08.126Z',
-            slug: 'Contacts',
-            version: '0.8.2'
-          },
-          {
-            date: '2019-04-12T14:34:29.088Z',
-            slug: 'konnector-toutatice',
-            version: '1.0.0'
-          }
-        ]
-      }
-    })
+    expect(mockCozyUtils.save).not.toHaveBeenCalledWith()
     expect(result.created).toEqual(0)
-    expect(result.updated).toEqual(1)
-    expect(result.skipped).toEqual(0)
+    expect(result.updated).toEqual(0)
+    expect(result.skipped).toEqual(1)
     expect(result.groups.length).toEqual(1)
   })
 
@@ -269,8 +241,8 @@ describe('synchronizing groups', () => {
       cozyGroups
     )
     expect(result.created).toEqual(1)
-    expect(result.updated).toEqual(1)
-    expect(result.skipped).toEqual(1)
+    expect(result.updated).toEqual(0) // No more update on name change
+    expect(result.skipped).toEqual(2)
     expect(result.groups.length).toEqual(3)
   })
 })
