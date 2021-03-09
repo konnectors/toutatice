@@ -1,5 +1,4 @@
 const get = require('lodash/get')
-const merge = require('lodash/merge')
 const pLimit = require('p-limit')
 const transpileGroupToCozy = require('./helpers/transpileGroupToCozy')
 
@@ -25,17 +24,10 @@ const synchronizeGroups = async (
       return cozyRemoteId === remoteId
     })
 
-    const needsUpdate = cozyGroup && cozyGroup.name !== transpiledGroup.name
-
     if (!cozyGroup) {
       const created = await cozyUtils.save(transpiledGroup)
       result.groups.push(created.data)
       result.created++
-    } else if (needsUpdate) {
-      const merged = merge({}, cozyGroup, transpiledGroup)
-      const updated = await cozyUtils.save(merged)
-      result.groups.push(updated.data)
-      result.updated++
     } else {
       // the group already exists and there is nothing to update
       result.groups.push(cozyGroup)
