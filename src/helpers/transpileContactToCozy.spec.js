@@ -199,5 +199,18 @@ describe('Transpile to cozy', () => {
         }
       }
     })
-  })
+  }),
+    it('should transpile mail', () => {
+      const source = {
+        uuid: '8726-1029-1189-8627',
+        firstname: 'Ron',
+        lastname: 'Weasley',
+        cloud_url: 'rweasley120.mytoutatice.cloud',
+        mail: 'ron@example.com'
+      }
+      const result = transpileContactToCozy(source, MOCK_CONTACT_ACCOUNT_ID)
+      expect(result.email).toEqual([
+        { address: 'ron@example.com', type: 'Pro', primary: false }
+      ])
+    })
 })
