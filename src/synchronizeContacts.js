@@ -3,6 +3,7 @@ const pLimit = require('p-limit')
 const mergeWith = require('lodash/mergeWith')
 const isArray = require('lodash/isArray')
 const isEqual = require('lodash/isEqual')
+const remove = require('lodash/remove')
 const unset = require('lodash/unset')
 const omit = require('lodash/omit')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
@@ -14,7 +15,24 @@ const customMerge = connectorGroupIds => (existingValue, newValue, key) => {
       existingValue,
       newValue
     )
+  if (key === 'email') return emailMergeStrategy(existingValue, newValue)
   else return undefined // for other fields, use the normal lodash merge strategy
+}
+
+// for the email fields,
+// we preserve existing addresses, we overwrite type 'Pro' addresses
+const emailMergeStrategy = (existingEmails, newEmails) => {
+  const hasAnEmail = isArray(newEmails) && newEmails.length > 0
+  if (hasAnEmail) {
+    const emails = existingEmails || []
+    // Remove all emails with type Pro
+    remove(emails, email => {
+      return email.type == 'Pro'
+    })
+    // Add new Pro email
+    emails.push(newEmails[0])
+    return emails
+  } else return undefined
 }
 
 // for the cozy field, we always want to use the new value

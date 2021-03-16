@@ -18,7 +18,16 @@ const transpileContactToCozy = (contact, contactsAccountsId) => {
   const cozyUrl = get(contact, 'cloud_url')
   const title = get(contact, 'title')
   const remoteId = get(contact, 'uuid')
-  const email = get(contact, 'mail')
+  const mail = get(contact, 'mail')
+  const email = mail
+    ? [
+        {
+          address: mail,
+          primary: false,
+          type: 'Pro'
+        }
+      ]
+    : undefined
 
   const jobTitle = title ? getJobTitle(title) : undefined
   const now = new Date().toISOString()
@@ -44,9 +53,9 @@ const transpileContactToCozy = (contact, contactsAccountsId) => {
       familyName,
       givenName
     },
-    email,
     cozy,
     jobTitle,
+    email,
     relationships: {
       groups: {
         data: groups
