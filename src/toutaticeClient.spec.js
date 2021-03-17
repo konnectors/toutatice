@@ -1,11 +1,12 @@
-jest.mock('node-fetch', () => {
-  return jest.fn(() => ({
+jest.mock('node-fetch', () => ({
+  __esModule: true, // this property makes it work
+  default: jest.fn(() => ({
     status: 200,
     json: jest.fn().mockResolvedValue({
       response: 'ok'
     })
   }))
-})
+}))
 
 const ToutaticeClient = require('./toutaticeClient')
 const fetch = require('node-fetch').default
