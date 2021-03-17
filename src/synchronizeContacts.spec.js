@@ -1144,6 +1144,10 @@ describe('synchronizing contacts', () => {
         },
         email: [
           {
+            address: 'hermioneGG778@example.com',
+            primary: false
+          },
+          {
             address: 'hermioneGG777@example.com',
             primary: false,
             type: 'Fake' // Not Pro, added by user
@@ -1206,6 +1210,10 @@ describe('synchronizing contacts', () => {
         givenName: 'Hermione'
       },
       email: [
+        {
+          address: 'hermioneGG778@example.com',
+          primary: false
+        },
         {
           address: 'hermioneGG777@example.com',
           primary: false,
