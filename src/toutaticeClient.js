@@ -1,4 +1,4 @@
-const fetch = require('isomorphic-fetch')
+const fetch = require('node-fetch').default
 
 class ToutaticeClient {
   constructor({ url, token }) {

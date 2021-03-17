@@ -1,4 +1,4 @@
-jest.mock('isomorphic-fetch', () => {
+jest.mock('node-fetch', () => {
   return jest.fn(() => ({
     status: 200,
     json: jest.fn().mockResolvedValue({
@@ -8,7 +8,7 @@ jest.mock('isomorphic-fetch', () => {
 })
 
 const ToutaticeClient = require('./toutaticeClient')
-const fetch = require('isomorphic-fetch')
+const fetch = require('node-fetch').default
 const get = require('lodash/get')
 
 const MOCK_URL = 'http://toutatice.test.com'
