@@ -30,9 +30,8 @@ const emailMergeStrategy = (existingEmails, newEmails) => {
       return email.type == 'Pro'
     })
     // Add new Pro email
-    emails.push(newEmails[0])
-    return emails
-  } else return undefined
+    return emails.concat(newEmails)
+  } else return existingEmails
 }
 
 // for the cozy field, we always want to use the new value

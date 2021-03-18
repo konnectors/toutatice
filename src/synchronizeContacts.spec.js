@@ -941,7 +941,7 @@ describe('synchronizing contacts', () => {
       skipped: 0
     })
   })
-/* Disabled as travis break the sleep function
+  /* Disabled as travis break the sleep function
   it('should throttle network requests', async () => {
     const sleep = delay => new Promise(resolve => setTimeout(resolve, delay))
     const SLEEP_DELAY = 100
@@ -988,73 +988,10 @@ describe('synchronizing contacts', () => {
   })
 */
   it('should update a contact where only the mail have changed', async () => {
-      const cozyContacts = [
-        {
-          _id: 'a145b5551e46fe3870763109c90063f0',
-          _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
-          cozy: [
-            {
-              label: null,
-              primary: true,
-              url: 'https://hgranger14.mytoutatice.cloud'
-            }
-          ],
-          cozyMetadata: {
-            sync: {
-              [MOCK_CONTACT_ACCOUNT_ID]: {
-                contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
-                id: '7162-1889-0916-6273',
-                konnector: 'konnector-toutatice',
-                lastSync: '2019-04-12T14:34:28.737Z',
-                remoteRev: null
-              }
-            },
-            updatedByApps: [
-              {
-                date: '2019-04-12T14:34:29.088Z',
-                slug: 'konnector-toutatice',
-                version: '1.0.0'
-              }
-            ]
-          },
-          fullname: 'Hermione Granger',
-          jobTitle: 'Élève',
-          name: {
-            familyName: 'Granger',
-            givenName: 'Hermione'
-          },
-          email: [
-            {
-              address: 'hermion@example.com',
-              primary: false,
-              type: 'Pro'
-            }
-          ]
-        }
-      ]
-      const remoteContacts = [
-        {
-          uuid: '7162-1889-0916-6273',
-          firstname: 'Hermione',
-          lastname: 'Granger',
-          title: 'ele',
-          cloud_url: 'hgranger14.mytoutatice.cloud',
-          mail: 'hermione@example.com' // changed
-        }
-      ]
-
-      const result = await synchronizeContacts(
-        mockCozyUtils,
-        MOCK_CONTACT_ACCOUNT_ID,
-        remoteContacts,
-        cozyContacts,
-        []
-      )
-      expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
-      expect(mockCozyUtils.save).toHaveBeenCalledWith({
+    const cozyContacts = [
+      {
         _id: 'a145b5551e46fe3870763109c90063f0',
         _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
-        _type: 'io.cozy.contacts',
         cozy: [
           {
             label: null,
@@ -1068,7 +1005,7 @@ describe('synchronizing contacts', () => {
               contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
               id: '7162-1889-0916-6273',
               konnector: 'konnector-toutatice',
-              lastSync: MOCKED_DATE,
+              lastSync: '2019-04-12T14:34:28.737Z',
               remoteRev: null
             }
           },
@@ -1088,92 +1025,92 @@ describe('synchronizing contacts', () => {
         },
         email: [
           {
-            address: 'hermione@example.com',
+            address: 'hermion@example.com',
             primary: false,
             type: 'Pro'
           }
-        ],
-        relationships: {
-          groups: {
-            data: []
-          }
+        ]
+      }
+    ]
+    const remoteContacts = [
+      {
+        uuid: '7162-1889-0916-6273',
+        firstname: 'Hermione',
+        lastname: 'Granger',
+        title: 'ele',
+        cloud_url: 'hgranger14.mytoutatice.cloud',
+        mail: 'hermione@example.com' // changed
+      }
+    ]
+
+    const result = await synchronizeContacts(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      cozyContacts,
+      []
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
+    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+      _id: 'a145b5551e46fe3870763109c90063f0',
+      _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+      _type: 'io.cozy.contacts',
+      cozy: [
+        {
+          label: null,
+          primary: true,
+          url: 'https://hgranger14.mytoutatice.cloud'
         }
-      })
-      expect(result.contacts).toEqual({
-        created: 0,
-        updated: 1,
-        skipped: 0
-      })
+      ],
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '7162-1889-0916-6273',
+            konnector: 'konnector-toutatice',
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        },
+        updatedByApps: [
+          {
+            date: '2019-04-12T14:34:29.088Z',
+            slug: 'konnector-toutatice',
+            version: '1.0.0'
+          }
+        ]
+      },
+      fullname: 'Hermione Granger',
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Granger',
+        givenName: 'Hermione'
+      },
+      email: [
+        {
+          address: 'hermione@example.com',
+          primary: false,
+          type: 'Pro'
+        }
+      ],
+      relationships: {
+        groups: {
+          data: []
+        }
+      }
+    })
+    expect(result.contacts).toEqual({
+      created: 0,
+      updated: 1,
+      skipped: 0
+    })
   })
 
   it('should preserve an email with a non Pro type', async () => {
-      const cozyContacts = [
-        {
-          _id: 'a145b5551e46fe3870763109c90063f0',
-          _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
-          cozy: [
-            {
-              label: null,
-              primary: true,
-              url: 'https://hgranger14.mytoutatice.cloud'
-            }
-          ],
-          cozyMetadata: {
-            sync: {
-              [MOCK_CONTACT_ACCOUNT_ID]: {
-                contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
-                id: '7162-1889-0916-6273',
-                konnector: 'konnector-toutatice',
-                lastSync: '2019-04-12T14:34:28.737Z',
-                remoteRev: null
-              }
-            },
-            updatedByApps: [
-              {
-                date: '2019-04-12T14:34:29.088Z',
-                slug: 'konnector-toutatice',
-                version: '1.0.0'
-              }
-            ]
-          },
-          fullname: 'Hermione Granger',
-          jobTitle: 'Élève',
-          name: {
-            familyName: 'Granger',
-            givenName: 'Hermione'
-          },
-          email: [
-            {
-              address: 'hermioneGG777@example.com',
-              primary: false,
-              type: 'Fake' // Not Pro, added by user
-            }
-          ]
-        }
-      ]
-      const remoteContacts = [
-        {
-          uuid: '7162-1889-0916-6273',
-          firstname: 'Hermione',
-          lastname: 'Granger',
-          title: 'ele',
-          cloud_url: 'hgranger14.mytoutatice.cloud',
-          mail: 'hermione@example.com' // added
-        }
-      ]
-
-      const result = await synchronizeContacts(
-        mockCozyUtils,
-        MOCK_CONTACT_ACCOUNT_ID,
-        remoteContacts,
-        cozyContacts,
-        []
-      )
-      expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
-      expect(mockCozyUtils.save).toHaveBeenCalledWith({
+    const cozyContacts = [
+      {
         _id: 'a145b5551e46fe3870763109c90063f0',
         _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
-        _type: 'io.cozy.contacts',
         cozy: [
           {
             label: null,
@@ -1187,7 +1124,7 @@ describe('synchronizing contacts', () => {
               contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
               id: '7162-1889-0916-6273',
               konnector: 'konnector-toutatice',
-              lastSync: MOCKED_DATE,
+              lastSync: '2019-04-12T14:34:28.737Z',
               remoteRev: null
             }
           },
@@ -1207,26 +1144,97 @@ describe('synchronizing contacts', () => {
         },
         email: [
           {
-            address: 'hermioneGG777@example.com',
-            primary: false,
-            type: 'Fake'
+            address: 'hermioneGG778@example.com',
+            primary: false
           },
           {
-            address: 'hermione@example.com',
+            address: 'hermioneGG777@example.com',
             primary: false,
-            type: 'Pro'
+            type: 'Fake' // Not Pro, added by user
           }
-        ],
-        relationships: {
-          groups: {
-            data: []
-          }
+        ]
+      }
+    ]
+    const remoteContacts = [
+      {
+        uuid: '7162-1889-0916-6273',
+        firstname: 'Hermione',
+        lastname: 'Granger',
+        title: 'ele',
+        cloud_url: 'hgranger14.mytoutatice.cloud',
+        mail: 'hermione@example.com' // added
+      }
+    ]
+
+    const result = await synchronizeContacts(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteContacts,
+      cozyContacts,
+      []
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalledTimes(1)
+    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+      _id: 'a145b5551e46fe3870763109c90063f0',
+      _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+      _type: 'io.cozy.contacts',
+      cozy: [
+        {
+          label: null,
+          primary: true,
+          url: 'https://hgranger14.mytoutatice.cloud'
         }
-      })
-      expect(result.contacts).toEqual({
-        created: 0,
-        updated: 1,
-        skipped: 0
-      })
+      ],
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '7162-1889-0916-6273',
+            konnector: 'konnector-toutatice',
+            lastSync: MOCKED_DATE,
+            remoteRev: null
+          }
+        },
+        updatedByApps: [
+          {
+            date: '2019-04-12T14:34:29.088Z',
+            slug: 'konnector-toutatice',
+            version: '1.0.0'
+          }
+        ]
+      },
+      fullname: 'Hermione Granger',
+      jobTitle: 'Élève',
+      name: {
+        familyName: 'Granger',
+        givenName: 'Hermione'
+      },
+      email: [
+        {
+          address: 'hermioneGG778@example.com',
+          primary: false
+        },
+        {
+          address: 'hermioneGG777@example.com',
+          primary: false,
+          type: 'Fake'
+        },
+        {
+          address: 'hermione@example.com',
+          primary: false,
+          type: 'Pro'
+        }
+      ],
+      relationships: {
+        groups: {
+          data: []
+        }
+      }
     })
+    expect(result.contacts).toEqual({
+      created: 0,
+      updated: 1,
+      skipped: 0
+    })
+  })
 })
