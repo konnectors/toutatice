@@ -1856,7 +1856,7 @@ cozy-client@19.1.0:
     sift "^6.0.0"
     url-search-params-polyfill "^7.0.0"
 
-cozy-client@^19.1.0:
+cozy-client@19.1.1, cozy-client@^19.1.0:
   version "19.1.1"
   resolved "https://registry.yarnpkg.com/cozy-client/-/cozy-client-19.1.1.tgz#78f291987c93936e28747308a2e64f77192cf551"
   integrity sha512-Mg05Qt/EmUm+cwDWv3J0w3Px0FjMhtYvCpExwxd+6uTE16bYFW9H7usb7pVg5aYjN8l78/VaJja3j0bI1oodLA==
