@@ -51,6 +51,6 @@
     "cozy-konnector-build": "1.2.1",
     "mockdate": "3.0.5",
     "open": "8.2.1",
-    "randomstring": "1.1.5"
+    "randomstring": "1.2.1"
   }
 }
