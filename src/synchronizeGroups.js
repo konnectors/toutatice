@@ -1,5 +1,4 @@
 const get = require('lodash/get')
-const pLimit = require('p-limit')
 const transpileGroupToCozy = require('./helpers/transpileGroupToCozy')
 
 const synchronizeGroups = async (
@@ -14,7 +13,7 @@ const synchronizeGroups = async (
     skipped: 0,
     groups: []
   }
-  const promises = remoteGroups.map(remoteGroup => async () => {
+  for (const remoteGroup of remoteGroups) {
     const transpiledGroup = transpileGroupToCozy(remoteGroup, contactAccountId)
     const remoteIdKey = `cozyMetadata.sync.${contactAccountId}.id`
     const remoteId = get(transpiledGroup, remoteIdKey)
@@ -33,10 +32,8 @@ const synchronizeGroups = async (
       result.groups.push(cozyGroup)
       result.skipped++
     }
-  })
+  }
 
-  const limit = pLimit(50)
-  await Promise.all(promises.map(limit))
   return result
 }
 
