@@ -245,4 +245,114 @@ describe('synchronizing groups', () => {
     expect(result.skipped).toEqual(2)
     expect(result.groups.length).toEqual(3)
   })
+
+  it('Group with old id exists and is created before 10Sept21, should create new', async () => {
+    const cozyGroups = [
+      {
+        _id: 'a145b5551e46fe3870763109c90063f0',
+        _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+        name: 'groupFakeName',
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '11111111-groupFakeGid',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-10-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          createdAt: '2021-09-09T15:10:46.448Z', // Created before 10Sept21
+        }
+      }
+    ]
+    const remoteGroups = [
+      {
+        uuid: '11111111-groupFakeName',
+        structure: '11111111',
+        structureName: 'HOGWARTS',
+        gid: 'groupFakeGid',
+        name: 'groupFakeName',
+        group_contacts: [
+          { uuid: '1458-1523-1236-123' },
+          { uuid: '1452-1598-3578-789' }
+        ]
+      }
+    ]
+
+    const result = await synchronizeGroups(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteGroups,
+      cozyGroups
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalled()
+    expect(result.created).toEqual(1)
+    expect(result.updated).toEqual(0)
+    expect(result.skipped).toEqual(0)
+  })
+
+  it('Group with old id exists and is created after 10Sept21, should change id', async () => {
+    const cozyGroups = [
+      {
+        _id: 'a145b5551e46fe3870763109c90063f0',
+        _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+        name: 'groupFakeName',
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '11111111-groupFakeGid',
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-10-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          createdAt: '2021-09-11T15:10:46.448Z', // Created before 10Sept21
+        }
+      }
+    ]
+    const remoteGroups = [
+      {
+        uuid: '11111111-groupFakeName',
+        structure: '11111111',
+        structureName: 'HOGWARTS',
+        gid: 'groupFakeGid',
+        name: 'groupFakeName',
+        group_contacts: [
+          { uuid: '1458-1523-1236-123' },
+          { uuid: '1452-1598-3578-789' }
+        ]
+      }
+    ]
+
+    const result = await synchronizeGroups(
+      mockCozyUtils,
+      MOCK_CONTACT_ACCOUNT_ID,
+      remoteGroups,
+      cozyGroups
+    )
+    expect(mockCozyUtils.save).toHaveBeenCalledWith(
+      {
+        _id: 'a145b5551e46fe3870763109c90063f0',
+        _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+        name: 'groupFakeName',
+        cozyMetadata: {
+          sync: {
+            [MOCK_CONTACT_ACCOUNT_ID]: {
+              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+              id: '11111111-groupFakeName', // Note the change here
+              konnector: 'konnector-toutatice',
+              lastSync: '2019-10-12T14:34:28.737Z',
+              remoteRev: null
+            }
+          },
+          createdAt: '2021-09-11T15:10:46.448Z',
+        }
+      }
+    )
+    expect(result.created).toEqual(0)
+    expect(result.updated).toEqual(1)
+    expect(result.skipped).toEqual(0)
+  })
 })

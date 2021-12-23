@@ -8,7 +8,7 @@ const convertStructuresToGroups = structures => {
 
     structureGroups.forEach(structureGroup => {
       groups.push({
-        uuid: `${structureId}-${structureGroup.gid}`,
+        uuid: `${structureId}-${structureGroup.name}`,
         structure: structureId,
         structureName,
         ...structureGroup

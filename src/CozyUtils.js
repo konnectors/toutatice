@@ -150,5 +150,4 @@ class CozyUtils {
     return this.client.save(params)
   }
 }
-
 module.exports = CozyUtils
