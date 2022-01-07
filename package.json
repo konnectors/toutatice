@@ -50,7 +50,7 @@
     "cozy-jobs-cli": "1.16.6",
     "cozy-konnector-build": "1.2.3",
     "mockdate": "3.0.5",
-    "open": "8.2.1",
+    "open": "8.4.0",
     "randomstring": "1.1.5"
   }
 }
