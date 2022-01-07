@@ -57,11 +57,8 @@ async function start(fields) {
     const remoteGroups = convertStructuresToGroups(remoteStructures)
     const filteredGroups = filterValidGroups(remoteGroups)
 
-    const remoteGroupsId = filteredGroups.map(({ uuid }) => uuid)
-    const existingCozyGroups = await cozyUtils.findGroups(
-      contactAccount._id,
-      remoteGroupsId
-    )
+    const existingCozyGroups = await cozyUtils.findGroups(contactAccount._id)
+
     const {
       groups: allConnectorGroups,
       ...groupsSyncResult

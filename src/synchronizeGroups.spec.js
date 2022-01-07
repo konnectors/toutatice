@@ -262,7 +262,7 @@ describe('synchronizing groups', () => {
               remoteRev: null
             }
           },
-          createdAt: '2021-09-09T15:10:46.448Z', // Created before 10Sept21
+          createdAt: '2021-09-09T15:10:46.448Z' // Created before 10Sept21
         }
       }
     ]
@@ -308,7 +308,7 @@ describe('synchronizing groups', () => {
               remoteRev: null
             }
           },
-          createdAt: '2021-09-11T15:10:46.448Z', // Created before 10Sept21
+          createdAt: '2021-09-11T15:10:46.448Z' // Created before 10Sept21
         }
       }
     ]
@@ -332,25 +332,23 @@ describe('synchronizing groups', () => {
       remoteGroups,
       cozyGroups
     )
-    expect(mockCozyUtils.save).toHaveBeenCalledWith(
-      {
-        _id: 'a145b5551e46fe3870763109c90063f0',
-        _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
-        name: 'groupFakeName',
-        cozyMetadata: {
-          sync: {
-            [MOCK_CONTACT_ACCOUNT_ID]: {
-              contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
-              id: '11111111-groupFakeName', // Note the change here
-              konnector: 'konnector-toutatice',
-              lastSync: '2019-10-12T14:34:28.737Z',
-              remoteRev: null
-            }
-          },
-          createdAt: '2021-09-11T15:10:46.448Z',
-        }
+    expect(mockCozyUtils.save).toHaveBeenCalledWith({
+      _id: 'a145b5551e46fe3870763109c90063f0',
+      _rev: '2-4b0ab8ed71794e03adfd632aecf44c24',
+      name: 'groupFakeName',
+      cozyMetadata: {
+        sync: {
+          [MOCK_CONTACT_ACCOUNT_ID]: {
+            contactsAccountsId: MOCK_CONTACT_ACCOUNT_ID,
+            id: '11111111-groupFakeName', // Note the change here
+            konnector: 'konnector-toutatice',
+            lastSync: '2019-10-12T14:34:28.737Z',
+            remoteRev: null
+          }
+        },
+        createdAt: '2021-09-11T15:10:46.448Z'
       }
-    )
+    })
     expect(result.created).toEqual(0)
     expect(result.updated).toEqual(1)
     expect(result.skipped).toEqual(0)

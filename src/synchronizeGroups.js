@@ -20,7 +20,6 @@ const synchronizeGroups = async (
     const remoteIdKey = `cozyMetadata.sync.${contactAccountId}.id`
     const remoteId = get(transpiledGroup, remoteIdKey)
 
-
     const cozyGroup = cozyGroups.find(group => {
       const cozyRemoteId = get(group, remoteIdKey)
       return cozyRemoteId === remoteId
@@ -41,18 +40,18 @@ const synchronizeGroups = async (
         result.groups.push(created.data)
         result.created++
       } else {
-        //Update
+        // Update
         let updatedGroup = cozyGroupWithOldId
-        set(updatedGroup,
-            `cozyMetadata.sync.${contactAccountId}.id`,
-            remoteGroup.structure + '-' + remoteGroup.name
-           )
+        set(
+          updatedGroup,
+          `cozyMetadata.sync.${contactAccountId}.id`,
+          remoteGroup.structure + '-' + remoteGroup.name
+        )
         const updated = await cozyUtils.save(updatedGroup)
         result.groups.push(updated.data)
         result.updated++
       }
-    }
-    else if (!cozyGroup) {
+    } else if (!cozyGroup) {
       const created = await cozyUtils.save(transpiledGroup)
       result.groups.push(created.data)
       result.created++
