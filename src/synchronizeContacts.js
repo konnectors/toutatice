@@ -7,7 +7,7 @@ const unset = require('lodash/unset')
 const omit = require('lodash/omit')
 const transpileContactToCozy = require('./helpers/transpileContactToCozy')
 
-const customMerge = (connectorGroupIds) => (existingValue, newValue, key) => {
+const customMerge = connectorGroupIds => (existingValue, newValue, key) => {
   if (key === 'cozy') return cozyMergeStrategy(existingValue, newValue)
   if (key === 'relationships')
     return relationshipsMergeStrategy(connectorGroupIds)(
@@ -25,7 +25,7 @@ const emailMergeStrategy = (existingEmails, newEmails) => {
   if (hasAnEmail) {
     const emails = existingEmails || []
     // Remove all emails with type Pro
-    remove(emails, (email) => {
+    remove(emails, email => {
       return email.type == 'Pro'
     })
     // Add new Pro email
@@ -40,25 +40,27 @@ const cozyMergeStrategy = (existingCozy, newCozy) => {
   else return undefined
 }
 
-const relationshipsMergeStrategy =
-  (connectorGroupIds) => (existingRelationships, newRelationships) => {
-    const otherRelationships = omit(existingRelationships, 'groups')
-    const existingGroups = get(existingRelationships, 'groups.data', [])
-    const existingManualGroups = existingGroups.filter(
-      ({ _id: existingGroupId }) =>
-        !connectorGroupIds.some(
-          ({ _id: connectorGroupId }) => connectorGroupId === existingGroupId
-        )
-    )
-    const newGroups = get(newRelationships, 'groups.data', [])
+const relationshipsMergeStrategy = connectorGroupIds => (
+  existingRelationships,
+  newRelationships
+) => {
+  const otherRelationships = omit(existingRelationships, 'groups')
+  const existingGroups = get(existingRelationships, 'groups.data', [])
+  const existingManualGroups = existingGroups.filter(
+    ({ _id: existingGroupId }) =>
+      !connectorGroupIds.some(
+        ({ _id: connectorGroupId }) => connectorGroupId === existingGroupId
+      )
+  )
+  const newGroups = get(newRelationships, 'groups.data', [])
 
-    return {
-      ...otherRelationships,
-      groups: {
-        data: [...newGroups, ...existingManualGroups],
-      },
+  return {
+    ...otherRelationships,
+    groups: {
+      data: [...newGroups, ...existingManualGroups]
     }
   }
+}
 
 const getFinalContactData = (cozyContact, remoteContact, connectorGroupIds) => {
   const merged = mergeWith(
@@ -84,10 +86,10 @@ const haveRemoteFieldsChanged = (
     'jobTitle',
     'trashed', // always false for the remote/next contact
     `cozyMetadata.sync.${contactAccountId}.id`,
-    'relationships.groups.data',
+    'relationships.groups.data'
   ]
   return diffKeys.some(
-    (key) => !isEqual(get(currentContact, key), get(nextContact, key))
+    key => !isEqual(get(currentContact, key), get(nextContact, key))
   )
 }
 
@@ -102,12 +104,12 @@ const synchronizeContacts = async (
     contacts: {
       created: 0,
       updated: 0,
-      skipped: 0,
-    },
+      skipped: 0
+    }
   }
 
   for (const remoteContact of remoteContacts) {
-    const cozyContact = cozyContacts.find((cozyContact) => {
+    const cozyContact = cozyContacts.find(cozyContact => {
       const cozyRemoteId = get(
         cozyContact,
         `cozyMetadata.sync.${contactAccountId}.id`
@@ -141,14 +143,14 @@ const synchronizeContacts = async (
     }
   }
 
-  const contactsDeletedOnRemote = cozyContacts.filter((cozyContact) => {
+  const contactsDeletedOnRemote = cozyContacts.filter(cozyContact => {
     const cozyRemoteId = get(
       cozyContact,
       `cozyMetadata.sync.${contactAccountId}.id`
     )
 
     return !remoteContacts.some(
-      (remoteContact) => cozyRemoteId === remoteContact.uuid
+      remoteContact => cozyRemoteId === remoteContact.uuid
     )
   })
 
@@ -159,7 +161,7 @@ const synchronizeContacts = async (
 
     const contactWithoutConnectorGroups = {
       ...contactDeletedOnRemote,
-      relationships: onlyManualRelationships,
+      relationships: onlyManualRelationships
     }
 
     await cozyUtils.save(contactWithoutConnectorGroups)

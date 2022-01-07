@@ -57,11 +57,8 @@ async function start(fields) {
     const remoteGroups = convertStructuresToGroups(remoteStructures)
     const filteredGroups = filterValidGroups(remoteGroups)
 
-    const remoteGroupsId = filteredGroups.map(({ uuid }) => uuid)
-    const existingCozyGroups = await cozyUtils.findGroups(
-      contactAccount._id,
-      remoteGroupsId
-    )
+    const existingCozyGroups = await cozyUtils.findGroups(contactAccount._id)
+
     const {
       groups: allConnectorGroups,
       ...groupsSyncResult
@@ -76,7 +73,10 @@ async function start(fields) {
     log('info', `${groupsSyncResult.skipped} groups skipped`)
 
     log('info', 'Syncing contacts')
+    // Acquiring contacts from API
     const remoteContacts = get(remoteData, 'contacts', [])
+    log('debug', `${remoteContacts.length} contacts receive from API`)
+    // Remove duplicate contacts with same uuid
     const filteredContacts = filterValidContacts(remoteContacts)
 
     const remoteContactsWithGroups = attachGroupsToContacts(
@@ -85,7 +85,7 @@ async function start(fields) {
       allConnectorGroups,
       contactAccount._id
     )
-
+    // Acquiring contacts from Cozy
     const cozyContacts = await cozyUtils.findContacts(contactAccount._id)
 
     const contactsSyncResult = await synchronizeContacts(

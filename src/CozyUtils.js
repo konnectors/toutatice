@@ -77,21 +77,21 @@ class CozyUtils {
    * @param  {array} remoteIds
    * @returns {array}
    */
-  async findGroups(accountId, remoteIds) {
+  async findGroups(accountId) {
     const groupsCollection = this.client.collection(DOCTYPE_CONTACTS_GROUPS)
     const resp = await groupsCollection.find(
       {
         cozyMetadata: {
           sync: {
             [accountId]: {
-              id: {
-                $in: remoteIds
+              contactsAccountsId: {
+                $in: [accountId]
               }
             }
           }
         }
       },
-      { indexedFields: [`cozyMetadata.sync.${accountId}.id`] }
+      { indexedFields: [`cozyMetadata.sync.${accountId}.contactsAccountsId`] }
     )
 
     return get(resp, 'data')
@@ -150,5 +150,4 @@ class CozyUtils {
     return this.client.save(params)
   }
 }
-
 module.exports = CozyUtils

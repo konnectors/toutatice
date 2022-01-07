@@ -176,14 +176,16 @@ describe('CozyUtils', () => {
           cozyMetadata: {
             sync: {
               fakeAccountId: {
-                id: {
-                  $in: ['6167-7728-0938-1661', '7273-7639-1773-8379']
+                contactsAccountsId: {
+                  $in: ['fakeAccountId']
                 }
               }
             }
           }
         },
-        { indexedFields: ['cozyMetadata.sync.fakeAccountId.id'] }
+        {
+          indexedFields: ['cozyMetadata.sync.fakeAccountId.contactsAccountsId']
+        }
       )
       expect(result).toEqual([{ id: 'hufflepuff' }, { id: 'gryffindor' }])
     })
