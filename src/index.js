@@ -59,15 +59,13 @@ async function start(fields) {
 
     const existingCozyGroups = await cozyUtils.findGroups(contactAccount._id)
 
-    const {
-      groups: allConnectorGroups,
-      ...groupsSyncResult
-    } = await synchronizeGroups(
-      cozyUtils,
-      contactAccount._id,
-      filteredGroups,
-      existingCozyGroups
-    )
+    const { groups: allConnectorGroups, ...groupsSyncResult } =
+      await synchronizeGroups(
+        cozyUtils,
+        contactAccount._id,
+        filteredGroups,
+        existingCozyGroups
+      )
     log('info', `${groupsSyncResult.created} groups created`)
     log('info', `${groupsSyncResult.updated} groups updated`)
     log('info', `${groupsSyncResult.skipped} groups skipped`)

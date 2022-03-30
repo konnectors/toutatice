@@ -1,3 +1,6 @@
+jest.mock('cozy-client')
+jest.mock('cozy-konnector-libs')
+
 const CozyClient = require('cozy-client').default
 const CozyUtils = require('./CozyUtils')
 
@@ -8,9 +11,6 @@ const {
   DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS
 } = require('./constants')
-
-jest.mock('cozy-client')
-jest.mock('cozy-konnector-libs')
 
 describe('CozyUtils', () => {
   const cozyUtils = new CozyUtils('fakeAccountId')

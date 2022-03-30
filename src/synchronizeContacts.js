@@ -40,27 +40,25 @@ const cozyMergeStrategy = (existingCozy, newCozy) => {
   else return undefined
 }
 
-const relationshipsMergeStrategy = connectorGroupIds => (
-  existingRelationships,
-  newRelationships
-) => {
-  const otherRelationships = omit(existingRelationships, 'groups')
-  const existingGroups = get(existingRelationships, 'groups.data', [])
-  const existingManualGroups = existingGroups.filter(
-    ({ _id: existingGroupId }) =>
-      !connectorGroupIds.some(
-        ({ _id: connectorGroupId }) => connectorGroupId === existingGroupId
-      )
-  )
-  const newGroups = get(newRelationships, 'groups.data', [])
+const relationshipsMergeStrategy =
+  connectorGroupIds => (existingRelationships, newRelationships) => {
+    const otherRelationships = omit(existingRelationships, 'groups')
+    const existingGroups = get(existingRelationships, 'groups.data', [])
+    const existingManualGroups = existingGroups.filter(
+      ({ _id: existingGroupId }) =>
+        !connectorGroupIds.some(
+          ({ _id: connectorGroupId }) => connectorGroupId === existingGroupId
+        )
+    )
+    const newGroups = get(newRelationships, 'groups.data', [])
 
-  return {
-    ...otherRelationships,
-    groups: {
-      data: [...newGroups, ...existingManualGroups]
+    return {
+      ...otherRelationships,
+      groups: {
+        data: [...newGroups, ...existingManualGroups]
+      }
     }
   }
-}
 
 const getFinalContactData = (cozyContact, remoteContact, connectorGroupIds) => {
   const merged = mergeWith(
