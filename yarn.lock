@@ -2986,7 +2986,7 @@ cozy-client-js@^0.20.0:
     pouchdb-browser "7.0.0"
     pouchdb-find "7.0.0"
 
-cozy-client@27.26.3, cozy-client@^27.26.1:
+cozy-client@27.26.3:
   version "27.26.3"
   resolved "https://registry.yarnpkg.com/cozy-client/-/cozy-client-27.26.3.tgz#67a5bed9727b565ee39033cc63ec07f279fdbb50"
   integrity sha512-+QcAOPKRXyqNo167d5Kyiwv0k0aWBqa/wBYloNFjQSk5y0kBv09g8HoEwpXdiSwK5+9q0JlCfgSn7TdN8IEFQQ==
@@ -3075,17 +3075,6 @@ cozy-device-helper@^2.1.0:
   dependencies:
     lodash "^4.17.19"
 
-cozy-doctypes@^1.83.5:
-  version "1.83.5"
-  resolved "https://registry.yarnpkg.com/cozy-doctypes/-/cozy-doctypes-1.83.5.tgz#2608bbedfbf0d28efa0695423a2ea7c5137f5ef7"
-  integrity sha512-r4YEMoEuLTwl5iJ//rkxjpylkqAvZVIrUhdIHTtEdiFkJ7Oo4vpNQznzOAqP3Jdw8tfZkWE3rR3TE/wk1Elseg==
-  dependencies:
-    cozy-logger "^1.8.0"
-    date-fns "^1.30.1"
-    es6-promise-pool "^2.5.0"
-    lodash "^4.17.19"
-    prop-types "^15.7.2"
-
 cozy-doctypes@^1.83.8:
   version "1.83.8"
   resolved "https://registry.yarnpkg.com/cozy-doctypes/-/cozy-doctypes-1.83.8.tgz#99ec864059034bd032f6f01e322b57fea130a5d3"
@@ -3150,36 +3139,7 @@ cozy-konnector-build@1.3.1:
     webpack "5.68.0"
     webpack-cli "4.9.1"
 
-cozy-konnector-libs@4.52.1:
-  version "4.52.1"
-  resolved "https://registry.yarnpkg.com/cozy-konnector-libs/-/cozy-konnector-libs-4.52.1.tgz#e2fd07977cfdf777a75674f384216c5130772a74"
-  integrity sha512-yb/8zbKwwOGaXSPfuZgKvIwVozmXxwpsbR9Oecua/EFK7hA42Foq4HIMIH7/vMjH8XEMXdbkVCyDMyqRZHi+1Q==
-  dependencies:
-    babel-runtime "^6.26.0"
-    bluebird "^3.7.2"
-    bluebird-retry "^0.11.0"
-    btoa "1.2.1"
-    cheerio "^1.0.0-rc.9"
-    classificator "^0.3.3"
-    cozy-client "^27.26.1"
-    cozy-client-js "^0.20.0"
-    cozy-doctypes "^1.83.5"
-    cozy-logger "^1.8.0"
-    date-fns "^2.22.1"
-    file-type "^16.5.0"
-    geco "git+https://github.com/konnectors/geco.git#0.11.2"
-    lodash-id "^0.14.0"
-    lowdb "^1.0.0"
-    mime-types "^2.1.31"
-    node-fetch "^2.6.1"
-    raven "^2.6.4"
-    raw-body "^2.4.1"
-    request "^2.88.2"
-    request-debug "^0.2.0"
-    request-promise "^4.2.6"
-    strip-json-comments "^3.1.1"
-
-cozy-konnector-libs@^4.53.0:
+cozy-konnector-libs@4.53.0, cozy-konnector-libs@^4.53.0:
   version "4.53.0"
   resolved "https://registry.yarnpkg.com/cozy-konnector-libs/-/cozy-konnector-libs-4.53.0.tgz#aeed5846b005ba5c46824dbd273fb2217e21ef1d"
   integrity sha512-TtTbAuD208JE+WPEtDki5YGs6mBGC299KhfbDr71NcHgS/YaCHIuzP/c9uIBCy5g9wK87qbfFE5F3OywEAVocA==
