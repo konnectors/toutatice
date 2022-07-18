@@ -1,4 +1,4 @@
-const { BaseKonnector, log, errors } = require('cozy-konnector-libs')
+const { BaseKonnector, log, errors, mkdirp } = require('cozy-konnector-libs')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
 const ToutaticeClient = require('./toutaticeClient')
@@ -9,6 +9,7 @@ const filterValidContacts = require('./helpers/filterValidContacts')
 const attachGroupsToContacts = require('./helpers/attachGroupsToContacts')
 const synchronizeContacts = require('./synchronizeContacts')
 const synchronizeGroups = require('./synchronizeGroups')
+const createFiles = require('./helpers/createFiles')
 const { TOUTATICE_API_URL } = require('./constants')
 
 module.exports = new BaseKonnector(start)
@@ -104,6 +105,36 @@ async function start(fields) {
       sourceAccount: null, // to indicate that the account is now disconnected
       lastLocalSync: new Date().toISOString()
     })
+    log('info', 'Fetching list of apps')
+    const foundApps = await toutaticeClient.getApps()
+    const files = createFiles(foundApps)
+    const createdShortcuts = await cozyUtils.createShortcuts(files)
+    const destinationFolder = '/Settings/Home'
+    await mkdirp(destinationFolder)
+    log('info', 'Creating shortcuts for school apps')
+    await this.saveFiles(
+      createdShortcuts.schoolShortcuts,
+      { folderPath: destinationFolder },
+      {
+        identifier: ['shortcuts'],
+        sourceAccount: 'Toutatice',
+        sourceAccountIdentifier: 'Toutatice',
+        fileIdAttributes: ['tempAppId'],
+        validateFile: true,
+        subPath: "/Applications de l'école"
+      }
+    )
+    log('info', 'Creating shortcuts for favourite apps')
+    await this.saveFiles(
+      createdShortcuts.favShortcuts,
+      { folderPath: destinationFolder },
+      {
+        identifier: ['shortcuts'],
+        sourceAccount: 'Toutatice',
+        sourceAccountIdentifier: 'Toutatice',
+        fileIdAttributes: ['tempAppId']
+      }
+    )
 
     log('info', 'Finished!')
   } catch (err) {

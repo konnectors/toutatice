@@ -146,6 +146,33 @@ class CozyUtils {
     }
   }
 
+  async createShortcuts(files) {
+    let schoolShortcuts = []
+    let favShortcuts = []
+    for (const file of files) {
+      if (file.hubMetadata.favori) {
+        favShortcuts.push({
+          ...file,
+          tempAppId: file.hubMetadata.idInterne,
+          filename: `${file.title}.url`,
+          filestream: `[InternetShortcut]\nURL=${file.url}`,
+          shouldReplaceFile: true
+        })
+      } else {
+        schoolShortcuts.push({
+          ...file,
+          tempAppId: file.hubMetadata.idInterne,
+          filename: `${file.title}.url`,
+          filestream: `[InternetShortcut]\nURL=${file.url}`,
+          shouldReplaceFile: true
+        })
+      }
+    }
+    return { schoolShortcuts, favShortcuts }
+  }
+
+  async createThumbnail() {}
+
   save(params) {
     return this.client.save(params)
   }
