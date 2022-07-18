@@ -28,12 +28,6 @@
   ],
   "screenshots": [],
   "permissions": {
-    "files": {
-      "type": "io.cozy.files",
-      "verbs": [
-        "ALL"
-      ]
-    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
