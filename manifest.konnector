@@ -38,8 +38,7 @@
     },
     "files": {
       "type": "directory",
-      "name": "Home",
-      "path":"../Settings/Home"
+      "name": "Home"
     },
     "accounts": {
       "type": "io.cozy.accounts",
