@@ -36,10 +36,6 @@
         "PUT"
       ]
     },
-    "files": {
-      "type": "directory",
-      "name": "Home"
-    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
