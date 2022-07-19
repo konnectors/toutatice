@@ -34,7 +34,7 @@
         "PUT",
         "DELETE"
       ],
-      "path": "Drive/Settings/Home"
+      "path": "../Settings/Home"
     },
     "accounts": {
       "type": "io.cozy.accounts",
