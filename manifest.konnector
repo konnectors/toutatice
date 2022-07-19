@@ -22,7 +22,6 @@
       "openid+toutatice+offline_access"
     ]
   },
-  "folders": [{"defaultDir": "$Settings/$Home"}],
   "data_types": [
     "contacts"
   ],
@@ -31,8 +30,11 @@
     "files": {
       "type": "io.cozy.files",
       "verbs": [
-        "ALL"
-      ]
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "path": "/Settings/Home"
     },
     "accounts": {
       "type": "io.cozy.accounts",
