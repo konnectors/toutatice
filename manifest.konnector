@@ -34,8 +34,7 @@
         "DELETE",
         "POST",
         "PUT"
-      ],
-      "path":"Drive/Settings/Home"
+      ]
     },
     "files": {
       "type": "directory",
