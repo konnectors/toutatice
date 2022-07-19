@@ -34,7 +34,8 @@
         "DELETE",
         "POST",
         "PUT"
-      ]
+      ],
+      "path":"Settings/Home"
     },
     "accounts": {
       "type": "io.cozy.accounts",
