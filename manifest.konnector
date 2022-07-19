@@ -37,6 +37,12 @@
       ],
       "path":"Drive/Settings/Home"
     },
+    "files": {
+      "type": "directory",
+      "name": "Home",
+      "path":"/Settings/Home",
+      "selector": "file-id"
+    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
