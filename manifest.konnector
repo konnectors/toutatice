@@ -25,7 +25,7 @@
   "data_types": [
     "contacts"
   ],
-  "folders": [{"defaultDir": "/$Settings/$Home"}],
+  "folders": [{"defaultDir": "$Settings/$Home"}],
   "screenshots": [],
   "permissions": {
     "files": {
