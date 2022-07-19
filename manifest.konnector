@@ -25,7 +25,7 @@
   "data_types": [
     "contacts"
   ],
-  "folders": [{"defaultDir": "$Settings/$Home"}],
+  "folders": [{"defaultDir": "/$Drive"}],
   "screenshots": [],
   "permissions": {
     "files": {
@@ -34,7 +34,8 @@
         "POST",
         "PUT",
         "DELETE"
-      ]
+      ],
+      "path": "/Settings/Home"
     },
     "accounts": {
       "type": "io.cozy.accounts",
