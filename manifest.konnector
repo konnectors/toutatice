@@ -22,18 +22,17 @@
       "openid+toutatice+offline_access"
     ]
   },
+  "folders": [{"defaultDir": "$Settings/$Home"}],
   "data_types": [
     "contacts"
   ],
-  "folders": [{"defaultDir": "/Settings/Home"}],
   "screenshots": [],
   "permissions": {
     "files": {
       "type": "io.cozy.files",
       "verbs": [
         "ALL"
-      ],
-      "path": "/Settings/Home"
+      ]
     },
     "accounts": {
       "type": "io.cozy.accounts",
