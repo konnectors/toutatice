@@ -31,9 +31,7 @@
     "files": {
       "type": "io.cozy.files",
       "verbs": [
-        "POST",
-        "PUT",
-        "DELETE"
+        "ALL"
       ],
       "path": "/Settings/Home"
     },
