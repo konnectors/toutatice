@@ -22,6 +22,7 @@
       "openid+toutatice+offline_access"
     ]
   },
+  "folders": [{"defaultDir": "$Settings/$Home"}],
   "data_types": [
     "contacts"
   ],
