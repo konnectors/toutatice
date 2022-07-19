@@ -146,7 +146,13 @@ class CozyUtils {
     }
   }
 
-  async createShortcuts(files) {
+  /**
+   * async computeShortcuts - Spliting and preparing shortcuts for saveFiles
+   *
+   * @param  {array} files   files received from the toutatice API call
+   * @returns {object}
+   */
+  async computeShortcuts(files) {
     let schoolShortcuts = []
     let favShortcuts = []
     for (const file of files) {
@@ -171,6 +177,7 @@ class CozyUtils {
     return { schoolShortcuts, favShortcuts }
   }
 
+  // Waiting for the full svg icons to be handled
   async createThumbnail() {}
 
   save(params) {

@@ -1,7 +1,7 @@
 const { log } = require('cozy-konnector-libs')
 
-function createFiles(apps) {
-  log('info', 'createFiles starts')
+function formattingShortcutsDatas(apps) {
+  log('info', 'formattingShortcutsDatas starts')
   let files = []
   try {
     for (const app of apps) {
@@ -17,9 +17,9 @@ function createFiles(apps) {
     }
     return files
   } catch (err) {
-    log('error', 'something wen wrong when creating files')
+    log('error', "something went wrong when formatting shortcut's datas")
     throw err
   }
 }
 
-module.exports = createFiles
+module.exports = formattingShortcutsDatas

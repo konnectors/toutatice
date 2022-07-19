@@ -9,7 +9,7 @@ const filterValidContacts = require('./helpers/filterValidContacts')
 const attachGroupsToContacts = require('./helpers/attachGroupsToContacts')
 const synchronizeContacts = require('./synchronizeContacts')
 const synchronizeGroups = require('./synchronizeGroups')
-const createFiles = require('./helpers/createFiles')
+const formattingShortcutsDatas = require('./helpers/formattingShortcutsDatas')
 const { TOUTATICE_API_URL } = require('./constants')
 
 module.exports = new BaseKonnector(start)
@@ -107,13 +107,13 @@ async function start(fields) {
     })
     log('info', 'Fetching list of apps')
     const foundApps = await toutaticeClient.getApps()
-    const files = createFiles(foundApps)
-    const createdShortcuts = await cozyUtils.createShortcuts(files)
+    const files = formattingShortcutsDatas(foundApps)
+    const computedShortcuts = await cozyUtils.computeShortcuts(files)
     const destinationFolder = '/Settings/Home'
     await mkdirp(destinationFolder)
     log('info', 'Creating shortcuts for school apps')
     await this.saveFiles(
-      createdShortcuts.schoolShortcuts,
+      computedShortcuts.schoolShortcuts,
       { folderPath: destinationFolder },
       {
         identifier: ['shortcuts'],
@@ -126,13 +126,14 @@ async function start(fields) {
     )
     log('info', 'Creating shortcuts for favourite apps')
     await this.saveFiles(
-      createdShortcuts.favShortcuts,
+      computedShortcuts.favShortcuts,
       { folderPath: destinationFolder },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
-        fileIdAttributes: ['tempAppId']
+        fileIdAttributes: ['tempAppId'],
+        validateFile: true
       }
     )
 
