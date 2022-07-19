@@ -32,7 +32,8 @@
       "verbs": [
         "DELETE",
         "POST",
-        "PUT"
+        "PUT",
+        "GET"
       ]
     },
     "accounts": {
