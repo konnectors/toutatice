@@ -34,12 +34,9 @@
         "POST",
         "PUT",
         "GET"
-      ]
-    },
-    "directory": {
-      "type": "io.cozy.files",
-      "name": "Settings",
-      "path": "/Settings"
+      ],
+      "selector": "path",
+      "values": ["/Settings/Home"]
     },
     "accounts": {
       "type": "io.cozy.accounts",
