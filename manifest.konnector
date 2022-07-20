@@ -36,8 +36,8 @@
         "GET"
       ]
     },
-    "folder": {
-      "type": "io.cozy.directory",
+    "directory": {
+      "type": "io.cozy.files",
       "name": "Settings",
       "path": "/Settings"
     },
