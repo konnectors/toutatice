@@ -36,7 +36,7 @@
         "GET"
       ],
       "selector": "path",
-      "values": ["/Drive/Settings/Home"]
+      "values": ["/Drive/Settings/Home/Applications de l'école"]
     },
     "accounts": {
       "type": "io.cozy.accounts",
