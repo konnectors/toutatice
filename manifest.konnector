@@ -37,7 +37,7 @@
       ]
     },
     "folder": {
-      "type": "directory",
+      "type": "io.cozy.directory",
       "name": "Settings",
       "path": "/Settings"
     },
