@@ -36,7 +36,7 @@
         "GET"
       ],
       "selector": "path",
-      "values": ["Settings/Home"]
+      "values": ["/Settings/Home"]
     },
     "accounts": {
       "type": "io.cozy.accounts",
