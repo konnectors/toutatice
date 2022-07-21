@@ -108,6 +108,8 @@ async function start(fields) {
     log('info', 'Fetching list of apps')
     const foundApps = await toutaticeClient.getApps()
     const files = formattingShortcutsDatas(foundApps)
+    // Waiting for toutatice to give svgs for all apps before handling it
+    // const thumbnailsSource = await cozyUtils.computeThumbnails(files)
     const computedShortcuts = await cozyUtils.computeShortcuts(files)
     const destinationFolder = '/Settings/Home'
     await mkdirp(destinationFolder)

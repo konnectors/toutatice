@@ -178,7 +178,19 @@ class CozyUtils {
   }
 
   // Waiting for the full svg icons to be handled
-  async createThumbnail() {}
+  async computeThumbnails(files) {
+    let thumbnailsSource = []
+    for (const file of files) {
+      if (file.thumbnail === undefined) {
+        continue
+      } else if (file.thumbnail.match('.svg')) {
+        thumbnailsSource.push({
+          title: file.title,
+          url: file.thumbnail
+        })
+      }
+    }
+  }
 
   save(params) {
     return this.client.save(params)
