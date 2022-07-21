@@ -31,50 +31,6 @@ class ToutaticeClient {
   }
 
   async getApps() {
-    // log('info', 'getApps begins')
-    // const read = async body => {
-    //   log('info', 'Get in read')
-    //   let error
-    //   body.on('error', err => {
-    //     error = err
-    //   })
-
-    //   for await (const chunk of body) {
-    //     log('info', 'get in read loop')
-    //     log('info', JSON.parse(chunk.toString()))
-    //   }
-    //   log('info', 'read before return')
-    //   return new Promise((resolve, reject) => {
-    //     body.on('close', () => {
-    //       error ? reject(error) : resolve()
-    //     })
-    //   })
-    // }
-
-    // log('info', 'TestgetApps before try')
-
-    // try {
-    //   log('info', 'TestgetApps inside try')
-    //   const response = await fetch(
-    //     'https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/3ec0316e-2cbc-4a7e-ba0d-81e127d98600/sync',
-    //     {
-    //       method: 'POST',
-    //       headers: {
-    //         Authorization: `Bearer ${this.token}`,
-    //         'Content-Type': 'application/json'
-    //       },
-    //       body: '{}'
-    //     }
-    //   )
-    //   log('info', 'TestgetApps after call')
-    //   const data = await read(response.body)
-    //   log('info', { data })
-    //   log('info', 'TestgetApps after read')
-    // } catch (err) {
-    //   log('info', 'TestgetApps inside catch')
-    //   log('error', err.stack)
-    // }
-    // log('info', 'Exiting syncCall')
     const response = await fetch(
       'https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/3ec0316e-2cbc-4a7e-ba0d-81e127d98600/sync',
       {
@@ -87,16 +43,18 @@ class ToutaticeClient {
       }
     )
     if (response.status === 202) {
-      log('info', 'Syncing apps ...')
-      await this.sleep(5000)
-      log('info', 'Syncing apps succesfully, returning new list')
+      log('info', 'Syncing apps, returning new list on next API call')
     }
     if (response.status !== 202) {
       log(
         'warn',
-        'Something went wrong when syncing apps, returning last state of the list'
+        'Something went wrong when syncing apps, returning last state of the list on next API call'
       )
     }
+    // the /sync path is async but should be done relatively quickly
+    // it has been agreed just to be safe to wait for a second before making the next call
+    await this.sleep(1000)
+
     const syncApps = await fetch(
       'https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/3ec0316e-2cbc-4a7e-ba0d-81e127d98600/applications',
       {
