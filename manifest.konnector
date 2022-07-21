@@ -34,9 +34,7 @@
         "POST",
         "PUT",
         "GET"
-      ],
-      "selector": "path",
-      "values": ["/Settings/Home"]
+      ]
     },
     "accounts": {
       "type": "io.cozy.accounts",
