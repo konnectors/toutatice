@@ -146,6 +146,52 @@ class CozyUtils {
     }
   }
 
+  /**
+   * async computeShortcuts - Spliting and preparing shortcuts for saveFiles
+   *
+   * @param  {array} files   files received from the toutatice API call
+   * @returns {object}
+   */
+  async computeShortcuts(files) {
+    let schoolShortcuts = []
+    let favShortcuts = []
+    for (const file of files) {
+      if (file.hubMetadata.favori) {
+        favShortcuts.push({
+          ...file,
+          tempAppId: file.hubMetadata.idInterne,
+          filename: `${file.title}.url`,
+          filestream: `[InternetShortcut]\nURL=${file.url}`,
+          shouldReplaceFile: true
+        })
+      } else {
+        schoolShortcuts.push({
+          ...file,
+          tempAppId: file.hubMetadata.idInterne,
+          filename: `${file.title}.url`,
+          filestream: `[InternetShortcut]\nURL=${file.url}`,
+          shouldReplaceFile: true
+        })
+      }
+    }
+    return { schoolShortcuts, favShortcuts }
+  }
+
+  // Waiting for the full svg icons to be handled
+  async computeThumbnails(files) {
+    let thumbnailsSource = []
+    for (const file of files) {
+      if (file.thumbnail === undefined) {
+        continue
+      } else if (file.thumbnail.match('.svg')) {
+        thumbnailsSource.push({
+          title: file.title,
+          url: file.thumbnail
+        })
+      }
+    }
+  }
+
   save(params) {
     return this.client.save(params)
   }
