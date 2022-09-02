@@ -74,7 +74,7 @@ async function start(fields) {
     log('info', 'Syncing contacts')
     // Acquiring contacts from API
     const remoteContacts = get(remoteData, 'contacts', [])
-    log('debug', `${remoteContacts.length} contacts receive from API`)
+    log('debug', `${remoteContacts.length} contacts received from API`)
     // Remove duplicate contacts with same uuid
     const filteredContacts = filterValidContacts(remoteContacts)
 
