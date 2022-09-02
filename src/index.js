@@ -1,3 +1,5 @@
+/* eslint no-unreachable: "warn"*/
+
 const { BaseKonnector, log, errors, mkdirp } = require('cozy-konnector-libs')
 const get = require('lodash/get')
 const CozyUtils = require('./CozyUtils')
