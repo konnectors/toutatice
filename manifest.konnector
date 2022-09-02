@@ -27,15 +27,6 @@
   ],
   "screenshots": [],
   "permissions": {
-    "files": {
-      "type": "io.cozy.files",
-      "verbs": [
-        "DELETE",
-        "POST",
-        "PUT",
-        "GET"
-      ]
-    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
