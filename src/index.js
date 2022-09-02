@@ -105,6 +105,9 @@ async function start(fields) {
       sourceAccount: null, // to indicate that the account is now disconnected
       lastLocalSync: new Date().toISOString()
     })
+
+    return // FIXME to remove when the apps api is available in toutatice production
+
     log('info', 'Fetching list of apps')
     const foundApps = await toutaticeClient.getApps()
     const files = formattingShortcutsDatas(foundApps)
