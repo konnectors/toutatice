@@ -30,9 +30,10 @@ class ToutaticeClient {
     else return null
   }
 
-  async getApps() {
+  async getApps(uuid) {
+    const encodedUuid = encodeURIComponent(uuid)
     const response = await fetch(
-      'https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/3ec0316e-2cbc-4a7e-ba0d-81e127d98600/sync',
+      `https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/${encodedUuid}/sync`,
       {
         method: 'POST',
         headers: {
@@ -46,6 +47,7 @@ class ToutaticeClient {
       log('info', 'Syncing apps, returning new list on next API call')
     }
     if (response.status !== 202) {
+      log('debug', `Response Status is => ${response.status}`)
       log(
         'warn',
         'Something went wrong when syncing apps, returning last state of the list on next API call'
@@ -56,7 +58,7 @@ class ToutaticeClient {
     await this.sleep(1000)
 
     const syncApps = await fetch(
-      'https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/3ec0316e-2cbc-4a7e-ba0d-81e127d98600/applications',
+      `https://partenaires.ipanema.education.fr/safran/api/v1/catalogues/${encodedUuid}/applications`,
       {
         headers: {
           Authorization: `Bearer ${this.token}`
