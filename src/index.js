@@ -106,7 +106,7 @@ async function start(fields) {
       lastLocalSync: new Date().toISOString()
     })
     log('info', 'Fetching list of apps')
-    const foundApps = await toutaticeClient.getApps()
+    const foundApps = await toutaticeClient.getApps(userInfo.ENTPersonUid)
     const files = formattingShortcutsDatas(foundApps)
     // Waiting for toutatice to give svgs for all apps before handling it
     // const thumbnailsSource = await cozyUtils.computeThumbnails(files)
