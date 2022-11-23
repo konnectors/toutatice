@@ -27,6 +27,12 @@
   ],
   "screenshots": [],
   "permissions": {
+    "shortcuts": {
+      "type": "io.cozy.files.shortcuts",
+      "verbs": [
+        "ALL"
+      ]
+    },
     "files": {
       "type": "io.cozy.files",
       "verbs": [
