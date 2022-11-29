@@ -36,10 +36,7 @@
     "files": {
       "type": "io.cozy.files",
       "verbs": [
-        "DELETE",
-        "POST",
-        "PUT",
-        "GET"
+        "ALL"
       ]
     },
     "accounts": {
