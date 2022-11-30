@@ -110,7 +110,9 @@ async function start(fields) {
     const files = formattingShortcutsDatas(foundApps)
     // Waiting for toutatice to give svgs for all apps before handling it
     // const thumbnailsSource = await cozyUtils.computeThumbnails(files)
+    const foundShortcuts = await cozyUtils.findShortcuts()
     const computedShortcuts = await cozyUtils.computeShortcuts(files)
+    await cozyUtils.synchronizeShortcuts(foundShortcuts, computedShortcuts)
     const destinationFolder = '/Settings/Home'
     await mkdirp(destinationFolder)
     log('info', 'Creating shortcuts for school apps')
@@ -121,7 +123,7 @@ async function start(fields) {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
-        fileIdAttributes: ['tempAppId'],
+        fileIdAttributes: ['vendorRef'],
         validateFile: true,
         subPath: "/Applications de l'école"
       }
@@ -134,7 +136,7 @@ async function start(fields) {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
-        fileIdAttributes: ['tempAppId'],
+        fileIdAttributes: ['vendorRef'],
         validateFile: true
       }
     )

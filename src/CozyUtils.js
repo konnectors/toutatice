@@ -1,4 +1,5 @@
 const { log } = require('cozy-konnector-libs')
+const { Q } = require('cozy-client')
 const get = require('lodash/get')
 const initCozyClient = require('./helpers/initCozyClient')
 
@@ -153,44 +154,101 @@ class CozyUtils {
    * @returns {object}
    */
   async computeShortcuts(files) {
+    log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
+
     for (const file of files) {
       if (file.hubMetadata.favori) {
         favShortcuts.push({
           ...file,
-          tempAppId: file.hubMetadata.idInterne,
+          vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
+          // metadata: {
+          //   icon: svgIcon
+          // },
           shouldReplaceFile: true
         })
       } else {
-        schoolShortcuts.push({
+        const appToSave = {
           ...file,
-          tempAppId: file.hubMetadata.idInterne,
+          vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
-        })
+        }
+        if (file.icon) {
+          if (file.icon.match('https://')) {
+            appToSave.metadata = {
+              icon: file.icon
+            }
+          }
+        }
+        schoolShortcuts.push(appToSave)
       }
     }
     return { schoolShortcuts, favShortcuts }
   }
 
-  // Waiting for the full svg icons to be handled
-  async computeThumbnails(files) {
-    let thumbnailsSource = []
-    for (const file of files) {
-      if (file.thumbnail === undefined) {
+  async findShortcuts() {
+    log('info', 'Getting in findShortcuts')
+    // Here we're looking for the shortcuts created by toutatice konnector
+    // We know their path is "/Settings/Home", so there is no need to query the path
+    try {
+      const query = Q('io.cozy.files').partialIndex({
+        type: 'file',
+        class: 'shortcut',
+        'cozyMetadata.createdByApp': 'toutatice',
+        trashed: false
+      })
+      const existingShortcuts = await this.client.queryAll(query)
+      return existingShortcuts
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  async synchronizeShortcuts(foundShortcuts, computedShortcuts) {
+    let allComputedShortcuts = computedShortcuts.schoolShortcuts.concat(
+      computedShortcuts.favShortcuts
+    )
+    let appsToDelete = []
+    for (let cozyShortcut of foundShortcuts) {
+      if (cozyShortcut.type !== 'file') {
+        log('info', 'is not a file, jumping on next object')
         continue
-      } else if (file.thumbnail.match('.svg')) {
-        thumbnailsSource.push({
-          title: file.title,
-          url: file.thumbnail
-        })
+      }
+      let idx = allComputedShortcuts.findIndex(apiShortcut => {
+        return apiShortcut.vendorRef == cozyShortcut.metadata.fileIdAttributes
+      })
+      if (idx == -1) {
+        appsToDelete.push(cozyShortcut)
+      }
+    }
+    if (appsToDelete.length > 0) {
+      log('info', `${appsToDelete.length} apps to delete`)
+      for (let appToDelete of appsToDelete) {
+        await this.client
+          .collection('io.cozy.files')
+          .deleteFilePermanently(appToDelete._id)
       }
     }
   }
+  // Waiting for the full svg icons to be handled
+  // async computeThumbnails(files) {
+  //   let thumbnailsSource = []
+  //   for (const file of files) {
+  //     if (file.icon === undefined) {
+  //       continue
+  //     } else if (file.icon.match('.svg' | '.png')) {
+  //       thumbnailsSource.push({
+  //         title: file.title,
+  //         url: file.icon
+  //       })
+  //     }
+  //   }
+  // }
 
   save(params) {
     return this.client.save(params)

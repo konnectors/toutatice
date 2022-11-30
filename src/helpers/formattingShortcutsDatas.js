@@ -9,7 +9,7 @@ function formattingShortcutsDatas(apps) {
         title: app.title[0],
         description: app.description,
         url: app.source,
-        thumbnail: app.vignette,
+        icon: app.vignette,
         source: app.rights,
         networkAccess: app.networkAccessibility,
         hubMetadata: app.hubMetadata
