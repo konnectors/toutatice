@@ -1,18 +1,18 @@
-const { log } = require('cozy-konnector-libs')
+const { log, cozyClient } = require('cozy-konnector-libs')
 const { Q } = require('cozy-client')
 const get = require('lodash/get')
-const initCozyClient = require('./helpers/initCozyClient')
 
 const {
   APP_NAME,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
-  DOCTYPE_CONTACTS_ACCOUNT
+  DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_FILES
 } = require('./constants')
 
 class CozyUtils {
-  constructor(accountId) {
-    this.client = initCozyClient(accountId)
+  constructor() {
+    this.client = cozyClient.new
   }
 
   async refreshToken(accountId) {
@@ -157,7 +157,6 @@ class CozyUtils {
     log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
-
     for (const file of files) {
       if (file.hubMetadata.favori) {
         favShortcuts.push({
@@ -196,7 +195,7 @@ class CozyUtils {
     // Here we're looking for the shortcuts created by toutatice konnector
     // We know their path is "/Settings/Home", so there is no need to query the path
     try {
-      const query = Q('io.cozy.files').partialIndex({
+      const query = Q(DOCTYPE_FILES).partialIndex({
         type: 'file',
         class: 'shortcut',
         'cozyMetadata.createdByApp': 'toutatice',
@@ -209,18 +208,23 @@ class CozyUtils {
     }
   }
 
-  async synchronizeShortcuts(foundShortcuts, computedShortcuts) {
+  async synchronizeShortcuts(foundShortcuts, computedShortcuts, favFolder) {
+    const favFolderId = favFolder._id
     let allComputedShortcuts = computedShortcuts.schoolShortcuts.concat(
       computedShortcuts.favShortcuts
     )
     let appsToDelete = []
     for (let cozyShortcut of foundShortcuts) {
+      const isFavourite = favFolderId === cozyShortcut.dir_id ? true : false
       if (cozyShortcut.type !== 'file') {
         log('info', 'is not a file, jumping on next object')
         continue
       }
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
-        return apiShortcut.vendorRef == cozyShortcut.metadata.fileIdAttributes
+        return (
+          apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
+          apiShortcut.hubMetadata.favori === isFavourite
+        )
       })
       if (idx == -1) {
         appsToDelete.push(cozyShortcut)
@@ -228,11 +232,14 @@ class CozyUtils {
     }
     if (appsToDelete.length > 0) {
       log('info', `${appsToDelete.length} apps to delete`)
-      for (let appToDelete of appsToDelete) {
-        await this.client
-          .collection('io.cozy.files')
-          .deleteFilePermanently(appToDelete._id)
-      }
+      await Promise.all(
+        appsToDelete.map(appToDelete =>
+          // wrap limit here if neededs
+          this.client
+            .collection(DOCTYPE_FILES)
+            .deleteFilePermanently(appToDelete._id)
+        )
+      )
     }
   }
   // Waiting for the full svg icons to be handled

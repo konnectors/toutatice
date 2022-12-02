@@ -111,14 +111,18 @@ async function start(fields) {
     // Waiting for toutatice to give svgs for all apps before handling it
     // const thumbnailsSource = await cozyUtils.computeThumbnails(files)
     const foundShortcuts = await cozyUtils.findShortcuts()
+    const destinationFolderPath = '/Settings/Home'
+    const destinationFolder = await mkdirp(destinationFolderPath)
     const computedShortcuts = await cozyUtils.computeShortcuts(files)
-    await cozyUtils.synchronizeShortcuts(foundShortcuts, computedShortcuts)
-    const destinationFolder = '/Settings/Home'
-    await mkdirp(destinationFolder)
+    await cozyUtils.synchronizeShortcuts(
+      foundShortcuts,
+      computedShortcuts,
+      destinationFolder
+    )
     log('info', 'Creating shortcuts for school apps')
     await this.saveFiles(
       computedShortcuts.schoolShortcuts,
-      { folderPath: destinationFolder },
+      { folderPath: destinationFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
@@ -131,7 +135,7 @@ async function start(fields) {
     log('info', 'Creating shortcuts for favourite apps')
     await this.saveFiles(
       computedShortcuts.favShortcuts,
-      { folderPath: destinationFolder },
+      { folderPath: destinationFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
