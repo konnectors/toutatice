@@ -113,7 +113,7 @@ async function start(fields) {
     const foundShortcuts = await cozyUtils.findShortcuts()
     const destinationFolderPath = '/Settings/Home'
     const destinationFolder = await mkdirp(destinationFolderPath)
-    const computedShortcuts = await cozyUtils.computeShortcuts(files)
+    const computedShortcuts = cozyUtils.computeShortcuts(files)
     await cozyUtils.synchronizeShortcuts(
       foundShortcuts,
       computedShortcuts,

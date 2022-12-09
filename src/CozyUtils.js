@@ -1,4 +1,4 @@
-const { log, cozyClient } = require('cozy-konnector-libs')
+const { log, cozyClient, manifest } = require('cozy-konnector-libs')
 const { Q } = require('cozy-client')
 const get = require('lodash/get')
 
@@ -153,7 +153,7 @@ class CozyUtils {
    * @param  {array} files   files received from the toutatice API call
    * @returns {object}
    */
-  async computeShortcuts(files) {
+  computeShortcuts(files) {
     log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
@@ -194,18 +194,14 @@ class CozyUtils {
     log('info', 'Getting in findShortcuts')
     // Here we're looking for the shortcuts created by toutatice konnector
     // We know their path is "/Settings/Home", so there is no need to query the path
-    try {
-      const query = Q(DOCTYPE_FILES).partialIndex({
-        type: 'file',
-        class: 'shortcut',
-        'cozyMetadata.createdByApp': 'toutatice',
-        trashed: false
-      })
-      const existingShortcuts = await this.client.queryAll(query)
-      return existingShortcuts
-    } catch (err) {
-      throw new Error(err)
-    }
+    const query = Q(DOCTYPE_FILES).partialIndex({
+      type: 'file',
+      class: 'shortcut',
+      'cozyMetadata.createdByApp': manifest.data.slug,
+      trashed: false
+    })
+    const existingShortcuts = await this.client.queryAll(query)
+    return existingShortcuts
   }
 
   async synchronizeShortcuts(foundShortcuts, computedShortcuts, favFolder) {
@@ -216,10 +212,6 @@ class CozyUtils {
     let appsToDelete = []
     for (let cozyShortcut of foundShortcuts) {
       const isFavourite = favFolderId === cozyShortcut.dir_id ? true : false
-      if (cozyShortcut.type !== 'file') {
-        log('info', 'is not a file, jumping on next object')
-        continue
-      }
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
