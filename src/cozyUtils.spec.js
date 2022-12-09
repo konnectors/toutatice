@@ -1,7 +1,8 @@
-jest.mock('cozy-client')
+// jest.mock('cozy-client')
 jest.mock('cozy-konnector-libs')
 
 const CozyUtils = require('./CozyUtils')
+const { Q } = require('cozy-client')
 
 const {
   APP_NAME,
@@ -330,7 +331,6 @@ describe('CozyUtils', () => {
         computedShortcuts,
         favFolder
       )
-      expect(cozyUtils.client.collection).toHaveBeenCalledWith(DOCTYPE_FILES)
       expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
     })
     it('should delete multiple apps with deleteFilePermanently', async () => {
@@ -574,51 +574,23 @@ describe('CozyUtils', () => {
       expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(1)
       expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
     })
-    it('should skip the shortcut if its type is not "file"', async () => {
-      const foundShortcuts = [
-        {
-          _id: 'SOME_ID',
-          type: 'file',
-          metadata: {
-            fileIdAttributes: 'SOME_VALUE'
-          }
-        },
-        {
-          _id: 'SOME_ID_2',
-          type: 'file',
-          metadata: {
-            fileIdAttributes: 'SOME_VALUE_2'
-          }
-        },
-        {
-          _id: 'SOME_ID_3',
-          type: 'directory',
-          metadata: {
-            fileIdAttributes: 'SOME_VALUE_3'
-          }
-        }
-      ]
-      const computedShortcuts = {
-        schoolShortcuts: [],
-        favShortcuts: []
-      }
-      const favFolder = {
-        _id: 'SOME_FAV_DIR_ID'
-      }
+  })
 
-      const deleteFilePermanentlySpy = jest.fn()
-      cozyUtils.client.collection = jest.fn(() => ({
-        deleteFilePermanently: deleteFilePermanentlySpy
-      }))
+  describe('findShortcuts', () => {
+    it('should load the manifest slug properly', async () => {
+      cozyUtils.client.queryAll = jest
+        .fn()
+        .mockResolvedValue('SOME_QUERY_RESULT')
 
-      await cozyUtils.synchronizeShortcuts(
-        foundShortcuts,
-        computedShortcuts,
-        favFolder
-      )
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_2')
+      const response = await cozyUtils.findShortcuts()
+      const expectedQuery = Q(DOCTYPE_FILES).partialIndex({
+        type: 'file',
+        class: 'shortcut',
+        'cozyMetadata.createdByApp': 'toutatice',
+        trashed: false
+      })
+      expect(response).toEqual('SOME_QUERY_RESULT')
+      expect(cozyUtils.client.queryAll).toHaveBeenCalledWith(expectedQuery)
     })
   })
 })

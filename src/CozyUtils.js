@@ -210,8 +210,8 @@ class CozyUtils {
       computedShortcuts.favShortcuts
     )
     let appsToDelete = []
-    for (let cozyShortcut of foundShortcuts) {
-      const isFavourite = favFolderId === cozyShortcut.dir_id ? true : false
+    for (const cozyShortcut of foundShortcuts) {
+      const isFavourite = favFolderId === cozyShortcut.dir_id
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
