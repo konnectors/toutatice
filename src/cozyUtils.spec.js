@@ -1,15 +1,15 @@
-jest.mock('cozy-client')
+// jest.mock('cozy-client')
 jest.mock('cozy-konnector-libs')
 
-const CozyClient = require('cozy-client').default
 const CozyUtils = require('./CozyUtils')
+const { Q } = require('cozy-client')
 
 const {
   APP_NAME,
-  APP_VERSION,
   DOCTYPE_CONTACTS_ACCOUNT,
   DOCTYPE_CONTACTS_GROUPS,
-  DOCTYPE_CONTACTS
+  DOCTYPE_CONTACTS,
+  DOCTYPE_FILES
 } = require('./constants')
 
 describe('CozyUtils', () => {
@@ -17,34 +17,6 @@ describe('CozyUtils', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
-  })
-
-  it('should initialize a cozy client', () => {
-    expect(CozyClient).toHaveBeenCalledWith({
-      appMetadata: {
-        slug: APP_NAME,
-        sourceAccount: 'fakeAccountId',
-        version: APP_VERSION
-      },
-      schema: {
-        contacts: {
-          doctype: 'io.cozy.contacts',
-          doctypeVersion: 2
-        },
-        contactsAccounts: {
-          doctype: 'io.cozy.contacts.accounts',
-          doctypeVersion: 1
-        },
-        contactsGroups: {
-          doctype: 'io.cozy.contacts.groups',
-          doctypeVersion: 2
-        }
-      },
-      token: '{"token":{"accessToken":"0230b4b0-f833-4e4a-b70a-ffb1e48e2c01"}}',
-      uri: 'https://rosellalabadie.mycozy.cloud'
-    })
-
-    expect(cozyUtils.client).toBeDefined()
   })
 
   describe('refreshing a token', () => {
@@ -302,6 +274,323 @@ describe('CozyUtils', () => {
       expect(result).toEqual({
         id: 'saved-contact-account'
       })
+    })
+  })
+
+  describe('synchronizeShortcuts', () => {
+    it('should not call deleteFilePermanently if no app to delete', async () => {
+      const foundShortcuts = []
+      const computedShortcuts = {
+        schoolShortcuts: [],
+        favShortcuts: []
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).not.toHaveBeenCalled()
+    })
+    it('should delete one app with deleteFilePermanently', async () => {
+      const foundShortcuts = [
+        {
+          _id: 'SOME_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE'
+          }
+        }
+      ]
+      const computedShortcuts = {
+        schoolShortcuts: [
+          {
+            vendorRef: 'SOME_OTHER_VALUE'
+          }
+        ],
+        favShortcuts: []
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+    })
+    it('should delete multiple apps with deleteFilePermanently', async () => {
+      const foundShortcuts = [
+        {
+          _id: 'SOME_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE'
+          }
+        },
+        {
+          _id: 'SOME_ID_2',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_2'
+          }
+        },
+        {
+          _id: 'SOME_ID_3',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_3'
+          }
+        }
+      ]
+      const computedShortcuts = {
+        schoolShortcuts: [
+          {
+            vendorRef: 'SOME_OTHER_VALUE'
+          }
+        ],
+        favShortcuts: []
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(3)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_2')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_3')
+    })
+    it('should not delete app present in computedShortcuts.schoolShortcuts', async () => {
+      const foundShortcuts = [
+        {
+          _id: 'SOME_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE'
+          }
+        },
+        {
+          _id: 'SOME_ID_2',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_2'
+          }
+        },
+        {
+          _id: 'SOME_ID_3',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_3'
+          }
+        }
+      ]
+      const computedShortcuts = {
+        schoolShortcuts: [
+          {
+            vendorRef: 'SOME_OTHER_VALUE',
+            hubMetadata: {
+              favori: false
+            }
+          },
+          {
+            vendorRef: 'SOME_VALUE_2',
+            hubMetadata: {
+              favori: false
+            }
+          }
+        ],
+        favShortcuts: []
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_3')
+    })
+    it('should not delete app present in computedShortcuts.favShortcuts', async () => {
+      const foundShortcuts = [
+        {
+          _id: 'SOME_ID',
+          dir_id: 'SOME_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE'
+          }
+        },
+        {
+          _id: 'SOME_ID_2',
+          dir_id: 'SOME_FAV_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_2'
+          }
+        },
+        {
+          _id: 'SOME_ID_3',
+          dir_id: 'SOME_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_3'
+          }
+        }
+      ]
+      const computedShortcuts = {
+        schoolShortcuts: [
+          {
+            vendorRef: 'SOME_OTHER_VALUE',
+            hubMetadata: {
+              favori: false
+            }
+          }
+        ],
+        favShortcuts: [
+          {
+            vendorRef: 'SOME_VALUE_2',
+            hubMetadata: {
+              favori: true
+            }
+          }
+        ]
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_3')
+    })
+    it('should delete app if favourite status has changed', async () => {
+      const foundShortcuts = [
+        {
+          _id: 'SOME_ID',
+          dir_id: 'SOME_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE'
+          }
+        },
+        {
+          _id: 'SOME_ID_2',
+          dir_id: 'SOME_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_2'
+          }
+        },
+        {
+          _id: 'SOME_ID_3',
+          dir_id: 'SOME_DIR_ID',
+          type: 'file',
+          metadata: {
+            fileIdAttributes: 'SOME_VALUE_3'
+          }
+        }
+      ]
+      const computedShortcuts = {
+        schoolShortcuts: [
+          {
+            vendorRef: 'SOME_VALUE_2',
+            hubMetadata: {
+              favori: false
+            }
+          },
+          {
+            vendorRef: 'SOME_VALUE_3',
+            hubMetadata: {
+              favori: false
+            }
+          }
+        ],
+        favShortcuts: [
+          {
+            vendorRef: 'SOME_VALUE',
+            hubMetadata: {
+              favori: true
+            }
+          }
+        ]
+      }
+      const favFolder = {
+        _id: 'SOME_FAV_DIR_ID'
+      }
+
+      const deleteFilePermanentlySpy = jest.fn()
+      cozyUtils.client.collection = jest.fn(() => ({
+        deleteFilePermanently: deleteFilePermanentlySpy
+      }))
+
+      await cozyUtils.synchronizeShortcuts(
+        foundShortcuts,
+        computedShortcuts,
+        favFolder
+      )
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(1)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+    })
+  })
+
+  describe('findShortcuts', () => {
+    it('should load the manifest slug properly', async () => {
+      cozyUtils.client.queryAll = jest
+        .fn()
+        .mockResolvedValue('SOME_QUERY_RESULT')
+
+      const response = await cozyUtils.findShortcuts()
+      const expectedQuery = Q(DOCTYPE_FILES).partialIndex({
+        type: 'file',
+        class: 'shortcut',
+        'cozyMetadata.createdByApp': 'toutatice',
+        trashed: false
+      })
+      expect(response).toEqual('SOME_QUERY_RESULT')
+      expect(cozyUtils.client.queryAll).toHaveBeenCalledWith(expectedQuery)
     })
   })
 })

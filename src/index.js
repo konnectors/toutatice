@@ -108,20 +108,24 @@ async function start(fields) {
     log('info', 'Fetching list of apps')
     const foundApps = await toutaticeClient.getApps(userInfo.ENTPersonUid)
     const files = formattingShortcutsDatas(foundApps)
-    // Waiting for toutatice to give svgs for all apps before handling it
-    // const thumbnailsSource = await cozyUtils.computeThumbnails(files)
-    const computedShortcuts = await cozyUtils.computeShortcuts(files)
-    const destinationFolder = '/Settings/Home'
-    await mkdirp(destinationFolder)
+    const foundShortcuts = await cozyUtils.findShortcuts()
+    const destinationFolderPath = '/Settings/Home'
+    const destinationFolder = await mkdirp(destinationFolderPath)
+    const computedShortcuts = cozyUtils.computeShortcuts(files)
+    await cozyUtils.synchronizeShortcuts(
+      foundShortcuts,
+      computedShortcuts,
+      destinationFolder
+    )
     log('info', 'Creating shortcuts for school apps')
     await this.saveFiles(
       computedShortcuts.schoolShortcuts,
-      { folderPath: destinationFolder },
+      { folderPath: destinationFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
-        fileIdAttributes: ['tempAppId'],
+        fileIdAttributes: ['vendorRef'],
         validateFile: true,
         subPath: "/Applications de l'école"
       }
@@ -129,12 +133,12 @@ async function start(fields) {
     log('info', 'Creating shortcuts for favourite apps')
     await this.saveFiles(
       computedShortcuts.favShortcuts,
-      { folderPath: destinationFolder },
+      { folderPath: destinationFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
-        fileIdAttributes: ['tempAppId'],
+        fileIdAttributes: ['vendorRef'],
         validateFile: true
       }
     )

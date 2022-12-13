@@ -1,17 +1,18 @@
-const { log } = require('cozy-konnector-libs')
+const { log, cozyClient, manifest } = require('cozy-konnector-libs')
+const { Q } = require('cozy-client')
 const get = require('lodash/get')
-const initCozyClient = require('./helpers/initCozyClient')
 
 const {
   APP_NAME,
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
-  DOCTYPE_CONTACTS_ACCOUNT
+  DOCTYPE_CONTACTS_ACCOUNT,
+  DOCTYPE_FILES
 } = require('./constants')
 
 class CozyUtils {
-  constructor(accountId) {
-    this.client = initCozyClient(accountId)
+  constructor() {
+    this.client = cozyClient.new
   }
 
   async refreshToken(accountId) {
@@ -152,43 +153,75 @@ class CozyUtils {
    * @param  {array} files   files received from the toutatice API call
    * @returns {object}
    */
-  async computeShortcuts(files) {
+  computeShortcuts(files) {
+    log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
     for (const file of files) {
       if (file.hubMetadata.favori) {
         favShortcuts.push({
           ...file,
-          tempAppId: file.hubMetadata.idInterne,
+          vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
         })
       } else {
-        schoolShortcuts.push({
+        const appToSave = {
           ...file,
-          tempAppId: file.hubMetadata.idInterne,
+          vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
-        })
+        }
+        schoolShortcuts.push(appToSave)
       }
     }
     return { schoolShortcuts, favShortcuts }
   }
 
-  // Waiting for the full svg icons to be handled
-  async computeThumbnails(files) {
-    let thumbnailsSource = []
-    for (const file of files) {
-      if (file.thumbnail === undefined) {
-        continue
-      } else if (file.thumbnail.match('.svg')) {
-        thumbnailsSource.push({
-          title: file.title,
-          url: file.thumbnail
-        })
+  async findShortcuts() {
+    log('info', 'Getting in findShortcuts')
+    // Here we're looking for the shortcuts created by toutatice konnector
+    // We know their path is "/Settings/Home", so there is no need to query the path
+    const query = Q(DOCTYPE_FILES).partialIndex({
+      type: 'file',
+      class: 'shortcut',
+      'cozyMetadata.createdByApp': manifest.data.slug,
+      trashed: false
+    })
+    const existingShortcuts = await this.client.queryAll(query)
+    return existingShortcuts
+  }
+
+  async synchronizeShortcuts(foundShortcuts, computedShortcuts, favFolder) {
+    const favFolderId = favFolder._id
+    let allComputedShortcuts = computedShortcuts.schoolShortcuts.concat(
+      computedShortcuts.favShortcuts
+    )
+    let appsToDelete = []
+    for (const cozyShortcut of foundShortcuts) {
+      const isFavourite = favFolderId === cozyShortcut.dir_id
+      let idx = allComputedShortcuts.findIndex(apiShortcut => {
+        return (
+          apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
+          apiShortcut.hubMetadata.favori === isFavourite
+        )
+      })
+      if (idx == -1) {
+        appsToDelete.push(cozyShortcut)
       }
+    }
+    if (appsToDelete.length > 0) {
+      log('info', `${appsToDelete.length} apps to delete`)
+      await Promise.all(
+        appsToDelete.map(appToDelete =>
+          // wrap limit here if neededs
+          this.client
+            .collection(DOCTYPE_FILES)
+            .deleteFilePermanently(appToDelete._id)
+        )
+      )
     }
   }
 
