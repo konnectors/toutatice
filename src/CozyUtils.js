@@ -164,9 +164,6 @@ class CozyUtils {
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
-          // metadata: {
-          //   icon: svgIcon
-          // },
           shouldReplaceFile: true
         })
       } else {
@@ -176,13 +173,6 @@ class CozyUtils {
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
-        }
-        if (file.icon) {
-          if (file.icon.match('https://')) {
-            appToSave.metadata = {
-              icon: file.icon
-            }
-          }
         }
         schoolShortcuts.push(appToSave)
       }
@@ -234,20 +224,6 @@ class CozyUtils {
       )
     }
   }
-  // Waiting for the full svg icons to be handled
-  // async computeThumbnails(files) {
-  //   let thumbnailsSource = []
-  //   for (const file of files) {
-  //     if (file.icon === undefined) {
-  //       continue
-  //     } else if (file.icon.match('.svg' | '.png')) {
-  //       thumbnailsSource.push({
-  //         title: file.title,
-  //         url: file.icon
-  //       })
-  //     }
-  //   }
-  // }
 
   save(params) {
     return this.client.save(params)
