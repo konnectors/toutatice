@@ -1,4 +1,6 @@
+// @ts-check
 const { log, cozyClient, manifest } = require('cozy-konnector-libs')
+const fetch = require('node-fetch').default
 const { Q } = require('cozy-client')
 const get = require('lodash/get')
 
@@ -9,7 +11,6 @@ const {
   DOCTYPE_CONTACTS_ACCOUNT,
   DOCTYPE_FILES
 } = require('./constants')
-
 class CozyUtils {
   constructor() {
     this.client = cozyClient.new
@@ -37,7 +38,7 @@ class CozyUtils {
    * async findContacts - Finds contacts based on a list of remote ids
    *
    * @param  {string} accountId The io.cozy.contacts.account contacts should be linked to
-   * @returns {array}
+   * @returns {Promise<array>}
    */
   async findContacts(accountId) {
     const contactsCollection = this.client.collection(DOCTYPE_CONTACTS)
@@ -75,8 +76,7 @@ class CozyUtils {
    * async findGroups - Finds groups based on a list of remote ids
    *
    * @param  {string} accountId The io.cozy.contacts.account groups should be linked to
-   * @param  {array} remoteIds
-   * @returns {array}
+   * @returns {Promise<array>}
    */
   async findGroups(accountId) {
     const groupsCollection = this.client.collection(DOCTYPE_CONTACTS_GROUPS)
@@ -103,7 +103,7 @@ class CozyUtils {
    *
    * @param  {string} accountId   io.cozy.account ID
    * @param  {string} accountName
-   * @returns {object}
+   * @returns {Promise<object>}
    */
   async findOrCreateContactAccount(accountId, accountName) {
     const accountsCollection = this.client.collection(DOCTYPE_CONTACTS_ACCOUNT)
@@ -151,21 +151,36 @@ class CozyUtils {
    * async computeShortcuts - Spliting and preparing shortcuts for saveFiles
    *
    * @param  {array} files   files received from the toutatice API call
-   * @returns {object}
+   * @returns {Promise<object>}
    */
-  computeShortcuts(files) {
+  async computeShortcuts(files) {
     log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
+    let processedIcons = 0
+    let unprocessedIcons = 0
     for (const file of files) {
       if (file.hubMetadata.favori) {
-        favShortcuts.push({
+        const appToSave = {
           ...file,
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
-        })
+        }
+        if (
+          appToSave.icon &&
+          (appToSave.icon.startsWith('https://') ||
+            appToSave.icon.startsWith('http://'))
+        ) {
+          const icon = await this.fetchIcon(appToSave.icon)
+          appToSave.fileAttributes = { metadata: { icon } }
+          delete appToSave.icon
+          processedIcons++
+        } else {
+          unprocessedIcons++
+        }
+        favShortcuts.push(appToSave)
       } else {
         const appToSave = {
           ...file,
@@ -174,9 +189,25 @@ class CozyUtils {
           filestream: `[InternetShortcut]\nURL=${file.url}`,
           shouldReplaceFile: true
         }
+        if (
+          appToSave.icon &&
+          (appToSave.icon.startsWith('https://') ||
+            appToSave.icon.startsWith('http://'))
+        ) {
+          const icon = await this.fetchIcon(appToSave.icon)
+          appToSave.fileAttributes = { metadata: { icon } }
+          delete appToSave.icon
+          processedIcons++
+        } else {
+          unprocessedIcons++
+        }
         schoolShortcuts.push(appToSave)
       }
     }
+    log(
+      'debug',
+      `${processedIcons} icons treated & ${unprocessedIcons} icons untreated : No valid urls`
+    )
     return { schoolShortcuts, favShortcuts }
   }
 
@@ -223,6 +254,35 @@ class CozyUtils {
         )
       )
     }
+  }
+
+  async fetchIcon(url) {
+    log('info', 'valid icon url found, processing')
+    const iconizerUrl = this.getIconizerUrl()
+    const processedUrl = `${iconizerUrl}/iconize?url=${encodeURIComponent(url)}`
+    const processedIcon = await fetch(`${processedUrl}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json'
+      }
+    })
+    try {
+      const finalIcon = await processedIcon.json()
+      return finalIcon.content
+    } catch (err) {
+      log(
+        'warn',
+        "Something went wrong while retrieving icon from iconizer's API"
+      )
+      log('warn', err)
+    }
+  }
+
+  getIconizerUrl() {
+    // This is supposed to be retrieve from an account_type
+    // but its not possible yet, it will be change in the future
+    const iconizerUrl = 'http://iconizer:8000'
+    return iconizerUrl
   }
 
   save(params) {
