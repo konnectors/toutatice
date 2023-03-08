@@ -279,9 +279,8 @@ class CozyUtils {
   }
 
   getIconizerUrl() {
-    // This is supposed to be retrieve from an account_type
-    // but its not possible yet, it will be change in the future
-    const iconizerUrl = 'http://iconizer:8000'
+    const secrets = JSON.parse(process.env.COZY_PARAMETERS || '{}').secret
+    const iconizerUrl = secrets.iconizer_url
     return iconizerUrl
   }
 
