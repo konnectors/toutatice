@@ -173,8 +173,13 @@ class CozyUtils {
           (appToSave.icon.startsWith('https://') ||
             appToSave.icon.startsWith('http://'))
         ) {
-          const icon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = { metadata: { icon } }
+          const finalIcon = await this.fetchIcon(appToSave.icon)
+          appToSave.fileAttributes = {
+            metadata: {
+              icon: finalIcon.content,
+              iconMimeType: finalIcon.mimetype
+            }
+          }
           delete appToSave.icon
           processedIcons++
         } else {
@@ -194,8 +199,13 @@ class CozyUtils {
           (appToSave.icon.startsWith('https://') ||
             appToSave.icon.startsWith('http://'))
         ) {
-          const icon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = { metadata: { icon } }
+          const finalIcon = await this.fetchIcon(appToSave.icon)
+          appToSave.fileAttributes = {
+            metadata: {
+              icon: finalIcon.content,
+              iconMimeType: finalIcon.mimetype
+            }
+          }
           delete appToSave.icon
           processedIcons++
         } else {
@@ -268,7 +278,7 @@ class CozyUtils {
     })
     try {
       const finalIcon = await processedIcon.json()
-      return finalIcon.content
+      return finalIcon
     } catch (err) {
       log(
         'warn',
