@@ -37,6 +37,7 @@
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
+    "cozy-client": "27.26.3",
     "cozy-konnector-libs": "4.56.4",
     "jest": "27.5.1",
     "json-loader": "0.5.7",
@@ -46,7 +47,7 @@
   },
   "devDependencies": {
     "cozy-jobs-cli": "1.20.2",
-    "cozy-konnector-build": "1.4.4",
+    "cozy-konnector-build": "1.4.5",
     "mockdate": "3.0.5",
     "open": "8.4.0",
     "randomstring": "1.1.5"
