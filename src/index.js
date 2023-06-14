@@ -118,6 +118,8 @@ async function start(fields) {
       destinationFolder
     )
     log('info', 'Creating shortcuts for school apps')
+    // For both of the following saveFiles we force validateFile to true
+    // in order to avoid "BAD_MIME_TYPE" error while saving the shortcuts
     await this.saveFiles(
       computedShortcuts.schoolShortcuts,
       { folderPath: destinationFolderPath },
@@ -126,7 +128,7 @@ async function start(fields) {
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
         fileIdAttributes: ['vendorRef'],
-        validateFile: true,
+        validateFile: () => true,
         subPath: "/Applications de l'école"
       }
     )
@@ -139,7 +141,7 @@ async function start(fields) {
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
         fileIdAttributes: ['vendorRef'],
-        validateFile: true
+        validateFile: () => true
       }
     )
 
