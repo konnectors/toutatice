@@ -284,6 +284,9 @@ describe('CozyUtils', () => {
         schoolShortcuts: [],
         favShortcuts: []
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
@@ -295,6 +298,7 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
       expect(deleteFilePermanentlySpy).not.toHaveBeenCalled()
@@ -320,6 +324,9 @@ describe('CozyUtils', () => {
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
 
       const deleteFilePermanentlySpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
@@ -329,6 +336,7 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
       expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
@@ -368,6 +376,9 @@ describe('CozyUtils', () => {
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
 
       const deleteFilePermanentlySpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
@@ -377,6 +388,7 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
       expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(3)
@@ -428,6 +440,9 @@ describe('CozyUtils', () => {
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
 
       const deleteFilePermanentlySpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
@@ -437,6 +452,7 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
       expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
@@ -491,6 +507,9 @@ describe('CozyUtils', () => {
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
 
       const deleteFilePermanentlySpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
@@ -500,6 +519,7 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
       expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
@@ -560,6 +580,9 @@ describe('CozyUtils', () => {
       const favFolder = {
         _id: 'SOME_FAV_DIR_ID'
       }
+      const folder = {
+        _id: 'SOME_DIR_ID'
+      }
 
       const deleteFilePermanentlySpy = jest.fn()
       cozyUtils.client.collection = jest.fn(() => ({
@@ -569,10 +592,12 @@ describe('CozyUtils', () => {
       await cozyUtils.synchronizeShortcuts(
         foundShortcuts,
         computedShortcuts,
+        folder,
         favFolder
       )
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(1)
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_2')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_3')
     })
   })
 
