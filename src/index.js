@@ -110,12 +110,15 @@ async function start(fields) {
     const files = formattingShortcutsDatas(foundApps)
     const foundShortcuts = await cozyUtils.findShortcuts()
     const destinationFolderPath = '/Settings/Home'
+    const favFolderPath = `${destinationFolderPath}/⭐️ Mes favoris Toutatice`
     const destinationFolder = await mkdirp(destinationFolderPath)
+    const destinationFavFolder = await mkdirp(favFolderPath)
     const computedShortcuts = await cozyUtils.computeShortcuts(files)
     await cozyUtils.synchronizeShortcuts(
       foundShortcuts,
       computedShortcuts,
-      destinationFolder
+      destinationFolder,
+      destinationFavFolder
     )
     log('info', 'Creating shortcuts for school apps')
     // For both of the following saveFiles we force validateFile to true
@@ -129,13 +132,13 @@ async function start(fields) {
         sourceAccountIdentifier: 'Toutatice',
         fileIdAttributes: ['vendorRef'],
         validateFile: () => true,
-        subPath: "/Applications de l'école"
+        subPath: '/Mes autres applications Toutatice'
       }
     )
     log('info', 'Creating shortcuts for favourite apps')
     await this.saveFiles(
       computedShortcuts.favShortcuts,
-      { folderPath: destinationFolderPath },
+      { folderPath: favFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
