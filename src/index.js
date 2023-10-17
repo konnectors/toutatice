@@ -132,7 +132,7 @@ async function start(fields) {
         sourceAccountIdentifier: 'Toutatice',
         fileIdAttributes: ['vendorRef'],
         validateFile: () => true,
-        subPath: '/Mes autres applications Toutatice'
+        subPath: '/Mes applications Toutatice'
       }
     )
     log('info', 'Creating shortcuts for favourite apps')
