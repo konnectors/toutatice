@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "cozy-client": "27.26.3",
-    "cozy-konnector-libs": "5.6.0",
+    "cozy-konnector-libs": "5.6.1",
     "jest": "27.5.1",
     "json-loader": "0.5.7",
     "lodash": "4.17.21",
@@ -46,7 +46,7 @@
     "p-limit": "3.1.0"
   },
   "devDependencies": {
-    "cozy-jobs-cli": "2.2.6",
+    "cozy-jobs-cli": "2.2.7",
     "cozy-konnector-build": "1.5.1",
     "mockdate": "3.0.5",
     "open": "8.4.0",
