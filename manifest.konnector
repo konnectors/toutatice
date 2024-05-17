@@ -55,6 +55,12 @@
       "verbs": [
         "ALL"
       ]
+    },
+    "settings":{
+      "type": "io.cozy.home.settings",
+      "verbs":[
+        "ALL"
+      ]
     }
   },
   "developer": {
