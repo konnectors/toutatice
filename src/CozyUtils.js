@@ -162,53 +162,59 @@ class CozyUtils {
     for (const file of files) {
       if (file.hubMetadata.favori) {
         const appToSave = {
-          ...file,
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
-          shouldReplaceFile: true
-        }
-        if (
-          appToSave.icon &&
-          (appToSave.icon.startsWith('https://') ||
-            appToSave.icon.startsWith('http://'))
-        ) {
-          const finalIcon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = {
+          shouldReplaceFile: () => true,
+          fileAttributes: {
             metadata: {
-              icon: finalIcon.content,
-              iconMimeType: finalIcon.mimetype
+              ...file
             }
           }
-          delete appToSave.icon
+        }
+        if (
+          appToSave.fileAttributes.metadata.icon &&
+          (appToSave.fileAttributes.metadata.icon.startsWith('https://') ||
+            appToSave.fileAttributes.metadata.icon.startsWith('http://'))
+        ) {
+          const finalIcon = await this.fetchIcon(
+            appToSave.fileAttributes.metadata.icon
+          )
+          appToSave.fileAttributes.metadata.icon = finalIcon.content
+          appToSave.fileAttributes.metadata.iconMimeType = finalIcon.mimetype
           processedIcons++
         } else {
+          // If not usable, make sure to delete it to avoid bad display of the icon on cozy home
+          delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
         favShortcuts.push(appToSave)
       } else {
         const appToSave = {
-          ...file,
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
-          shouldReplaceFile: true
-        }
-        if (
-          appToSave.icon &&
-          (appToSave.icon.startsWith('https://') ||
-            appToSave.icon.startsWith('http://'))
-        ) {
-          const finalIcon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = {
+          shouldReplaceFile: () => true,
+          fileAttributes: {
             metadata: {
-              icon: finalIcon.content,
-              iconMimeType: finalIcon.mimetype
+              ...file
             }
           }
-          delete appToSave.icon
+        }
+        if (
+          appToSave.fileAttributes.metadata.icon &&
+          (appToSave.fileAttributes.metadata.icon.startsWith('https://') ||
+            appToSave.fileAttributes.metadata.icon.startsWith('http://'))
+        ) {
+          const finalIcon = await this.fetchIcon(
+            appToSave.fileAttributes.metadata.icon
+          )
+          appToSave.fileAttributes.metadata.icon = finalIcon.content
+          appToSave.fileAttributes.metadata.iconMimeType = finalIcon.mimetype
           processedIcons++
         } else {
+          // If not usable, make sure to delete it to avoid bad display of the icon on cozy home
+          delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
         schoolShortcuts.push(appToSave)
@@ -253,7 +259,7 @@ class CozyUtils {
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
-          apiShortcut.hubMetadata.favori === isFavourite
+          apiShortcut.fileAttributes.metadata.hubMetadata.favori === isFavourite
         )
       })
       if (idx == -1) {
