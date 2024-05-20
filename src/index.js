@@ -123,7 +123,7 @@ async function start(fields) {
     log('info', 'Creating shortcuts for school apps')
     // For both of the following saveFiles we force validateFile to true
     // in order to avoid "BAD_MIME_TYPE" error while saving the shortcuts
-    await this.saveFiles(
+    const savedSchoolShortcuts = await this.saveFiles(
       computedShortcuts.schoolShortcuts,
       { folderPath: destinationFolderPath },
       {
@@ -136,7 +136,7 @@ async function start(fields) {
       }
     )
     log('info', 'Creating shortcuts for favourite apps')
-    await this.saveFiles(
+    const savedFavoriteShortcuts = await this.saveFiles(
       computedShortcuts.favShortcuts,
       { folderPath: favFolderPath },
       {
@@ -147,6 +147,10 @@ async function start(fields) {
         validateFile: () => true
       }
     )
+
+    const savedShortcuts = [...savedSchoolShortcuts, ...savedFavoriteShortcuts]
+    log('info', 'Find or creat home settings doctype')
+    await cozyUtils.findOrCreateHomeSettingsDoctype(savedShortcuts)
 
     log('info', 'Finished!')
   } catch (err) {

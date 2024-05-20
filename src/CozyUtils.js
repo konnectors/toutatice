@@ -9,7 +9,8 @@ const {
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS_ACCOUNT,
-  DOCTYPE_FILES
+  DOCTYPE_FILES,
+  DOCTYPE_HOME_SETTINGS
 } = require('./constants')
 class CozyUtils {
   constructor() {
@@ -299,6 +300,41 @@ class CozyUtils {
       )
       log('warn', err)
     }
+  }
+
+  async findOrCreateHomeSettingsDoctype(shortcuts) {
+    log('info', 'findOrCreateHomeSettingsDoctype starts')
+    let sectionLayout = []
+    let layout = {}
+    let order = 1
+    for (const shortcut of shortcuts) {
+      const shortcutLayout = {
+        id: shortcut.dir_id,
+        originalName: 'Applications Toutatice',
+        createdByApp: 'toutatice',
+        mobile: {
+          detailedLines: true,
+          grouped: false
+        },
+        desktop: {
+          detaileLines: true,
+          grouped: false
+        },
+        order
+      }
+      sectionLayout.push(shortcutLayout)
+      order++
+    }
+    layout.sectionLayout = sectionLayout
+    const { data: existingLayout } = await this.client.query(
+      Q(DOCTYPE_HOME_SETTINGS).getById('layout')
+    )
+    if (existingLayout) {
+      layout = { ...existingLayout, ...layout }
+    } else {
+      layout = { ...layout, id: 'laytout', _type: DOCTYPE_HOME_SETTINGS }
+    }
+    await this.client.save(layout)
   }
 
   getIconizerUrl() {
