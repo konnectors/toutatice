@@ -247,6 +247,7 @@ class CozyUtils {
       'debug',
       `${processedIcons} icons treated & ${unprocessedIcons} icons untreated : No valid urls`
     )
+
     return {
       schoolShortcuts,
       favShortcuts,
@@ -355,21 +356,39 @@ class CozyUtils {
         log('info', 'Store folder detected, skipping it')
         continue
       }
-      const favFolderLayout = {
-        id: oneFolder._id,
-        originalName: oneFolder.attributes.name,
-        createdByApp: 'toutatice',
-        mobile: {
-          detailedLines: true,
-          grouped: false
-        },
-        desktop: {
-          detailedLines: true,
-          grouped: false
-        },
-        order
+      if (oneFolder.attributes.name === 'Applications Toutatice') {
+        const favFolderLayout = {
+          id: oneFolder._id,
+          originalName: oneFolder.attributes.name,
+          createdByApp: 'toutatice',
+          mobile: {
+            detailedLines: true,
+            grouped: false
+          },
+          desktop: {
+            detailedLines: true,
+            grouped: false
+          },
+          order
+        }
+        sectionLayout.push(favFolderLayout)
+      } else {
+        const favFolderLayout = {
+          id: oneFolder._id,
+          originalName: oneFolder.attributes.name,
+          createdByApp: 'toutatice',
+          mobile: {
+            detailedLines: false,
+            grouped: true
+          },
+          desktop: {
+            detailedLines: false,
+            grouped: true
+          },
+          order
+        }
+        sectionLayout.push(favFolderLayout)
       }
-      sectionLayout.push(favFolderLayout)
       order++
     }
 
