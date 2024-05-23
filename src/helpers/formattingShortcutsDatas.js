@@ -4,13 +4,18 @@ function formattingShortcutsDatas(apps) {
   log('info', 'formattingShortcutsDatas starts')
   let files = []
   // keeping all commented lines around for test/debug purposes while in beta
-  // let typeValues = ['app', 'info', 'espace', 'perso']
-  // let index = 0
+  let typeValues = [
+    'app',
+    'info'
+    //  'espace', 'perso'
+  ]
+  let index = 0
   try {
     for (const app of apps) {
-      // if (index > 24) {
-      //   app.hubMetadata.favori = false
-      // } else {
+      // if (!app.hubMetadata.favori) {
+      app.hubMetadata.favori = true
+      // }
+      // else {
       //   app.hubMetadata.favori = true
       // }
       files.push({
@@ -21,10 +26,10 @@ function formattingShortcutsDatas(apps) {
         source: app.rights,
         networkAccess: app.networkAccessibility,
         hubMetadata: app.hubMetadata,
-        type: app.type
-        // type: typeValues[index % typeValues.length]
+        // type: app.type
+        type: typeValues[index % typeValues.length]
       })
-      // index++
+      index++
     }
     return files
   } catch (err) {

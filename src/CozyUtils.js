@@ -193,6 +193,11 @@ class CozyUtils {
           delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
+        // ////// TEST ///
+        if (appToSave.fileAttributes.metadata.title === 'Edutheque') {
+          appToSave.fileAttributes.metadata.type = 'app'
+        }
+        // //////////////
         switch (appToSave.fileAttributes.metadata.type) {
           case 'info':
             log('info', 'Info shortcut')
@@ -247,7 +252,16 @@ class CozyUtils {
       'debug',
       `${processedIcons} icons treated & ${unprocessedIcons} icons untreated : No valid urls`
     )
-
+    // ////////// TEST ////////////
+    //
+    let numberOfFavNeeded = 5
+    let numberOfInfoNeeded = 15
+    const fiveFavShortcuts = favShortcuts.slice(0, numberOfFavNeeded)
+    const restFavShortcut = favShortcuts.slice(numberOfFavNeeded)
+    infosShortcuts = infosShortcuts.concat(restFavShortcut)
+    infosShortcuts = infosShortcuts.slice(0, numberOfInfoNeeded)
+    favShortcuts = fiveFavShortcuts
+    // ///////////////////////////
     return {
       schoolShortcuts,
       favShortcuts,
