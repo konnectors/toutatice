@@ -110,33 +110,41 @@ async function start(fields) {
     const files = formattingShortcutsDatas(foundApps)
     const foundShortcuts = await cozyUtils.findShortcuts()
     const destinationFolderPath = '/Settings/Home'
-    const favFolderPath = `${destinationFolderPath}/⭐️ Mes favoris Toutatice`
-    const destinationFolder = await mkdirp(destinationFolderPath)
+    const favFolderPath = `${destinationFolderPath}/Applications Toutatice`
+    const infosFolderPath = `${destinationFolderPath}/Info`
+    const spacesFolderPath = `${destinationFolderPath}/Espaces`
+    const persoFolderPath = `${destinationFolderPath}/Mes liens et raccourcis`
+    const storeFolderPath = `${favFolderPath}/Store Toutatice`
+    await mkdirp(destinationFolderPath)
     const destinationFavFolder = await mkdirp(favFolderPath)
+    const destinationStoreFolder = await mkdirp(storeFolderPath)
+    const destinationInfoFolder = await mkdirp(infosFolderPath)
+    const destinationSpacesFolder = await mkdirp(spacesFolderPath)
+    const destinationPersoFolder = await mkdirp(persoFolderPath)
     const computedShortcuts = await cozyUtils.computeShortcuts(files)
-    await cozyUtils.synchronizeShortcuts(
-      foundShortcuts,
-      computedShortcuts,
-      destinationFolder,
-      destinationFavFolder
-    )
+    await cozyUtils.synchronizeShortcuts(foundShortcuts, computedShortcuts, {
+      destinationFavFolder,
+      destinationStoreFolder,
+      destinationInfoFolder,
+      destinationPersoFolder,
+      destinationSpacesFolder
+    })
     log('info', 'Creating shortcuts for school apps')
     // For both of the following saveFiles we force validateFile to true
     // in order to avoid "BAD_MIME_TYPE" error while saving the shortcuts
-    await this.saveFiles(
+    const savedSchoolShortcuts = await this.saveFiles(
       computedShortcuts.schoolShortcuts,
-      { folderPath: destinationFolderPath },
+      { folderPath: storeFolderPath },
       {
         identifier: ['shortcuts'],
         sourceAccount: 'Toutatice',
         sourceAccountIdentifier: 'Toutatice',
         fileIdAttributes: ['vendorRef'],
-        validateFile: () => true,
-        subPath: '/Mes applications Toutatice'
+        validateFile: () => true
       }
     )
     log('info', 'Creating shortcuts for favourite apps')
-    await this.saveFiles(
+    const savedFavoriteShortcuts = await this.saveFiles(
       computedShortcuts.favShortcuts,
       { folderPath: favFolderPath },
       {
@@ -147,6 +155,52 @@ async function start(fields) {
         validateFile: () => true
       }
     )
+    log('info', 'Creating infos shortcuts')
+    const savedInfosShortcuts = await this.saveFiles(
+      computedShortcuts.infosShortcuts,
+      { folderPath: infosFolderPath },
+      {
+        identifier: ['shortcuts'],
+        sourceAccount: 'Toutatice',
+        sourceAccountIdentifier: 'Toutatice',
+        fileIdAttributes: ['vendorRef'],
+        validateFile: () => true
+      }
+    )
+    log('info', 'Creating spaces shortcuts')
+    const savedSpacesShortcuts = await this.saveFiles(
+      computedShortcuts.spacesShortcuts,
+      { folderPath: spacesFolderPath },
+      {
+        identifier: ['shortcuts'],
+        sourceAccount: 'Toutatice',
+        sourceAccountIdentifier: 'Toutatice',
+        fileIdAttributes: ['vendorRef'],
+        validateFile: () => true
+      }
+    )
+    log('info', 'Creating personnal shortcuts')
+    const savedPersoShortcuts = await this.saveFiles(
+      computedShortcuts.persoShortcuts,
+      { folderPath: persoFolderPath },
+      {
+        identifier: ['shortcuts'],
+        sourceAccount: 'Toutatice',
+        sourceAccountIdentifier: 'Toutatice',
+        fileIdAttributes: ['vendorRef'],
+        validateFile: () => true
+      }
+    )
+
+    const savedShortcuts = [
+      ...savedSchoolShortcuts,
+      ...savedFavoriteShortcuts,
+      ...savedInfosShortcuts,
+      ...savedSpacesShortcuts,
+      ...savedPersoShortcuts
+    ]
+    log('info', 'Find or creat home settings doctype')
+    await cozyUtils.findOrCreateHomeSettingsDoctype(savedShortcuts)
 
     log('info', 'Finished!')
   } catch (err) {

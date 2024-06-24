@@ -10,6 +10,7 @@ module.exports = {
   DOCTYPE_ACCOUNT: 'io.cozy.accounts',
   DOCTYPE_TRIGGERS: 'io.cozy.triggers',
   DOCTYPE_FILES: 'io.cozy.files',
+  DOCTYPE_HOME_SETTINGS: 'io.cozy.home.settings',
   DOCTYPE_CONTACTS_VERSION: 2,
   DOCTYPE_CONTACTS_GROUPS_VERSION: 2,
   DOCTYPE_CONTACTS_ACCOUNT_VERSION: 1,

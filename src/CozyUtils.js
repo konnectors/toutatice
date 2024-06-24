@@ -9,7 +9,8 @@ const {
   DOCTYPE_CONTACTS,
   DOCTYPE_CONTACTS_GROUPS,
   DOCTYPE_CONTACTS_ACCOUNT,
-  DOCTYPE_FILES
+  DOCTYPE_FILES,
+  DOCTYPE_HOME_SETTINGS
 } = require('./constants')
 class CozyUtils {
   constructor() {
@@ -157,68 +158,119 @@ class CozyUtils {
     log('info', 'computeShortcuts starts')
     let schoolShortcuts = []
     let favShortcuts = []
+    let infosShortcuts = []
+    let spacesShortcuts = []
+    let persoShortcuts = []
+    let rightContentStore = []
     let processedIcons = 0
     let unprocessedIcons = 0
     for (const file of files) {
       if (file.hubMetadata.favori) {
         const appToSave = {
-          ...file,
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
-          shouldReplaceFile: true
-        }
-        if (
-          appToSave.icon &&
-          (appToSave.icon.startsWith('https://') ||
-            appToSave.icon.startsWith('http://'))
-        ) {
-          const finalIcon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = {
+          shouldReplaceFile: () => true,
+          fileAttributes: {
             metadata: {
-              icon: finalIcon.content,
-              iconMimeType: finalIcon.mimetype
+              ...file
             }
           }
-          delete appToSave.icon
+        }
+        if (
+          appToSave.fileAttributes.metadata.icon &&
+          (appToSave.fileAttributes.metadata.icon.startsWith('https://') ||
+            appToSave.fileAttributes.metadata.icon.startsWith('http://'))
+        ) {
+          const finalIcon = await this.fetchIcon(
+            appToSave.fileAttributes.metadata.icon
+          )
+          appToSave.fileAttributes.metadata.icon = finalIcon.content
+          appToSave.fileAttributes.metadata.iconMimeType = finalIcon.mimetype
           processedIcons++
         } else {
+          log('info', 'Icon not valid')
+          // If not usable, make sure to delete it to avoid bad display of the icon on cozy home
+          delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
-        favShortcuts.push(appToSave)
+        switch (appToSave.fileAttributes.metadata.source) {
+          case 'Toutatice':
+          case 'ENT':
+          case 'GAR':
+          case 'Arena':
+            favShortcuts.push(appToSave)
+            break
+          // default here goes to contentStore, as if its not one of the above, it is all treated the same
+          default:
+            rightContentStore.push(appToSave)
+            break
+        }
       } else {
         const appToSave = {
-          ...file,
           vendorRef: file.hubMetadata.idInterne,
           filename: `${file.title}.url`,
           filestream: `[InternetShortcut]\nURL=${file.url}`,
-          shouldReplaceFile: true
-        }
-        if (
-          appToSave.icon &&
-          (appToSave.icon.startsWith('https://') ||
-            appToSave.icon.startsWith('http://'))
-        ) {
-          const finalIcon = await this.fetchIcon(appToSave.icon)
-          appToSave.fileAttributes = {
+          shouldReplaceFile: () => true,
+          fileAttributes: {
             metadata: {
-              icon: finalIcon.content,
-              iconMimeType: finalIcon.mimetype
+              ...file
             }
           }
-          delete appToSave.icon
+        }
+        if (
+          appToSave.fileAttributes.metadata.icon &&
+          (appToSave.fileAttributes.metadata.icon.startsWith('https://') ||
+            appToSave.fileAttributes.metadata.icon.startsWith('http://'))
+        ) {
+          const finalIcon = await this.fetchIcon(
+            appToSave.fileAttributes.metadata.icon
+          )
+          appToSave.fileAttributes.metadata.icon = finalIcon.content
+          appToSave.fileAttributes.metadata.iconMimeType = finalIcon.mimetype
           processedIcons++
         } else {
+          // If not usable, make sure to delete it to avoid bad display of the icon on cozy home
+          delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
         schoolShortcuts.push(appToSave)
+      }
+    }
+    for (const app of rightContentStore) {
+      switch (app.fileAttributes.metadata.type) {
+        case 'info':
+          log('info', 'Info shortcut')
+          infosShortcuts.push(app)
+          break
+        case 'triskell':
+        case 'perso':
+          log('info', 'Space shortcut')
+          spacesShortcuts.push(app)
+          break
+        case 'lien':
+          log('info', 'Perso shortcut')
+          persoShortcuts.push(app)
+          break
+        // fallback to fav folder if type is unknown
+        default:
+          log('info', 'Default (fav + unknown type) shortcut')
+          favShortcuts.push(app)
+          break
       }
     }
     log(
       'debug',
       `${processedIcons} icons treated & ${unprocessedIcons} icons untreated : No valid urls`
     )
-    return { schoolShortcuts, favShortcuts }
+
+    return {
+      schoolShortcuts,
+      favShortcuts,
+      infosShortcuts,
+      spacesShortcuts,
+      persoShortcuts
+    }
   }
 
   async findShortcuts() {
@@ -235,25 +287,27 @@ class CozyUtils {
     return existingShortcuts
   }
 
-  async synchronizeShortcuts(
-    foundShortcuts,
-    computedShortcuts,
-    folder,
-    favFolder
-  ) {
-    const folderId = folder._id
-    const favFolderId = favFolder._id
-    let allComputedShortcuts = computedShortcuts.schoolShortcuts.concat(
-      computedShortcuts.favShortcuts
-    )
+  async synchronizeShortcuts(foundShortcuts, computedShortcuts, folders) {
+    const storeFolderId = folders.destinationStoreFolder._id
+    const favFolderId = folders.destinationFavFolder._id
+    const infoFolderId = folders.destinationInfoFolder._id
+    const spaceFolderId = folders.destinationSpacesFolder._id
+    const persoFolderId = folders.destinationPersoFolder._id
+
+    let allComputedShortcuts = Object.values(computedShortcuts).flat()
     let appsToDelete = []
     for (const cozyShortcut of foundShortcuts) {
       const isFavourite =
-        folderId === cozyShortcut.dir_id || favFolderId === cozyShortcut.dir_id
+        storeFolderId === cozyShortcut.dir_id ||
+        infoFolderId === cozyShortcut.dir_id ||
+        spaceFolderId === cozyShortcut.dir_id ||
+        persoFolderId === cozyShortcut.dir_id ||
+        favFolderId === cozyShortcut.dir_id
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
-          apiShortcut.hubMetadata.favori === isFavourite
+          apiShortcut.fileAttributes?.metadata?.hubMetadata?.favori ===
+            isFavourite
         )
       })
       if (idx == -1) {
@@ -292,6 +346,84 @@ class CozyUtils {
         "Something went wrong while retrieving icon from iconizer's API"
       )
       log('warn', err)
+    }
+  }
+
+  async findOrCreateHomeSettingsDoctype(shortcuts) {
+    log('info', 'findOrCreateHomeSettingsDoctype starts')
+    const shortcutDirsIds = []
+    for (const shortcut of shortcuts) {
+      shortcutDirsIds.push(shortcut.fileDocument.attributes.dir_id)
+    }
+    const neededDirsIds = [...new Set(shortcutDirsIds)]
+    const neededFolders = []
+    for (const neededId of neededDirsIds) {
+      const { data: folder } = await this.client.query(
+        Q(DOCTYPE_FILES).getById(neededId)
+      )
+      neededFolders.push(folder)
+    }
+    let sectionLayout = []
+    let layout = {}
+    let order = 1
+    for (const oneFolder of neededFolders) {
+      if (oneFolder.attributes.name === 'Store Toutatice') {
+        // ignoring the "Store" folder because it is not displayed on the Home
+        log('info', 'Store folder detected, skipping it')
+        continue
+      }
+      if (oneFolder.attributes.name === 'Applications Toutatice') {
+        const favFolderLayout = {
+          id: oneFolder._id,
+          originalName: oneFolder.attributes.name,
+          createdByApp: 'toutatice',
+          mobile: {
+            detailedLines: true,
+            grouped: false
+          },
+          desktop: {
+            detailedLines: true,
+            grouped: false
+          },
+          order
+        }
+        sectionLayout.push(favFolderLayout)
+      } else {
+        const favFolderLayout = {
+          id: oneFolder._id,
+          originalName: oneFolder.attributes.name,
+          createdByApp: 'toutatice',
+          mobile: {
+            detailedLines: false,
+            grouped: true
+          },
+          desktop: {
+            detailedLines: false,
+            grouped: true
+          },
+          order
+        }
+        sectionLayout.push(favFolderLayout)
+      }
+      order++
+    }
+
+    layout.shortcutsLayout = sectionLayout
+    const { data: existingLayouts } = await this.client.query(
+      Q(DOCTYPE_HOME_SETTINGS)
+    )
+    let wantedLayout
+    for (const existingLayout of existingLayouts) {
+      if (existingLayout.id === 'layout') {
+        wantedLayout = existingLayout
+      }
+    }
+    if (wantedLayout && wantedLayout.shortcutsLayout) {
+      log('info', 'Shortcuts layout already created')
+    } else {
+      log('info', 'No shortcuts layout found, creating it ...')
+      layout = { ...layout, id: 'layout', _type: DOCTYPE_HOME_SETTINGS }
+      await this.client.save(layout)
     }
   }
 
