@@ -161,6 +161,7 @@ class CozyUtils {
     let infosShortcuts = []
     let spacesShortcuts = []
     let persoShortcuts = []
+    let rightContentStore = []
     let processedIcons = 0
     let unprocessedIcons = 0
     for (const file of files) {
@@ -193,23 +194,16 @@ class CozyUtils {
           delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
-        switch (appToSave.fileAttributes.metadata.type) {
-          case 'info':
-            log('info', 'Info shortcut')
-            infosShortcuts.push(appToSave)
-            break
-          case 'espace':
-            log('info', 'space shortcut')
-            spacesShortcuts.push(appToSave)
-            break
-          case 'perso':
-            log('info', 'perso shortcut')
-            persoShortcuts.push(appToSave)
-            break
-          // default here is for type "app" and other possible unknown types
-          default:
-            log('info', 'default (app) shortcut')
+        switch (appToSave.fileAttributes.metadata.source) {
+          case 'Toutatice':
+          case 'ENT':
+          case 'GAR':
+          case 'Arena':
             favShortcuts.push(appToSave)
+            break
+          // default here goes to contentStore, as if its not one of the above, it is all treated the same
+          default:
+            rightContentStore.push(appToSave)
             break
         }
       } else {
@@ -241,6 +235,28 @@ class CozyUtils {
           unprocessedIcons++
         }
         schoolShortcuts.push(appToSave)
+      }
+    }
+    for (const app of rightContentStore) {
+      switch (app.fileAttributes.metadata.type) {
+        case 'info':
+          log('info', 'Info shortcut')
+          infosShortcuts.push(app)
+          break
+        case 'triskell':
+        case 'perso':
+          log('info', 'Space shortcut')
+          spacesShortcuts.push(app)
+          break
+        case 'lien':
+          log('info', 'Perso shortcut')
+          persoShortcuts.push(app)
+          break
+        // fallback to fav folder if type is unknown
+        default:
+          log('info', 'Default (fav + unknown type) shortcut')
+          favShortcuts.push(app)
+          break
       }
     }
     log(
