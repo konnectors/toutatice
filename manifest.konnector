@@ -9,7 +9,8 @@
   "editor": "Cozy",
   "vendor_link": "https://www.toutatice.fr",
   "categories": [
-    "online_services"
+    "online_services",
+    "contacts"
   ],
   "fields": {
     "access_token": {
@@ -29,7 +30,10 @@
     "files": {
       "type": "io.cozy.files",
       "verbs": [
-        "ALL"
+        "DELETE",
+        "POST",
+        "PUT",
+        "GET"
       ]
     },
     "accounts": {
@@ -53,12 +57,6 @@
     "contactsAccounts": {
       "type": "io.cozy.contacts.accounts",
       "verbs": [
-        "ALL"
-      ]
-    },
-    "settings":{
-      "type": "io.cozy.home.settings",
-      "verbs":[
         "ALL"
       ]
     }
