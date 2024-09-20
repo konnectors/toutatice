@@ -480,8 +480,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_OTHER_VALUE',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -490,8 +492,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -572,8 +576,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_OTHER_VALUE',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -584,8 +590,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: true
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: true
+                  }
                 }
               }
             }
@@ -665,8 +673,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_OTHER_VALUE',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -678,8 +688,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: true
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: true
+                  }
                 }
               }
             }
@@ -772,8 +784,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: true
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: true
+                  }
                 }
               }
             }
@@ -851,8 +865,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_OTHER_VALUE',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -866,8 +882,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: true
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: true
+                  }
                 }
               }
             }
@@ -944,8 +962,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_2',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -954,8 +974,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE_3',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: false
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: false
+                  }
                 }
               }
             }
@@ -966,8 +988,10 @@ describe('CozyUtils', () => {
             vendorRef: 'SOME_VALUE',
             fileAttributes: {
               metadata: {
-                hubMetadata: {
-                  favori: true
+                externalDataSource: {
+                  hubMetadata: {
+                    favori: true
+                  }
                 }
               }
             }
