@@ -173,7 +173,19 @@ class CozyUtils {
           shouldReplaceFile: () => true,
           fileAttributes: {
             metadata: {
-              ...file
+              target: {
+                title: file.title,
+                description: file.description,
+                category: file.type
+              },
+              externalDataSource: {
+                networkAccess: file.networkAccess,
+                source: file.source,
+                hubMetadata: {
+                  ...file.hubMetadata
+                }
+              },
+              icon: file.icon
             }
           }
         }
@@ -214,7 +226,19 @@ class CozyUtils {
           shouldReplaceFile: () => true,
           fileAttributes: {
             metadata: {
-              ...file
+              target: {
+                title: file.title,
+                description: file.description,
+                category: file.type
+              },
+              externalDataSource: {
+                networkAccess: file.networkAccess,
+                source: file.source,
+                hubMetadata: {
+                  ...file.hubMetadata
+                }
+              },
+              icon: file.icon
             }
           }
         }
@@ -238,7 +262,7 @@ class CozyUtils {
       }
     }
     for (const app of rightContentStore) {
-      switch (app.fileAttributes.metadata.type) {
+      switch (app.fileAttributes.metadata.target.category) {
         case 'info':
           log('info', 'Info shortcut')
           infosShortcuts.push(app)
@@ -306,8 +330,8 @@ class CozyUtils {
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
-          apiShortcut.fileAttributes?.metadata?.hubMetadata?.favori ===
-            isFavourite
+          apiShortcut.fileAttributes?.metadata?.externalDataSource?.hubMetadata
+            ?.favori === isFavourite
         )
       })
       if (idx == -1) {
