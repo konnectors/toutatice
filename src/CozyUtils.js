@@ -175,7 +175,6 @@ class CozyUtils {
             metadata: {
               target: {
                 title: file.title,
-                description: file.description,
                 category: file.type
               },
               externalDataSource: {
@@ -185,6 +184,7 @@ class CozyUtils {
                   ...file.hubMetadata
                 }
               },
+              description: file.description,
               icon: file.icon
             }
           }
@@ -228,7 +228,6 @@ class CozyUtils {
             metadata: {
               target: {
                 title: file.title,
-                description: file.description,
                 category: file.type
               },
               externalDataSource: {
@@ -238,6 +237,7 @@ class CozyUtils {
                   ...file.hubMetadata
                 }
               },
+              description: file.description,
               icon: file.icon
             }
           }
