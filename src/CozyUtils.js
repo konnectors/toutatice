@@ -182,7 +182,8 @@ class CozyUtils {
                 source: file.source,
                 hubMetadata: {
                   ...file.hubMetadata
-                }
+                },
+                creator: file.creator
               },
               description: file.description,
               icon: file.icon
@@ -235,7 +236,8 @@ class CozyUtils {
                 source: file.source,
                 hubMetadata: {
                   ...file.hubMetadata
-                }
+                },
+                creator: file.creator
               },
               description: file.description,
               icon: file.icon

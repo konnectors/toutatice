@@ -23,8 +23,9 @@ function formattingShortcutsDatas(apps) {
         // source: rightsValue[index % rightsValue.length],
         networkAccess: app.networkAccessibility,
         hubMetadata: app.hubMetadata,
-        type: app.type
-        // type: typeValues[index % typeValues.length]
+        type: app.type,
+        // type: typeValues[index % typeValues.length],
+        creator: app.creator
       })
       // index++
     }
