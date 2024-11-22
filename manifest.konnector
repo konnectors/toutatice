@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.5.0",
   "name": "Toutatice",
   "type": "konnector",
   "language": "node",
@@ -9,8 +9,7 @@
   "editor": "Cozy",
   "vendor_link": "https://www.toutatice.fr",
   "categories": [
-    "online_services",
-    "contacts"
+    "online_services"
   ],
   "fields": {
     "access_token": {
@@ -27,6 +26,12 @@
   ],
   "screenshots": [],
   "permissions": {
+    "files": {
+      "type": "io.cozy.files",
+      "verbs": [
+        "ALL"
+      ]
+    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
@@ -48,6 +53,12 @@
     "contactsAccounts": {
       "type": "io.cozy.contacts.accounts",
       "verbs": [
+        "ALL"
+      ]
+    },
+    "settings":{
+      "type": "io.cozy.home.settings",
+      "verbs":[
         "ALL"
       ]
     }
