@@ -17,7 +17,10 @@ function formattingShortcutsDatas(apps) {
       files.push({
         title: app.title[0],
         description: app.description,
-        url: app.source,
+        url:
+          app.source ||
+          app.extensionArena?.urlApplications?.find(url => url.reseau === 'ALL')
+            ?.url,
         icon: app.vignette,
         source: app.rights,
         // source: rightsValue[index % rightsValue.length],
