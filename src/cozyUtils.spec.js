@@ -1033,9 +1033,8 @@ describe('CozyUtils', () => {
         computedShortcuts,
         folders
       )
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(2)
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_2')
-      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID_3')
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledTimes(1)
+      expect(deleteFilePermanentlySpy).toHaveBeenCalledWith('SOME_ID')
     })
   })
 

@@ -314,21 +314,12 @@ class CozyUtils {
   }
 
   async synchronizeShortcuts(foundShortcuts, computedShortcuts, folders) {
-    const storeFolderId = folders.destinationStoreFolder._id
     const favFolderId = folders.destinationFavFolder._id
-    const infoFolderId = folders.destinationInfoFolder._id
-    const spaceFolderId = folders.destinationSpacesFolder._id
-    const persoFolderId = folders.destinationPersoFolder._id
 
     let allComputedShortcuts = Object.values(computedShortcuts).flat()
     let appsToDelete = []
     for (const cozyShortcut of foundShortcuts) {
-      const isFavourite =
-        storeFolderId === cozyShortcut.dir_id ||
-        infoFolderId === cozyShortcut.dir_id ||
-        spaceFolderId === cozyShortcut.dir_id ||
-        persoFolderId === cozyShortcut.dir_id ||
-        favFolderId === cozyShortcut.dir_id
+      const isFavourite = favFolderId === cozyShortcut.dir_id
       let idx = allComputedShortcuts.findIndex(apiShortcut => {
         return (
           apiShortcut.vendorRef === cozyShortcut.metadata.fileIdAttributes &&
