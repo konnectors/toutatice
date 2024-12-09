@@ -3,6 +3,7 @@ const { log, cozyClient, manifest } = require('cozy-konnector-libs')
 const fetch = require('node-fetch').default
 const { Q } = require('cozy-client')
 const get = require('lodash/get')
+const flag = require('cozy-flags/dist/flag').default
 
 const {
   APP_NAME,
@@ -15,6 +16,10 @@ const {
 class CozyUtils {
   constructor() {
     this.client = cozyClient.new
+  }
+
+  async init() {
+    await this.client.registerPlugin(flag.plugin)
   }
 
   async refreshToken(accountId) {
@@ -207,17 +212,40 @@ class CozyUtils {
           delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
-        switch (appToSave.fileAttributes.metadata.source) {
-          case 'Toutatice':
-          case 'ENT':
-          case 'GAR':
-          case 'Arena':
-            favShortcuts.push(appToSave)
-            break
-          // default here goes to contentStore, as if its not one of the above, it is all treated the same
-          default:
-            rightContentStore.push(appToSave)
-            break
+
+        if (flag('toutatice.eleve')) {
+          switch (appToSave.fileAttributes.metadata.type) {
+            case 'info':
+              log('info', 'Info shortcut')
+              infosShortcuts.push(appToSave)
+              break
+            case 'espace':
+              log('info', 'space shortcut')
+              spacesShortcuts.push(appToSave)
+              break
+            case 'perso':
+              log('info', 'perso shortcut')
+              persoShortcuts.push(appToSave)
+              break
+            // default here is for type "app" and other possible unknown types
+            default:
+              log('info', 'default (app) shortcut')
+              favShortcuts.push(appToSave)
+              break
+          }
+        } else {
+          switch (appToSave.fileAttributes.metadata.source) {
+            case 'Toutatice':
+            case 'ENT':
+            case 'GAR':
+            case 'Arena':
+              favShortcuts.push(appToSave)
+              break
+            // default here goes to contentStore, as if its not one of the above, it is all treated the same
+            default:
+              rightContentStore.push(appToSave)
+              break
+          }
         }
       } else {
         const appToSave = {

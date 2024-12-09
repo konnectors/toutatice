@@ -3191,6 +3191,13 @@ cozy-flags@^2.8.7:
   dependencies:
     microee "^0.0.6"
 
+cozy-flags@^4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/cozy-flags/-/cozy-flags-4.6.1.tgz#81eb05c8a77f4cd8f67be404248bed6d2853f2be"
+  integrity sha512-UW0+I78wUnPyDaP/bWEVSQTPh4nSJBFFeFOl8nm79PW76xriN5GncJVvUKRFQTL1FzHo65mOrn/ltFzeaLOlhg==
+  dependencies:
+    microee "^0.0.6"
+
 cozy-jobs-cli@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/cozy-jobs-cli/-/cozy-jobs-cli-2.1.1.tgz#0669990173e6b2d7e7cbcb22dcf45db767c58857"

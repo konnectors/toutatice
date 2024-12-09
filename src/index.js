@@ -23,6 +23,7 @@ async function start(fields) {
   try {
     const accountId = getAccountId()
     const cozyUtils = new CozyUtils(accountId)
+    await cozyUtils.init()
 
     const accessToken = await cozyUtils.refreshToken(accountId)
 

@@ -37,6 +37,7 @@
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
+    "cozy-flags": "^4.6.1",
     "cozy-konnector-libs": "5.3.0",
     "jest": "27.5.1",
     "json-loader": "0.5.7",
