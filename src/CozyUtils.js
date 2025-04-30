@@ -213,39 +213,17 @@ class CozyUtils {
           unprocessedIcons++
         }
 
-        if (flag('toutatice.eleve')) {
-          switch (appToSave.fileAttributes.metadata.type) {
-            case 'info':
-              log('info', 'Info shortcut')
-              infosShortcuts.push(appToSave)
-              break
-            case 'espace':
-              log('info', 'space shortcut')
-              spacesShortcuts.push(appToSave)
-              break
-            case 'perso':
-              log('info', 'perso shortcut')
-              persoShortcuts.push(appToSave)
-              break
-            // default here is for type "app" and other possible unknown types
-            default:
-              log('info', 'default (app) shortcut')
-              favShortcuts.push(appToSave)
-              break
-          }
-        } else {
-          switch (appToSave.fileAttributes.metadata.source) {
-            case 'Toutatice':
-            case 'ENT':
-            case 'GAR':
-            case 'Arena':
-              favShortcuts.push(appToSave)
-              break
-            // default here goes to contentStore, as if its not one of the above, it is all treated the same
-            default:
-              rightContentStore.push(appToSave)
-              break
-          }
+        switch (appToSave.fileAttributes.metadata.source) {
+          case 'Toutatice':
+          case 'ENT':
+          case 'GAR':
+          case 'Arena':
+            favShortcuts.push(appToSave)
+            break
+          // default here goes to contentStore, as if its not one of the above, it is all treated the same
+          default:
+            rightContentStore.push(appToSave)
+            break
         }
       } else {
         const appToSave = {
@@ -288,7 +266,17 @@ class CozyUtils {
           delete appToSave.fileAttributes.metadata.icon
           unprocessedIcons++
         }
-        schoolShortcuts.push(appToSave)
+        const isStudent = flag('toutatice.eleve')
+        log('info', `User is student : ${isStudent}`)
+        if (isStudent) {
+          log(
+            'info',
+            'This accounts is a student account, putting all apps on home'
+          )
+          favShortcuts.push(appToSave)
+        } else {
+          schoolShortcuts.push(appToSave)
+        }
       }
     }
     for (const app of rightContentStore) {
