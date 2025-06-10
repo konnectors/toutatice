@@ -1,1 +1,1 @@
-module.exports = require('cozy-konnector-build/webpack.config.clisk')
+module.exports = require('cozy-konnector-build/webpack.config')
