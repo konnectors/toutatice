@@ -13,6 +13,6 @@ module.exports = {
   DOCTYPE_CONTACTS_GROUPS_VERSION: 2,
   DOCTYPE_CONTACTS_ACCOUNT_VERSION: 1,
   TOUTATICE_API_URL: process.env.COZY_URL.includes('mytoutatice.cloud')
-    ? 'https://www.toutatice.fr'
+    ? 'https://ent.toutatice.fr'
     : 'https://partenaires.ipanema.education.fr'
 }
