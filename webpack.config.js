@@ -33,7 +33,9 @@ module.exports = {
   mode: 'none',
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'index.js'
+    filename: 'index.js',
+    // Use a hash function compatible with OpenSSL 3 to avoid ERR_OSSL_EVP_UNSUPPORTED
+    hashFunction: 'xxhash64'
   },
   plugins: [
     new CopyPlugin({
