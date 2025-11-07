@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.3.3",
   "name": "Toutatice",
   "type": "konnector",
   "language": "node",
@@ -27,15 +27,6 @@
   ],
   "screenshots": [],
   "permissions": {
-    "files": {
-      "type": "io.cozy.files",
-      "verbs": [
-        "DELETE",
-        "POST",
-        "PUT",
-        "GET"
-      ]
-    },
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": [
