@@ -39,7 +39,7 @@
   "dependencies": {
     "cozy-client": "27.26.3",
     "cozy-konnector-libs": "5.13.0",
-    "jest": "27.5.1",
+    "jest": "30.2.0",
     "json-loader": "0.5.7",
     "lodash": "4.17.21",
     "node-fetch": "2.6.7",
