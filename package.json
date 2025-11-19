@@ -37,7 +37,7 @@
     "initGithubAction": "./bin/init_github_action"
   },
   "dependencies": {
-    "cozy-client": "27.26.3",
+    "cozy-client": "60.17.2",
     "cozy-konnector-libs": "5.13.0",
     "jest": "27.5.1",
     "json-loader": "0.5.7",
