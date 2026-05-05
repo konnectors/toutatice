@@ -143,6 +143,11 @@ async function start(fields) {
   } catch (err) {
     log('error', 'caught an unexpected error')
     log('error', err.message)
+    if (
+      err === errors.USER_ACTION_NEEDED_OAUTH_OUTDATED
+    ) {
+      throw err
+    }
     throw errors.VENDOR_DOWN
   }
 }
