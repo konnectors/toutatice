@@ -1,4 +1,4 @@
-const { log } = require('cozy-konnector-libs')
+const { log, errors } = require('cozy-konnector-libs')
 const get = require('lodash/get')
 const initCozyClient = require('./helpers/initCozyClient')
 
@@ -15,12 +15,23 @@ class CozyUtils {
   }
 
   async refreshToken(accountId) {
-    const response = await this.client.fetch(
-      'POST',
-      `/accounts/toutatice/${accountId}/refresh`
-    )
-    const body = await response.json()
-    return get(body, 'data.attributes.oauth.access_token', null)
+    try {
+      const response = await this.client.fetch(
+        'POST',
+        `/accounts/toutatice/${accountId}/refresh`
+      )
+      const body = await response.json()
+      return get(body, 'data.attributes.oauth.access_token', null)
+    } catch (err) {
+      if (get(err, 'reason.errors[0].code') === 'oauth_refresh_invalid_token') {
+        log(
+          'warn',
+          'OAuth refresh token is invalid or expired, account reconnection is required.'
+        )
+        throw errors.USER_ACTION_NEEDED_OAUTH_OUTDATED
+      }
+      throw err
+    }
   }
 
   async prepareIndexes(contactAccountId) {

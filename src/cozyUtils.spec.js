@@ -1,7 +1,13 @@
 jest.mock('cozy-client')
-jest.mock('cozy-konnector-libs')
+jest.mock('cozy-konnector-libs', () => ({
+  log: jest.fn(),
+  errors: {
+    USER_ACTION_NEEDED_OAUTH_OUTDATED: new Error('USER_ACTION_NEEDED.OAUTH_OUTDATED')
+  }
+}))
 
 const CozyClient = require('cozy-client').default
+const { errors } = require('cozy-konnector-libs')
 const CozyUtils = require('./CozyUtils')
 
 const {
@@ -76,6 +82,30 @@ describe('CozyUtils', () => {
       cozyUtils.client.fetch = jest.fn(() => ({ json: () => null }))
       const result = await cozyUtils.refreshToken('123')
       expect(result).toEqual(null)
+    })
+
+    it('should throw OAUTH_OUTDATED when stack returns oauth_refresh_invalid_token', async () => {
+      const stackError = {
+        reason: {
+          errors: [{ code: 'oauth_refresh_invalid_token' }]
+        }
+      }
+      cozyUtils.client.fetch = jest.fn(async () => {
+        throw stackError
+      })
+
+      await expect(cozyUtils.refreshToken('123')).rejects.toBe(
+        errors.USER_ACTION_NEEDED_OAUTH_OUTDATED
+      )
+    })
+
+    it('should rethrow unknown refresh errors', async () => {
+      const unexpectedError = new Error('Something failed')
+      cozyUtils.client.fetch = jest.fn(async () => {
+        throw unexpectedError
+      })
+
+      await expect(cozyUtils.refreshToken('123')).rejects.toBe(unexpectedError)
     })
   })
 
