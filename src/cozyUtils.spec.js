@@ -73,7 +73,9 @@ describe('CozyUtils', () => {
       const result = await cozyUtils.refreshToken(MOCK_ACCOUNT_ID)
       expect(cozyUtils.client.fetch).toHaveBeenCalledWith(
         'POST',
-        '/accounts/toutatice/123/refresh'
+        '/accounts/toutatice/123/refresh',
+        null,
+        { throwFetchErrors: true }
       )
       expect(result).toEqual(MOCK_REFRESHED_TOKEN)
     })

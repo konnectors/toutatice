@@ -18,7 +18,9 @@ class CozyUtils {
     try {
       const response = await this.client.fetch(
         'POST',
-        `/accounts/toutatice/${accountId}/refresh`
+        `/accounts/toutatice/${accountId}/refresh`,
+        null,
+        { throwFetchErrors: true }
       )
       const body = await response.json()
       return get(body, 'data.attributes.oauth.access_token', null)
