@@ -18,11 +18,12 @@ class CozyUtils {
     try {
       const response = await this.client.fetch(
         'POST',
-        `/accounts/toutatice/${accountId}/refresh`,
-        null,
-        { throwFetchErrors: true }
+        `/accounts/toutatice/${accountId}/refresh`
       )
       const body = await response.json()
+      if (!response.ok) {
+        throw { reason: body }
+      }
       return get(body, 'data.attributes.oauth.access_token', null)
     } catch (err) {
       if (get(err, 'reason.errors[0].code') === 'oauth_refresh_invalid_token') {
