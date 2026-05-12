@@ -3241,10 +3241,10 @@ cozy-client-js@^0.21.0:
     pouchdb-browser "7.0.0"
     pouchdb-find "7.0.0"
 
-cozy-client@27.26.3:
-  version "27.26.3"
-  resolved "https://registry.yarnpkg.com/cozy-client/-/cozy-client-27.26.3.tgz#67a5bed9727b565ee39033cc63ec07f279fdbb50"
-  integrity sha512-+QcAOPKRXyqNo167d5Kyiwv0k0aWBqa/wBYloNFjQSk5y0kBv09g8HoEwpXdiSwK5+9q0JlCfgSn7TdN8IEFQQ==
+cozy-client@27.26.4:
+  version "27.26.4"
+  resolved "https://registry.yarnpkg.com/cozy-client/-/cozy-client-27.26.4.tgz#6e5f194e459826297ab8885abbcab25a8b4011da"
+  integrity sha512-1mK7OqaVs9i/bSRQq9S2DFRCxbCe5TpEoqZVi0gjlE1CuFwiNFQrLFHkwaudk49ioJ2iABb9lsYtvlrT2EMdOw==
   dependencies:
     "@cozy/minilog" "1.0.0"
     "@types/jest" "^26.0.20"
